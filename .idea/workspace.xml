@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="48ec0f9a-1cc0-450a-827a-b64d202150f9" name="Default Changelist" comment="Initial layout" />
+    <list default="true" id="48ec0f9a-1cc0-450a-827a-b64d202150f9" name="Default Changelist" comment="Initial layout">
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Sarah.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/BaconBits.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/FoodItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/MagicMushroom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/OrangeJuice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/Pellets.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/PowerSnack.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/food/Steak.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/medical/Illnesses.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/uc/seng201/medical/MedicalItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Matthew_Johnson.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Matthew_Johnson.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/SpaceExplorer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/SpaceExplorer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/SpaceShip.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/SpaceShip.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/crew/CrewTypes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/crew/CrewTypes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Space Explorer/uc/seng201/crew/Testing.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/SpaceShip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/SpaceShip.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/BaseCrewMember.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Engi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Engi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Human.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Slug.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Slug.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,34 +40,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java">
+        <entry file="file://$PROJECT_DIR$/src/uc/seng201/medical/MedicalItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/uc/seng201/SpaceShip.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-              <folding>
-                <element signature="e#330#331#0" expanded="true" />
-                <element signature="e#361#362#0" expanded="true" />
-                <element signature="e#406#407#0" expanded="true" />
-                <element signature="e#437#438#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/BaseCrewMember.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="60" column="22" lean-forward="true" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
+            <state relative-caret-position="68">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
@@ -47,17 +51,52 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="280">
+              <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2239#2240#0" expanded="true" />
+                <element signature="e#2258#2259#0" expanded="true" />
+                <element signature="e#2338#2339#0" expanded="true" />
+                <element signature="e#2357#2358#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Human.java">
+        <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Sarah.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+            <state relative-caret-position="119">
+              <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/FoodItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" selection-start-line="15" selection-end-line="21" selection-end-column="5" />
+              <folding>
+                <element signature="e#132#133#0" expanded="true" />
+                <element signature="e#164#165#0" expanded="true" />
+                <element signature="e#193#194#0" expanded="true" />
+                <element signature="e#221#222#0" expanded="true" />
+                <element signature="e#247#248#0" expanded="true" />
+                <element signature="e#281#282#0" expanded="true" />
+                <element signature="e#331#332#0" expanded="true" />
+                <element signature="e#373#374#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/uc/seng201/medical/Illnesses.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -67,6 +106,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
       </list>
@@ -78,20 +118,31 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java" />
         <option value="$PROJECT_DIR$/src/uc/seng201/crew/Member1.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/SpaceShip.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Engi.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java" />
         <option value="$PROJECT_DIR$/src/uc/seng201/crew/ZOLTAN.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Slug.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/BaseCrewMember.java" />
-        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Human.java" />
         <option value="$PROJECT_DIR$/src/uc/seng201/crew/Testing.form" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/SpaceShip.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Slug.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Engi.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Human.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/BaseFoodItem.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/BaseCrewMember.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/PowerSnack.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/FoodItem.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/MagicMushroom.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/BaconBits.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/OrangeJuice.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/Pellets.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/food/Steak.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/medical/MedicalItem.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/medical/Illnesses.java" />
+        <option value="$PROJECT_DIR$/src/uc/seng201/crew/Sarah.java" />
       </list>
     </option>
   </component>
@@ -101,12 +152,15 @@
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -133,11 +187,24 @@
               <item name="seng201" type="462c0819:PsiDirectoryNode" />
               <item name="crew" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Space Explorer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Space Explorer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="seng201" type="462c0819:PsiDirectoryNode" />
+              <item name="food" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Space Explorer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Space Explorer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="seng201" type="462c0819:PsiDirectoryNode" />
+              <item name="medical" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -150,6 +217,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="uc.seng201.food" />
       <recent name="uc.seng201.crew" />
     </key>
   </component>
@@ -199,23 +267,26 @@
       <updated>1554597541350</updated>
       <workItem from="1554597545512" duration="4652000" />
       <workItem from="1554630810111" duration="588000" />
+      <workItem from="1554680753129" duration="4908000" />
+      <workItem from="1554715667398" duration="7140000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5240000" />
+    <option name="totallyTimeSpent" value="17288000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25799572" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.24377032" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -223,7 +294,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -246,59 +317,12 @@
     <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Member3.java" />
     <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Member2.java" />
     <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Member1.java" />
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Engi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Slug.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Testing.form" />
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Testing.java" />
     <entry file="file://$PROJECT_DIR$/src/uc/seng201/SpaceShip.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        <state relative-caret-position="340">
+          <caret line="20" column="6" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
           <folding>
             <element signature="e#330#331#0" expanded="true" />
             <element signature="e#361#362#0" expanded="true" />
@@ -308,30 +332,160 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java">
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/SpaceExplorer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="429">
+          <caret line="30" column="41" lean-forward="true" selection-start-line="30" selection-start-column="41" selection-end-line="30" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#331#332#0" expanded="true" />
+            <element signature="e#366#367#0" expanded="true" />
+            <element signature="e#408#409#0" expanded="true" />
+            <element signature="e#442#443#0" expanded="true" />
+            <element signature="e#484#485#0" expanded="true" />
+            <element signature="e#515#516#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewTypes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="10" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Slug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Zoltan.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Human.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+        <state relative-caret-position="85">
+          <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Testing.form">
-      <provider selected="true" editor-type-id="ui-designer" />
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Lanius.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+        </state>
+      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Testing.java">
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/FoodItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Engi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Crystal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/PowerSnack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/MagicMushroom.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/BaseCrewMember.java">
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/BaconBits.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/OrangeJuice.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/Pellets.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/Steak.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="60" column="22" lean-forward="true" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
+        <state relative-caret-position="119">
+          <caret line="7" column="5" lean-forward="true" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/CrewMember.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2239#2240#0" expanded="true" />
+            <element signature="e#2258#2259#0" expanded="true" />
+            <element signature="e#2338#2339#0" expanded="true" />
+            <element signature="e#2357#2358#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/medical/MedicalItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/food/FoodItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="21" selection-end-column="5" />
+          <folding>
+            <element signature="e#132#133#0" expanded="true" />
+            <element signature="e#164#165#0" expanded="true" />
+            <element signature="e#193#194#0" expanded="true" />
+            <element signature="e#221#222#0" expanded="true" />
+            <element signature="e#247#248#0" expanded="true" />
+            <element signature="e#281#282#0" expanded="true" />
+            <element signature="e#331#332#0" expanded="true" />
+            <element signature="e#373#374#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/crew/Sarah.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/uc/seng201/medical/Illnesses.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>

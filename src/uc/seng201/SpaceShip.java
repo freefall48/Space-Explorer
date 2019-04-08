@@ -1,13 +1,11 @@
 package uc.seng201;
 
-import uc.seng201.crew.BaseCrewMember;
-
 public class SpaceShip {
 
     private String shipName;
-    private BaseCrewMember[] shipCrew;
+    private CrewMember[] shipCrew;
 
-    public SpaceShip(String shipName, BaseCrewMember[] shipCrew) {
+    public SpaceShip(String shipName, CrewMember[] shipCrew) {
         this.shipName = shipName;
         this.shipCrew = shipCrew;
     }
@@ -16,7 +14,7 @@ public class SpaceShip {
         return shipName;
     }
 
-    public BaseCrewMember[] getShipCrew() {
+    public CrewMember[] getShipCrew() {
         return shipCrew;
     }
 }

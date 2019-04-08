@@ -1,17 +1,16 @@
 package uc.seng201.crew;
 
-public class Human extends BaseCrewMember{
+public class Human extends CrewMember {
 
     public Human(String name) {
-        super(name, CrewTypes.ENGI);
+        super(name, CrewTypes.HUMAN);
 
 //  Set the default stats for this crew member
-        setHealth(1);
-        setHealthRegenRate(0);
+        setHealth(100);
+        setHealthRegenRate(5);
         setTiredness(0);
-        setTirednessRate(0);
-        setHunger(1);
-        setHungerDecayRate(0);
-        feed();
+        setTirednessRate(10);
+        setFoodLevel(100);
+        setFoodDecayRate(20);
     }
 }
