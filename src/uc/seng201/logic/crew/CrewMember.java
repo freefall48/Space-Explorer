@@ -21,6 +21,8 @@ public class CrewMember {
     int tiredness;
     int tirednessRate;
 
+    int actionsLeftToday = 2;
+
     List<Illnesses> illnesses = new ArrayList<>();
 
     private final int maxFoodLevel = 100;
@@ -107,5 +109,9 @@ public class CrewMember {
 
     public void removeIllness(Illnesses illness) {
         this.illnesses.remove(illness);
+    }
+
+    public void performAction() {
+        this.actionsLeftToday -= 1;
     }
 }
