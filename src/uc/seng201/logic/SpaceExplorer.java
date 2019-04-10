@@ -1,7 +1,7 @@
 package uc.seng201.logic;
 
 import uc.seng201.logic.crew.CrewMember;
-import uc.seng201.logic.crew.CrewTypes;
+import uc.seng201.logic.crew.CrewType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +12,10 @@ public class SpaceExplorer {
     private static int gameDuration;
     private static SpaceShip spaceShip;
 
+    /**
+     * Used to output to the console. IDEs dont use a standard console
+     * so this allows user input to be gathered reliably.
+     */
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     public static int getGameDuration() {
@@ -38,7 +42,7 @@ public class SpaceExplorer {
 
     public static void outputCrewTypes() {
         System.out.println("Available crew types:");
-        for (CrewTypes crewType : CrewTypes.values())
+        for (CrewType crewType : CrewType.values())
         {
             System.out.print(String.format("[%s] ", crewType));
         }
@@ -47,7 +51,7 @@ public class SpaceExplorer {
 
     public static void generateCrew() throws IOException {
         int crewCount = crewCountInput();
-        CrewTypes crewMemberType = null;
+        CrewType crewMemberType = null;
         String crewMemberName = null;
         for (int i = 1; i <= crewCount; i++) {
             do {
@@ -58,7 +62,7 @@ public class SpaceExplorer {
                 try {
                     outputCrewTypes();
                     System.out.print(String.format("Enter crew member no. %d's type: ", i));
-                    crewMemberType = CrewTypes.valueOf(bufferedReader.readLine().toUpperCase());
+                    crewMemberType = CrewType.valueOf(bufferedReader.readLine().toUpperCase());
                 } catch (IllegalArgumentException e) {}
             } while (crewMemberType == null);
         }

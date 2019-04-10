@@ -2,9 +2,17 @@ package uc.seng201.logic.crew;
 
 import uc.seng201.logic.medical.Illnesses;
 
+/**
+ * Specific crew member type.
+ */
 public class Sarah extends CrewMember {
+
+    /**
+     * Creates a crew member with CrewType Sarah and a name.
+     * @param name Name of the crew member.
+     */
     public Sarah(String name) {
-        super(name, CrewTypes.SARAH);
+        super(name, CrewType.SARAH);
 
         this.maxHealth = 100;
         this.health = this.maxHealth;

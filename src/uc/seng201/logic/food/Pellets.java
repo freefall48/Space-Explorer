@@ -3,7 +3,7 @@ package uc.seng201.logic.food;
 public class Pellets extends FoodItem {
 
     public Pellets() {
-        setFoodValue(10);
-        setPrice(1);
+        this.price = 1;
+        this.nutritionalValue = 10;
     }
 }

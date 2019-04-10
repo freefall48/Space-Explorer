@@ -1,23 +1,29 @@
 package uc.seng201.logic.food;
 
+/**
+ * The base class for food items. Provides the base implementation
+ * that they can override.
+ */
 public class FoodItem {
 
     int price;
-    int foodValue;
+    int nutritionalValue;
 
-    public int getFoodValue() {
-        return foodValue;
+    /**
+     * Gets the nutritional value of the food.
+     * 
+     * @return The nutritionalValue of the food.
+     */
+    public int getNutritionalValue() {
+        return nutritionalValue;
     }
 
+    /**
+     * Gets the price of the food item that it can be sold at.
+     *
+     * @return  Price of the FoodItem.
+     */
     public int getPrice() {
         return price;
-    }
-
-    protected void setPrice(int price) {
-        this.price = price;
-    }
-
-    protected void setFoodValue(int foodValue) {
-        this.foodValue = foodValue;
     }
 }
