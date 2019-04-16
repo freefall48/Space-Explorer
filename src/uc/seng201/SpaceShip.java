@@ -35,9 +35,11 @@ public class SpaceShip {
     }
 
     public String toString() {
-        return String.format("Ship '%s' has %d shields and missing %d parts.\n" +
-                "The crew consists of:\n%s",
-                shipName, shieldCount, missingParts, Helpers.listToString(shipCrew, true));
+        return String.format("The spaceship '%s' has %d|%d shields and missing %d parts.\n",
+                this.shipName, this.shieldCount, this.maxShieldCount, this.missingParts) +
+                String.format("The crew consists of: \n%s\n", Helpers.listToString(this.shipCrew, true)) +
+                String.format("Items onboard:\n%s\n", Helpers.listToString(this.shipItems)) +
+                String.format("Spacebucks balance: $%d\n", this.spaceBucks);
     }
 
     /**
@@ -46,23 +48,35 @@ public class SpaceShip {
      * @param crewMembers CrewMembers to add the the spaceship.
      */
     public void add(CrewMember... crewMembers) {
-        shipCrew.addAll(Arrays.asList(crewMembers));
+        this.shipCrew.addAll(Arrays.asList(crewMembers));
     }
 
-    public boolean contains(ItemType item) {
-        return shipItems.contains(item);
-    }
-
-    public boolean contains(CrewMember crewMember) {
-        return shipCrew.contains(crewMember);
-    }
-
-    public void remove(ItemType itemType) {
-        this.shipItems.remove(itemType);
+    public void add(List<CrewMember> crewMembers) {
+        this.shipCrew.addAll(crewMembers);
     }
 
     public void add(ItemType itemType) {
         this.shipItems.add(itemType);
+    }
+
+    public CrewMember find(String crewMemberName) {
+        for (CrewMember crewMember : this.shipCrew) {
+            if (crewMember.getName().equals(crewMemberName)) {
+                return crewMember;
+            }
+        }
+        return null;
+    }
+
+    public boolean contains(ItemType item) {
+        return this.shipItems.contains(item);
+    }
+    public boolean contains(CrewMember crewMember) {
+        return this.shipCrew.contains(crewMember);
+    }
+
+    public void remove(ItemType itemType) {
+        this.shipItems.remove(itemType);
     }
 
     /**

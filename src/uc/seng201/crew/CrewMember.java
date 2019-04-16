@@ -37,11 +37,20 @@ public class CrewMember {
 
     @Override
     public String toString() {
-        return String.format("Crew member %s is a %s and has %d actions left today. " +
-                        "They have %d health, %d food and at %d tiredness. " +
-                        "They have %s ability, but %s illness.",
-                name, crewType, actionsLeftToday, health, foodLevel, tiredness,
-                Helpers.listToString(abilities), Helpers.listToString((illnesses)));
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("Crew member %s is a %s and has %d actions left today. ",
+                this.name, this.crewType, this.actionsLeftToday));
+        builder.append(String.format("They have %d|%d health with regen of %d/pt, %d|%d food decaying " +
+                        "at %d/pt and %d|%d tiredness at %d/pt. ",
+                this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
+                this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate));
+        builder.append(String.format("They have abilities '%s', but illnesses '%s'",
+                Helpers.listToString(this.abilities, true), Helpers.listToString(this.illnesses, true)));
+        return builder.toString();
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount) {
@@ -120,7 +129,8 @@ public class CrewMember {
     }
 
     /**
-     * Alters the current stats of the crew member by applying the given rates to them.
+     * Alters the current stats of the crew member by applying the given rates to them. Gives the
+     * crew member actions for the day. Called at the start of every day for each crew member.
      */
     public void updateStats() {
         if (this.abilities.contains(Abilities.HEALING_HANDS)) {
@@ -130,7 +140,28 @@ public class CrewMember {
         }
         alterFood(this.foodDecayRate);
         alterTiredness(this.tirednessRate);
+        if (this.foodLevel == 0 || this.tiredness == 100) {
+            this.actionsLeftToday = 0;
+        } else {
+            this.actionsLeftToday = 2;
+        }
 
+    }
+
+    public boolean isAlive() {
+        if (this.health > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canPerformActions() {
+        if (this.actionsLeftToday > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean performAction() {

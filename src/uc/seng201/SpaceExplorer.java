@@ -1,13 +1,10 @@
 package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.CrewType;
-import uc.seng201.crew.Human;
+import uc.seng201.crew.actions.Action;
 import uc.seng201.targets.Planet;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,110 +12,80 @@ public class SpaceExplorer {
 
     private static int gameDuration;
     private static SpaceShip spaceShip;
-    private static CrewMember currentlyActing;
+    private static CrewMember currentlyActingCrewMember;
     private static List<Planet> knownPlanets = new ArrayList<>();
 
     public static SpaceShip getSpaceShip() {
         return spaceShip;
     }
-
-    /**
-     * Used to output to the console. IDEs dont use a standard console
-     * so this allows user input to be gathered reliably.
-     */
-    private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
-    public static int getGameDuration() {
-        return gameDuration;
-    }
-
     public static CrewMember getCurrentlyActing() {
-        return currentlyActing;
+        return currentlyActingCrewMember;
     }
 
-    public static void main(String[] args) {
-        setupGame();
-        System.out.println(spaceShip.toString());
-    }
-
-    public static void setupGame() {
-        try {
-            gameDurationInput();
-            spaceShip = new SpaceShip(shipNameInput(), calcPartsToFind());
-            generateCrew();
-        } catch (IOException e){
-            System.out.println(e.toString());
-            System.exit(1);
+    static void runGame(SpaceShip ship, int duration) throws IOException {
+        gameDuration = duration;
+        spaceShip = ship;
+        while (gameDuration > 0) {
+            spaceShip.getShipCrew().forEach(CrewMember::updateStats);
+            performCrewAction();
+            gameDuration -= 1;
         }
-
     }
 
-    public static void outputCrewTypes() {
-        System.out.println("Available crew types:");
-        for (CrewType crewType : CrewType.values())
-        {
-            System.out.print(String.format("[%s] ", crewType));
-        }
-        System.out.print("\n");
-    }
-
-    public static void generateCrew() throws IOException {
-        int crewCount = crewCountInput();
-        CrewType crewMemberType = null;
-        String crewMemberName;
-        for (int i = 1; i <= crewCount; i++) {
-            do {
-                System.out.print(String.format("Enter crew member no. %d's name: ", i));
-                crewMemberName = bufferedReader.readLine();
-            } while (!crewMemberName.matches("^([a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*){1,12}$"));
-            do {
-                try {
-                    outputCrewTypes();
-                    System.out.print(String.format("Enter crew member no. %d's type: ", i));
-                    crewMemberType = CrewType.valueOf(bufferedReader.readLine().toUpperCase());
-                } catch (IllegalArgumentException e) {}
-            } while (crewMemberType == null);
-            switch (crewMemberType) {
-                case HUMAN:
-                    spaceShip.add(new Human(crewMemberName));
+    private static void performCrewAction() throws IOException {
+        boolean actionsLeft = setCrewMemberToAct();
+        while (actionsLeft) {
+            Action action = actionToPerform();
+            if (!currentlyActingCrewMember.performAction()) {
+                throw new IllegalStateException();
+            }
+            switch (action) {
+                case SLEEP:
+                    System.out.println("Sleep");
+                    break;
+                case PILOT:
+                    System.out.println("Pilot");
                     break;
             }
+            actionsLeft = setCrewMemberToAct();
         }
     }
 
-    public static int crewCountInput() throws IOException {
-        int crewCount = 0;
-        do {
-            System.out.print("Enter desired crew population: (2 - 4): ");
-            String userInput = bufferedReader.readLine();
-            if (Helpers.intTryParse(userInput)) {
-                crewCount = Integer.parseInt(userInput);
-            }
-        } while (crewCount < 2 || crewCount > 4);
-        return crewCount;
+    private static Action actionToPerform() throws IOException {
+        System.out.println(String.format("Actions available: %s\n", Helpers.listToString(Action.values())));
+        System.out.print(String.format("Enter action for %s: ", currentlyActingCrewMember.getName()));
+        return Action.valueOf(Helpers.bufferedReader.readLine().toUpperCase());
     }
 
-    public static String shipNameInput() throws IOException {
-        String shipName;
+    private static boolean setCrewMemberToAct() throws IOException {
+        CrewMember crewMember;
         do {
-            System.out.print("Enter the name of your ship: ");
-            shipName = bufferedReader.readLine();
-        } while (!shipName.matches("^([a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*){1,12}$"));
-        return shipName;
+            List<CrewMember> availableCrew = availableCrewMembers();
+            if (availableCrew.isEmpty()) {
+                return false;
+            }
+            System.out.println(String.format("Available crew members to choose:\n%s\n",
+                    Helpers.listToString(availableCrew, true)));
+            System.out.print("Enter the name of the crew member to act: ");
+            String name = Helpers.bufferedReader.readLine();
+            crewMember = spaceShip.find(name);
+        } while (crewMember == null);
+        currentlyActingCrewMember = crewMember;
+        return true;
+
     }
 
-    public static void gameDurationInput() throws IOException {
-        int duration = 0;
-        do {
-            System.out.print("Enter game duration (3 - 10 days): ");
-            String userInput = bufferedReader.readLine();
-            if (Helpers.intTryParse(userInput)) {
-                duration = Integer.parseInt(userInput);
+    private static List<CrewMember> availableCrewMembers() {
+        List<CrewMember> availableCrew = new ArrayList<>();
+        spaceShip.getShipCrew().forEach(crewMember -> {
+            if (crewMember.canPerformActions()) {
+                availableCrew.add(crewMember);
             }
-        } while (duration < 3 || duration > 10);
-        gameDuration = duration;
+        });
+        return availableCrew;
     }
-    public static int calcPartsToFind() {
-        return (int) (getGameDuration() * 0.6666);
+
+    static int calcPartsToFind(int duration) {
+        return (int) (duration * 0.6666);
     }
 }
