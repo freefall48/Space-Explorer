@@ -1,16 +1,26 @@
-package uc.seng201.logic;
+package uc.seng201;
 
-import uc.seng201.logic.crew.CrewMember;
-import uc.seng201.logic.crew.CrewType;
+import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.CrewType;
+import uc.seng201.crew.Human;
+import uc.seng201.targets.Planet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpaceExplorer {
 
     private static int gameDuration;
     private static SpaceShip spaceShip;
+    private static CrewMember currentlyActing;
+    private static List<Planet> knownPlanets = new ArrayList<>();
+
+    public static SpaceShip getSpaceShip() {
+        return spaceShip;
+    }
 
     /**
      * Used to output to the console. IDEs dont use a standard console
@@ -22,10 +32,13 @@ public class SpaceExplorer {
         return gameDuration;
     }
 
+    public static CrewMember getCurrentlyActing() {
+        return currentlyActing;
+    }
 
     public static void main(String[] args) {
         setupGame();
-//        System.out.println(ship + "\n" + gameDuration + "\n" + partsToFind + "\n" + ship.getShipName());
+        System.out.println(spaceShip.toString());
     }
 
     public static void setupGame() {
@@ -52,7 +65,7 @@ public class SpaceExplorer {
     public static void generateCrew() throws IOException {
         int crewCount = crewCountInput();
         CrewType crewMemberType = null;
-        String crewMemberName = null;
+        String crewMemberName;
         for (int i = 1; i <= crewCount; i++) {
             do {
                 System.out.print(String.format("Enter crew member no. %d's name: ", i));
@@ -65,8 +78,12 @@ public class SpaceExplorer {
                     crewMemberType = CrewType.valueOf(bufferedReader.readLine().toUpperCase());
                 } catch (IllegalArgumentException e) {}
             } while (crewMemberType == null);
+            switch (crewMemberType) {
+                case HUMAN:
+                    spaceShip.add(new Human(crewMemberName));
+                    break;
+            }
         }
-        spaceShip.addCrewMember(new CrewMember(crewMemberName, crewMemberType));
     }
 
     public static int crewCountInput() throws IOException {

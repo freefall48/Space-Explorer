@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Space Explorer:jar">
-    <output-path>D:/Users/Matthew Johnson/Desktop</output-path>
-    <root id="archive" name="Space Explorer.jar">
-      <element id="module-output" name="Space Explorer" />
-    </root>
-  </artifact>
-</component>

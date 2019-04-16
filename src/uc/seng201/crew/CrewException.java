@@ -1,4 +1,4 @@
-package uc.seng201.logic.crew;
+package uc.seng201.crew;
 
 /**
  * Exception handling for the CrewMember errors.
