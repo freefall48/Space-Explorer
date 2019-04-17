@@ -1,4 +1,4 @@
-package uc.seng201;
+package uc.seng201.helpers;
 
 
 import java.io.BufferedReader;
@@ -47,9 +47,11 @@ public class Helpers {
     public static String listToString(Object[] objects) {
         return listToString(Arrays.asList(objects));
     }
+
     public static String listToString(List list) {
         return listToString(list, false);
     }
+
     public static String listToString(List list, boolean newLine) {
         if (list.size() == 0) {
             return "None";
