@@ -25,7 +25,7 @@ public class SpaceShip {
      * number of missing parts.
      *
      * @param shipName      The name of the ship.
-     * @param missingParts  The number of missing parts to find.
+     * @param missingParts  The number of missing parts to findCrewMember.
      */
     public SpaceShip(String shipName, int missingParts) {
         this.shipName = shipName;
@@ -59,9 +59,9 @@ public class SpaceShip {
         this.shipItems.add(itemType);
     }
 
-    public CrewMember find(String crewMemberName) {
+    public CrewMember findCrewMember(String crewMemberName) {
         for (CrewMember crewMember : this.shipCrew) {
-            if (crewMember.getName().equals(crewMemberName)) {
+            if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase())) {
                 return crewMember;
             }
         }
@@ -71,6 +71,7 @@ public class SpaceShip {
     public boolean contains(ItemType item) {
         return this.shipItems.contains(item);
     }
+
     public boolean contains(CrewMember crewMember) {
         return this.shipCrew.contains(crewMember);
     }
@@ -137,12 +138,4 @@ public class SpaceShip {
         }
         this.spaceBucks = newBalance;
     }
-
-    public void turn() {
-        for (CrewMember crewMember : shipCrew) {
-            crewMember.updateStats();
-        }
-    }
-
-
 }

@@ -15,7 +15,7 @@ public class Helpers {
      * Used to output to the console. IDEs dont use a standard console
      * so this allows user input to be gathered reliably.
      */
-    static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    public static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     /**
      * Provides the ability to check if a String is safe to parse to an integer.
@@ -33,15 +33,15 @@ public class Helpers {
     }
 
     public static String generatePlanetName() {
-        char[] planetName = new char[7];
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 3; i++) {
-            planetName[i] = (char) (randomGenerator.nextInt(26) + 'a');
+            builder.append((char) (randomGenerator.nextInt(26) + 'a'));
         }
-        planetName[3] = '-';
-        for (int i = 4; i < 7; i++) {
-            planetName[i] = (char) (randomGenerator.nextInt(9));
+        builder.append('-');
+        for (int i = 0; i < 3; i++) {
+            builder.append(randomGenerator.nextInt(9));
         }
-        return planetName.toString();
+        return builder.toString();
     }
 
     public static String listToString(Object[] objects) {

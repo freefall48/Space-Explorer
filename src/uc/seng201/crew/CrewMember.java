@@ -1,6 +1,7 @@
 package uc.seng201.crew;
 
 import uc.seng201.Helpers;
+import uc.seng201.crew.actions.UnableToPerformAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +38,22 @@ public class CrewMember {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Crew member %s is a %s and has %d actions left today. ",
-                this.name, this.crewType, this.actionsLeftToday));
-        builder.append(String.format("They have %d|%d health with regen of %d/pt, %d|%d food decaying " +
-                        "at %d/pt and %d|%d tiredness at %d/pt. ",
-                this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
-                this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate));
-        builder.append(String.format("They have abilities '%s', but illnesses '%s'",
-                Helpers.listToString(this.abilities, true), Helpers.listToString(this.illnesses, true)));
-        return builder.toString();
+        return String.format("Crew member %s is a %s and has %d actions left today. ",
+                this.name, this.crewType, this.actionsLeftToday) +
+                String.format("They have %d|%d health with regen of %d/pt, %d|%d food decaying " +
+                                "at %d/pt and %d|%d tiredness at %d/pt. ",
+                        this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
+                        this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
+                String.format("They have abilities '%s', but illnesses '%s'",
+                        Helpers.listToString(this.abilities, true), Helpers.listToString(this.illnesses, true));
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof CrewMember) {
+            return (((CrewMember) object).getName().toUpperCase().equals(this.name.toUpperCase()));
+        }
+        return false;
     }
 
     public String getName() {
@@ -164,12 +171,11 @@ public class CrewMember {
         }
     }
 
-    public boolean performAction() {
+    public void performAction() {
         if (this.actionsLeftToday > 0) {
             this.actionsLeftToday -= 1;
-            return true;
         } else {
-            return false;
+            throw new UnableToPerformAction();
         }
     }
 }

@@ -9,7 +9,7 @@ public class SpacePlauge implements IEvent{
 
     @Override
     public void onTriggered() {
-        SpaceExplorer.getCurrentlyActing().addIllness(Illnesses.SPACE_PLAGUE);
+        SpaceExplorer.getCurrentlyActingCrewMember().addIllness(Illnesses.SPACE_PLAGUE);
         for (CrewMember crewMember : SpaceExplorer.getSpaceShip().getShipCrew()) {
             if (Helpers.randomGenerator.nextBoolean()) {
                 crewMember.addIllness(Illnesses.SPACE_PLAGUE);

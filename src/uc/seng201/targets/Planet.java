@@ -10,7 +10,11 @@ public class Planet {
     private boolean partFound = false;
 
     public Planet() {
-        planetName = Helpers.generatePlanetName();
+        this.planetName = Helpers.generatePlanetName();
+    }
+
+    public String toString() {
+        return getPlanetName();
     }
 
     public void onSearch() {
@@ -35,7 +39,7 @@ public class Planet {
     }
 
     public String getPlanetName() {
-        return planetName;
+        return planetName.toUpperCase();
     }
 
     public boolean getPartFound() {
