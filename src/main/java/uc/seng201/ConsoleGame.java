@@ -1,8 +1,7 @@
 package uc.seng201;
 
-import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.CrewType;
-import uc.seng201.crew.Human;
+import uc.seng201.crew.*;
+import uc.seng201.errors.InvalidGameState;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.helpers.StateActions;
 
@@ -26,15 +25,19 @@ public class ConsoleGame {
         int gameDuration = gameDurationInput();
         SpaceShip spaceShip = new SpaceShip(shipNameInput(), SpaceExplorer.calcPartsToFind(gameDuration));
         spaceShip.add(generateCrew());
-        SpaceExplorer.runNewGame(spaceShip, gameDuration);
+        SpaceExplorer.NewGame(spaceShip, gameDuration);
     }
 
     private static void loadGame() throws IOException {
         System.out.print("Filename: ");
         String filename = Helpers.bufferedReader.readLine();
         GameState gameState = StateActions.loadState(filename);
-        SpaceExplorer.runLoadedGame(gameState.getSpaceShip(), gameState.getPlanets(), gameState.getCurrentActingMember(),
-                gameState.getCurrentPlanet(), gameState.getCurrentDay(), gameState.getDuration());
+        if (gameState != null) {
+            SpaceExplorer.LoadedGame(gameState.getSpaceShip(), gameState.getPlanets(), gameState.getCurrentActingMember(),
+                    gameState.getCurrentPlanet(), gameState.getCurrentDay(), gameState.getDuration());
+        } else {
+            throw new InvalidGameState();
+        }
     }
 
     private static void inputConsoleMenu() throws IOException {
@@ -65,7 +68,7 @@ public class ConsoleGame {
             } while (!crewMemberName.matches("^([a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*){1,12}$"));
             do {
                 try {
-                    outputAvailableCrewTypes();
+                    System.out.println(String.format("Available crew types: %s", Helpers.listToString(CrewType.values())));
                     System.out.print(String.format("Enter crew member no. %d's type: ", i));
                     crewMemberType = CrewType.valueOf(Helpers.bufferedReader.readLine().toUpperCase());
                 } catch (IllegalArgumentException e) {
@@ -74,6 +77,21 @@ public class ConsoleGame {
             switch (crewMemberType) {
                 case HUMAN:
                     crew.add(new Human(crewMemberName));
+                    break;
+                case CRYSTAL:
+                    crew.add(new Crystal(crewMemberName));
+                    break;
+                case ENGI:
+                    crew.add(new Engi((crewMemberName)));
+                    break;
+                case SLUG:
+                    crew.add(new Slug(crewMemberName));
+                    break;
+                case LANIUS:
+                    crew.add(new Lanius(crewMemberName));
+                    break;
+                case ZOLTAN:
+                    crew.add(new Zoltan(crewMemberName));
                     break;
             }
         }
@@ -111,13 +129,5 @@ public class ConsoleGame {
             }
         } while (duration < 3 || duration > 10);
         return duration;
-    }
-
-    private static void outputAvailableCrewTypes() {
-        System.out.println("Available crew types:");
-        for (CrewType crewType : CrewType.values()) {
-            System.out.print(String.format("[%s] ", crewType));
-        }
-        System.out.print("\n");
     }
 }

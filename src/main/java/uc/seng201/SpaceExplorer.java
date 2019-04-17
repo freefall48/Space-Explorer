@@ -42,8 +42,8 @@ public class SpaceExplorer {
         SpaceExplorer.currentPlanet = currentPlanet;
     }
 
-    static void runLoadedGame(SpaceShip ship, List<Planet> planets, CrewMember currentAct,
-                              Planet orbiting, int day, int duration) throws IOException {
+    static void LoadedGame(SpaceShip ship, List<Planet> planets, CrewMember currentAct,
+                           Planet orbiting, int day, int duration) throws IOException {
         spaceShip = ship;
         knownPlanets = planets;
         currentlyActingCrewMember = currentAct;
@@ -51,7 +51,7 @@ public class SpaceExplorer {
         runGame(day, duration);
     }
 
-    static void runNewGame(SpaceShip ship, int duration) throws IOException {
+    static void NewGame(SpaceShip ship, int duration) throws IOException {
         spaceShip = ship;
         generatePlanets(duration);
         currentPlanet = knownPlanets.get(0);
