@@ -1,6 +1,6 @@
 package uc.seng201.items.medical;
 
-import uc.seng201.crew.Illnesses;
+import uc.seng201.crew.modifers.Illnesses;
 import uc.seng201.items.ItemType;
 
 public class Stardew extends MedicalItem {

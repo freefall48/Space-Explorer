@@ -1,6 +1,8 @@
 package uc.seng201.crew;
 
-import uc.seng201.crew.actions.UnableToPerformAction;
+import uc.seng201.crew.modifers.Abilities;
+import uc.seng201.crew.modifers.Illnesses;
+import uc.seng201.errors.ActionException;
 import uc.seng201.helpers.Helpers;
 
 import java.util.ArrayList;
@@ -39,9 +41,9 @@ public class CrewMember {
 
     @Override
     public String toString() {
-        return String.format("Crew member %s is a %s and has %d actions left today. ",
+        return String.format("%s, a %s that has %d actions left today, ",
                 this.name, this.crewType, this.actionsLeftToday) +
-                String.format("They have %d|%d health with regen of %d/pt, %d|%d food decaying " +
+                String.format("%d|%d health with regen of %d/pt, %d|%d food decaying " +
                                 "at %d/pt and %d|%d tiredness at %d/pt. ",
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
                         this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
@@ -167,7 +169,7 @@ public class CrewMember {
         if (this.actionsLeftToday > 0) {
             this.actionsLeftToday -= 1;
         } else {
-            throw new UnableToPerformAction();
+            throw new ActionException();
         }
     }
 }

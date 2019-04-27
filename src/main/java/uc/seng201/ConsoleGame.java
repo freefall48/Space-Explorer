@@ -43,7 +43,7 @@ public class ConsoleGame {
     private static void inputConsoleMenu() throws IOException {
         do {
             System.out.println("#######\tMain Menu\t#######");
-            System.out.print("Would you like to start a ([N]ew game) or ([L]oad) an existing game? : ");
+            System.out.print("Would you like to start a New game, or Load an existing one? [N|L]: ");
             String action = Helpers.bufferedReader.readLine();
             switch (action.toUpperCase()) {
                 case "N":
@@ -63,6 +63,7 @@ public class ConsoleGame {
         String crewMemberName;
         for (int i = 1; i <= crewCount; i++) {
             do {
+                System.out.println();
                 System.out.print(String.format("Enter crew member no. %d's name: ", i));
                 crewMemberName = Helpers.bufferedReader.readLine();
             } while (!crewMemberName.matches("^([a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*){1,12}$"));
@@ -101,7 +102,7 @@ public class ConsoleGame {
     private static int crewCountInput() throws IOException {
         int crewCount = 0;
         do {
-            System.out.print("Enter desired crew population: (2 - 4): ");
+            System.out.print("Enter desired crew population: (2 to 4): ");
             String userInput = Helpers.bufferedReader.readLine();
             if (Helpers.intTryParse(userInput)) {
                 crewCount = Integer.parseInt(userInput);

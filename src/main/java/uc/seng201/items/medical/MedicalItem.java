@@ -2,7 +2,7 @@ package uc.seng201.items.medical;
 
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.Illnesses;
+import uc.seng201.crew.modifers.Illnesses;
 import uc.seng201.items.IItem;
 import uc.seng201.items.ItemType;
 import uc.seng201.items.NoItemException;

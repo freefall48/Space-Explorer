@@ -1,4 +1,4 @@
-package uc.seng201.crew;
+package uc.seng201.crew.modifers;
 
 /**
  * The possible abilities that crew members can have.

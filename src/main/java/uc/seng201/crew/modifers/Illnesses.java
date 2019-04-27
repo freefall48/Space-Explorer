@@ -1,4 +1,4 @@
-package uc.seng201.crew;
+package uc.seng201.crew.modifers;
 
 /**
  * The possible illnesses that can affect crew members.

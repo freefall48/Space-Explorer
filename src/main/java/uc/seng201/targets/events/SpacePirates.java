@@ -12,7 +12,7 @@ public class SpacePirates implements IEvent {
     @Override
     public void onTriggered() {
         List<ItemType> currentItems = SpaceExplorer.getSpaceShip().getShipItems();
-        int positionToRemove = Helpers.randomGenerator.nextInt(currentItems.size() - 1);
+        int positionToRemove = Helpers.randomGenerator.nextInt(currentItems.size());
         currentItems.remove(positionToRemove);
     }
 }

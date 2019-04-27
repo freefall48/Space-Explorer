@@ -3,6 +3,7 @@ package uc.seng201;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.actions.Action;
 import uc.seng201.crew.actions.Pilot;
+import uc.seng201.crew.actions.Search;
 import uc.seng201.crew.actions.Sleep;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.helpers.StateActions;
@@ -65,28 +66,31 @@ public class SpaceExplorer {
             spaceShip.getShipCrew().forEach(CrewMember::updateStats);
             inputMenuAction();
             printDayStats();
+            Helpers.waitForEnter();
             performCrewAction();
         }
     }
 
+
     private static void printDayStats() {
-        System.out.println(String.format("\n\n#######\tDay %d statistics (Orbiting %s)\t#######\n%s\n",
+        System.out.print(String.format("\n#######\tDay %d statistics (Orbiting %s)\t#######\n%s",
                 currentDay, currentPlanet.getPlanetName(), spaceShip.toString()));
     }
 
     private static void inputMenuAction() throws IOException {
-        System.out.println(String.format("\n\n#######\tStart of day %d!\t#######", currentDay));
-        System.out.print("Would you like to [B]egin the day or [S]ave the game? : ");
+        System.out.println(String.format("\n#######\tStart of day %d!\t#######", currentDay));
+        System.out.print("Would you like to Begin the day or Save the game? [B|S]: ");
         String choice = Helpers.bufferedReader.readLine().toUpperCase();
         switch (choice) {
             case "B":
-                return;
+                break;
             case "S":
                 System.out.print("Filename to save as: ");
                 String filename = Helpers.bufferedReader.readLine();
                 boolean saved = StateActions.saveState(filename, spaceShip, knownPlanets, currentlyActingCrewMember,
                         currentPlanet, currentDay, gameDuration);
                 System.out.println(saved);
+                break;
         }
     }
 
@@ -95,7 +99,6 @@ public class SpaceExplorer {
         do {
             availableCrew = availableCrewMembers();
             currentlyActingCrewMember = inputCrewMemberToAct(availableCrew);
-            currentlyActingCrewMember.performAction();
             switch (actionToPerform(availableCrew.size())) {
                 case SLEEP:
                     Sleep.onPerform();
@@ -103,13 +106,15 @@ public class SpaceExplorer {
                 case PILOT:
                     Pilot.onPerform();
                     break;
+                case SEARCH:
+                    Search.onPerform();
             }
-        } while (!availableCrew.isEmpty());
+        } while (availableCrew.size() > 1);
 
     }
 
     private static Action actionToPerform(int availableCrew) throws IOException {
-        List<Action> actions = Arrays.asList(Action.values());
+        List<Action> actions = new ArrayList<>(Arrays.asList(Action.values()));
         if (availableCrew < 2) {
             actions.remove(Action.PILOT);
         }
