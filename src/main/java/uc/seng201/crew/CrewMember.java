@@ -35,7 +35,7 @@ public class CrewMember {
         this.name = name;
         this.crewType = crewType;
         this.maxHealth = this.health = maxHealth;
-        this.baseHealthRegen = baseHealthRegen;
+        this.baseHealthRegen = this.currentHealthRegen = baseHealthRegen;
         this.repairAmount = repairAmount;
     }
 

@@ -1,49 +1,47 @@
 package uc.seng201.gui;
 
-import javax.swing.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import uc.seng201.GameState;
+import uc.seng201.helpers.StateActions;
 
-public class MainMenuScreen extends JPanel implements Screen {
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
+public class MainMenuScreen extends JPanel implements Screen{
     private JPanel Menu;
-    private JButton slot3Button;
-    private JButton slot1Button;
-    private JButton slot2Button;
+    private JButton btnNewGame;
+    private JButton btnLoadGame;
 
     MainMenuScreen() {
 
-        checkSaves();
-        slot1Button.addActionListener(e -> {
-            SpaceExplorerGui.redraw(new StatsScreen().getScreen());
+        btnLoadGame.addActionListener(e -> {
+            FileDialog fd = new FileDialog(SpaceExplorerGui.getControlFrame(), "Choose a file", FileDialog.LOAD);
+            fd.setFile("*.json");
+            fd.setFilenameFilter((dir, name) -> name.toUpperCase().endsWith(".JSON"));
+            fd.setMultipleMode(false);
+            fd.setVisible(true);
+            if (fd.getFile() != null) {
+                try {
+                   GameState gameState = StateActions.loadState(fd.getDirectory()+fd.getFile());
+                   SpaceExplorerGui.spaceShip = gameState.getSpaceShip();
+                   SpaceExplorerGui.gameDuration = gameState.getDuration();
+                    SpaceExplorerGui.currentDay = gameState.getCurrentDay();
+                    SpaceExplorerGui.currentPlanet = gameState.getCurrentPlanet();
+                    SpaceExplorerGui.planets = gameState.getPlanets();
+                    SpaceExplorerGui.shipImageLocation = gameState.getShipImage();
+                } catch (IOException error) {
+                    JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
+                            "Failed to load the selected saved game!","Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            fd.dispose();
         });
-        slot2Button.addActionListener(e -> {
-
-        });
-        slot3Button.addActionListener(e -> {
-        });
+        btnNewGame.addActionListener(e -> SpaceExplorerGui.redraw(new AdventureCreator().getRootPanel()));
     }
 
     @Override
-    public JPanel getScreen() {
+    public JPanel getRootPanel() {
         return this.Menu;
     }
-
-    private void checkSaves() {
-        try {
-            if (Files.notExists(Paths.get("saves"))) {
-                Files.createDirectory(Paths.get("saves"));
-                this.slot1Button.setText("New Game");
-                this.slot1Button.setEnabled(true);
-            } else {
-                if (Files.exists(Paths.get("saves/save1.json"))) this.slot1Button.setEnabled(true);
-                if (Files.exists(Paths.get("saves/save2.json"))) this.slot2Button.setEnabled(true);
-                if (Files.exists(Paths.get("saves/save3.json"))) this.slot3Button.setEnabled(true);
-            }
-        } catch (IOException e) {
-            System.exit(1);
-        }
-    }
-
 
 }

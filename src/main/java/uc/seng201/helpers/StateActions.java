@@ -7,6 +7,8 @@ import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.targets.Planet;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -16,30 +18,20 @@ import java.util.List;
 
 public class StateActions {
 
-    public static boolean saveState(String filename, SpaceShip spaceShip, List<Planet> planets, CrewMember currentActing, Planet currentPlanet, int currentDay, int duration) {
-        GameState currentState = new GameState(spaceShip, planets, currentActing, currentPlanet, currentDay, duration);
+    public static void saveState(String filename, SpaceShip spaceShip, List<Planet> planets, Planet currentPlanet,
+                                    int currentDay, int duration, String shipImage) throws IOException{
+        GameState currentState = new GameState(spaceShip, planets, currentPlanet, currentDay, duration, shipImage);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(currentState);
-        try {
-            Path file = Paths.get(filename + ".json");
-            Files.writeString(file, json, Charset.forName("UTF-8"));
-            return true;
-        } catch (IOException e) {
-            System.out.println("Failed to save game state!");
-            return false;
-        }
+        Path file = Paths.get(filename + ".json");
+        Files.writeString(file, json, Charset.forName("UTF-8"));
     }
 
-    public static GameState loadState(String filename) {
-        try {
-            Path file = Paths.get(filename + ".json");
+    public static GameState loadState(String filename) throws IOException {
+            Path file = Paths.get(filename);
             String json = Files.readString(file);
             Gson gson = new Gson();
             return gson.fromJson(json, GameState.class);
-        } catch (IOException e) {
-            System.out.println("Failed to load game.");
-            return null;
-        }
     }
 }

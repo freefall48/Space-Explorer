@@ -4,6 +4,7 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InsufficientBalance;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.items.ItemType;
+import uc.seng201.targets.Planet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class SpaceShip {
     private List<CrewMember> shipCrew;
     private List<ItemType> shipItems;
     private int missingParts;
-    private int spaceBucks;
+    private int spaceBucks = 0;
     private int shieldCount = 2;
 
     /**
@@ -46,8 +47,10 @@ public class SpaceShip {
      *
      * @param crewMembers CrewMembers to add the the spaceship.
      */
-    public void add(CrewMember... crewMembers) {
-        this.shipCrew.addAll(Arrays.asList(crewMembers));
+    public void add(Object... crewMembers) {
+        for (Object crewMember : crewMembers) {
+                this.shipCrew.add((CrewMember) crewMember);
+        }
     }
 
     public void add(List<CrewMember> crewMembers) {
@@ -108,6 +111,18 @@ public class SpaceShip {
 
     public List<ItemType> getShipItems() {
         return shipItems;
+    }
+
+    public int getMaxShieldCount() {
+        return maxShieldCount;
+    }
+
+    public int getSpaceBucks() {
+        return spaceBucks;
+    }
+
+    public int getShieldCount() {
+        return shieldCount;
     }
 
     /**

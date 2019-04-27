@@ -33,8 +33,8 @@ public class ConsoleGame {
         String filename = Helpers.bufferedReader.readLine();
         GameState gameState = StateActions.loadState(filename);
         if (gameState != null) {
-            SpaceExplorer.LoadedGame(gameState.getSpaceShip(), gameState.getPlanets(), gameState.getCurrentActingMember(),
-                    gameState.getCurrentPlanet(), gameState.getCurrentDay(), gameState.getDuration());
+//            SpaceExplorer.LoadedGame(gameState.getSpaceShip(), gameState.getPlanets(), gameState.getCurrentActingMember(),
+//                    gameState.getCurrentPlanet(), gameState.getCurrentDay(), gameState.getDuration());
         } else {
             throw new InvalidGameState();
         }

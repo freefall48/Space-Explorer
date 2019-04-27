@@ -87,9 +87,9 @@ public class SpaceExplorer {
             case "S":
                 System.out.print("Filename to save as: ");
                 String filename = Helpers.bufferedReader.readLine();
-                boolean saved = StateActions.saveState(filename, spaceShip, knownPlanets, currentlyActingCrewMember,
-                        currentPlanet, currentDay, gameDuration);
-                System.out.println(saved);
+//                boolean saved = StateActions.saveState(filename, spaceShip, knownPlanets, currentlyActingCrewMember,
+//                        currentPlanet, currentDay, gameDuration);
+//                System.out.println(saved);
                 break;
         }
     }
@@ -155,7 +155,7 @@ public class SpaceExplorer {
         return availableCrew;
     }
 
-    static int calcPartsToFind(int duration) {
+    public static int calcPartsToFind(int duration) {
         return (int) (duration * 0.6666);
     }
 
@@ -168,10 +168,11 @@ public class SpaceExplorer {
         return null;
     }
 
-    private static void generatePlanets(int numberOfPlanets) {
-        knownPlanets = new ArrayList<>();
+    public static List<Planet> generatePlanets(int numberOfPlanets) {
+        List<Planet> planets = new ArrayList<>();
         for (int i = 0; i < numberOfPlanets; i++) {
-            knownPlanets.add(new Planet());
+            planets.add(new Planet());
         }
+        return planets;
     }
 }
