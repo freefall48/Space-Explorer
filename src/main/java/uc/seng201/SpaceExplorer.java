@@ -63,7 +63,7 @@ public class SpaceExplorer {
         gameDuration = duration;
         currentDay = day;
         for (; currentDay <= duration; currentDay++) {
-            spaceShip.getShipCrew().forEach(CrewMember::updateStats);
+//            spaceShip.getShipCrew().forEach(CrewMember::updateStats);
             inputMenuAction();
             printDayStats();
             Helpers.waitForEnter();
@@ -147,11 +147,11 @@ public class SpaceExplorer {
 
     public static List<CrewMember> availableCrewMembers() {
         List<CrewMember> availableCrew = new ArrayList<>();
-        spaceShip.getShipCrew().forEach(crewMember -> {
-            if (crewMember.canPerformActions()) {
-                availableCrew.add(crewMember);
-            }
-        });
+//        spaceShip.getShipCrew().forEach(crewMember -> {
+//            if (crewMember.canPerformActions()) {
+//                availableCrew.add(crewMember);
+//            }
+//        });
         return availableCrew;
     }
 

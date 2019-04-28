@@ -3,17 +3,18 @@ package uc.seng201.gui;
 import uc.seng201.GameState;
 import uc.seng201.helpers.StateActions;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
-public class MainMenuScreen extends JPanel implements Screen{
+public class MainMenu extends JPanel implements Screen{
     private JPanel Menu;
     private JButton btnNewGame;
     private JButton btnLoadGame;
 
-    MainMenuScreen() {
-
+    MainMenu() {
         btnLoadGame.addActionListener(e -> {
             FileDialog fd = new FileDialog(SpaceExplorerGui.getControlFrame(), "Choose a file", FileDialog.LOAD);
             fd.setFile("*.json");
@@ -29,6 +30,10 @@ public class MainMenuScreen extends JPanel implements Screen{
                     SpaceExplorerGui.currentPlanet = gameState.getCurrentPlanet();
                     SpaceExplorerGui.planets = gameState.getPlanets();
                     SpaceExplorerGui.shipImageLocation = gameState.getShipImage();
+                    if (SpaceExplorerGui.shipImageLocation != null) {
+                        SpaceExplorerGui.shipImage = ImageIO.read(new File(SpaceExplorerGui.shipImageLocation));
+                    }
+                    SpaceExplorerGui.redraw(new MainScreen().getRootPanel());
                 } catch (IOException error) {
                     JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
                             "Failed to load the selected saved game!","Error", JOptionPane.ERROR_MESSAGE);
@@ -43,5 +48,4 @@ public class MainMenuScreen extends JPanel implements Screen{
     public JPanel getRootPanel() {
         return this.Menu;
     }
-
 }

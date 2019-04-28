@@ -1,6 +1,5 @@
 package uc.seng201.gui;
 
-import com.sun.tools.javac.Main;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
@@ -12,12 +11,7 @@ import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdventureCreator extends JPanel implements Screen{
     private JTextField textShipName;
@@ -27,6 +21,7 @@ public class AdventureCreator extends JPanel implements Screen{
     private JButton btnAddCrew;
     private JList listCrew;
     private JCheckBox checkboxCustomShipFile;
+    private JButton btnBack;
 
     static DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
 
@@ -52,15 +47,18 @@ public class AdventureCreator extends JPanel implements Screen{
         listCrew.setModel(listCrewModal);
         listCrew.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 
+        btnBack.addActionListener(e -> SpaceExplorerGui.redraw(new MainMenu().getRootPanel()));
+
         btnAddCrew.addActionListener(e -> {
-            JDialog test = new CreateCrew();
-            test.setSize(450,230);
-            test.setVisible(true);
+            JDialog createCrewMember = new CreateCrewMember();
+            createCrewMember.setSize(450,230);
+            createCrewMember.setVisible(true);
         });
         btnContinue.addActionListener(e -> {
             SpaceExplorerGui.spaceShip = new SpaceShip(textShipName.getText(),
                     SpaceExplorer.calcPartsToFind(sliderDuration.getValue()));
             SpaceExplorerGui.spaceShip.add(listCrewModal.toArray());
+            SpaceExplorerGui.gameDuration = sliderDuration.getValue();
             SpaceExplorerGui.planets = SpaceExplorer.generatePlanets(sliderDuration.getValue());
             SpaceExplorerGui.currentPlanet = SpaceExplorerGui.planets.get(0);
             SpaceExplorerGui.redraw(new MainScreen().getRootPanel());

@@ -106,7 +106,9 @@ public class SpaceShip {
      * @return List of all crew members.
      */
     public List<CrewMember> getShipCrew() {
-        return shipCrew;
+
+        return new ArrayList<>(this.shipCrew);
+
     }
 
     public List<ItemType> getShipItems() {

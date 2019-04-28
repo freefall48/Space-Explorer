@@ -5,7 +5,7 @@ import uc.seng201.crew.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class CreateCrew extends JDialog {
+public class CreateCrewMember extends JDialog {
 
     private JPanel contentPane;
     private JButton buttonOK;
@@ -13,7 +13,7 @@ public class CreateCrew extends JDialog {
     private JTextField txtName;
     private JComboBox<CrewType> comboType;
 
-    CreateCrew() {
+    CreateCrewMember() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);

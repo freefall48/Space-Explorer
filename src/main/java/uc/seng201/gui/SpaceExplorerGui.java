@@ -1,13 +1,10 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
-import uc.seng201.helpers.Helpers;
 import uc.seng201.targets.Planet;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpaceExplorerGui {
@@ -30,7 +27,7 @@ public class SpaceExplorerGui {
     public static void main(String[] args) {
 
         controlFrame = new JFrame("Space Explorer");
-        controlFrame.setContentPane(new MainMenuScreen().getRootPanel());
+        controlFrame.setContentPane(new MainMenu().getRootPanel());
         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlFrame.setResizable(false);
         controlFrame.pack();
@@ -41,5 +38,15 @@ public class SpaceExplorerGui {
     static void redraw(JPanel panel) {
         controlFrame.setContentPane(panel);
         controlFrame.pack();
+    }
+
+    static void cleanGameState() {
+        currentDay = 0;
+        gameDuration = 0;
+        spaceShip = null;
+        shipImage = null;
+        shipImageLocation = null;
+        planets = null;
+        currentPlanet = null;
     }
 }
