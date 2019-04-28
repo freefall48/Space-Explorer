@@ -3,11 +3,9 @@ package uc.seng201;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InsufficientBalance;
 import uc.seng201.helpers.Helpers;
-import uc.seng201.items.ItemType;
-import uc.seng201.targets.Planet;
+import uc.seng201.items.Items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SpaceShip {
@@ -15,7 +13,7 @@ public class SpaceShip {
     private final int maxShieldCount = 4;
     private String shipName;
     private List<CrewMember> shipCrew;
-    private List<ItemType> shipItems;
+    private List<Items> shipItems;
     private int missingParts;
     private int spaceBucks = 0;
     private int shieldCount = 2;
@@ -57,7 +55,7 @@ public class SpaceShip {
         this.shipCrew.addAll(crewMembers);
     }
 
-    public void add(ItemType itemType) {
+    public void add(Items itemType) {
         this.shipItems.add(itemType);
     }
 
@@ -70,7 +68,7 @@ public class SpaceShip {
         return null;
     }
 
-    public boolean contains(ItemType item) {
+    public boolean contains(Items item) {
         return this.shipItems.contains(item);
     }
 
@@ -78,7 +76,7 @@ public class SpaceShip {
         return this.shipCrew.contains(crewMember);
     }
 
-    public void remove(ItemType itemType) {
+    public void remove(Items itemType) {
         this.shipItems.remove(itemType);
     }
 
@@ -110,8 +108,15 @@ public class SpaceShip {
         return new ArrayList<>(this.shipCrew);
 
     }
+    public List<CrewMember> getShipCrew(boolean mutable) {
+        if (mutable) {
+            return this.shipCrew;
+        } else {
+            return getShipCrew();
+        }
+    }
 
-    public List<ItemType> getShipItems() {
+    public List<Items> getShipItems() {
         return shipItems;
     }
 
@@ -156,5 +161,9 @@ public class SpaceShip {
             throw new InsufficientBalance();
         }
         this.spaceBucks = newBalance;
+    }
+
+    public void startOfDay() {
+        this.shipCrew.forEach(CrewMember::updateStats);
     }
 }

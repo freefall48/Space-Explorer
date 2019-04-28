@@ -1,10 +1,9 @@
 package uc.seng201.items.food;
 
-import uc.seng201.SpaceExplorer;
+import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.items.IItem;
-import uc.seng201.items.ItemType;
-import uc.seng201.items.NoItemException;
+import uc.seng201.items.Items;
 
 /**
  * The base class for food items. Provides the base implementation
@@ -14,9 +13,9 @@ public class FoodItem implements IItem {
 
     private int price;
     private int nutritionalValue;
-    private ItemType itemType;
+    private Items itemType;
 
-    public FoodItem(int price, int nutritionalValue, ItemType itemType) {
+    public FoodItem(int price, int nutritionalValue, Items itemType) {
         this.price = price;
         this.nutritionalValue = nutritionalValue;
         this.itemType = itemType;
@@ -42,12 +41,12 @@ public class FoodItem implements IItem {
     }
 
     @Override
-    public void onUse(CrewMember crewMember) {
-        if (!SpaceExplorer.getSpaceShip().contains(itemType)) {
-            throw new NoItemException();
+    public void onUse(CrewMember crewMember, SpaceShip spaceShip) {
+        if (!spaceShip.contains(itemType)) {
+            return;
         }
 
         crewMember.alterFood(nutritionalValue);
-        SpaceExplorer.getSpaceShip().remove(itemType);
+        spaceShip.remove(itemType);
     }
 }

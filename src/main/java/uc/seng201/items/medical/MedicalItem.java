@@ -1,11 +1,10 @@
 package uc.seng201.items.medical;
 
-import uc.seng201.SpaceExplorer;
+import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Illnesses;
 import uc.seng201.items.IItem;
-import uc.seng201.items.ItemType;
-import uc.seng201.items.NoItemException;
+import uc.seng201.items.Items;
 
 /**
  * Base class for medical items.
@@ -15,9 +14,9 @@ public class MedicalItem implements IItem {
     private int price;
     private int healthValue;
     private Illnesses illnessToCure;
-    private ItemType itemType;
+    private Items itemType;
 
-    public MedicalItem(int price, int healthValue, Illnesses illnessToCure, ItemType itemType) {
+    public MedicalItem(int price, int healthValue, Illnesses illnessToCure, Items itemType) {
         this.price = price;
         this.healthValue = healthValue;
         this.illnessToCure = illnessToCure;
@@ -41,9 +40,9 @@ public class MedicalItem implements IItem {
      * @param crewMember Target crew member.
      */
     @Override
-    public void onUse(CrewMember crewMember) {
-        if (!SpaceExplorer.getSpaceShip().contains(itemType)) {
-            throw new NoItemException();
+    public void onUse(CrewMember crewMember, SpaceShip spaceShip) {
+        if (!spaceShip.contains(itemType)) {
+            return;
         }
         if (healthValue > 0) {
             crewMember.alterHealth(healthValue);
@@ -51,6 +50,6 @@ public class MedicalItem implements IItem {
         if (illnessToCure != null) {
             crewMember.removeIllness(illnessToCure);
         }
-        SpaceExplorer.getSpaceShip().remove(itemType);
+        spaceShip.remove(itemType);
     }
 }

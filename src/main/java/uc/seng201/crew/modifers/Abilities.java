@@ -10,7 +10,7 @@ public enum Abilities {
 
     private String name;
 
-    Abilities(String name) {
+    Abilities(final String name) {
         this.name = name;
     }
 

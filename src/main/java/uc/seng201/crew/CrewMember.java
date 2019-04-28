@@ -20,7 +20,7 @@ public class CrewMember {
     private final int maxTiredness = 100;
     private final int tirednessRate = 25;
     private final int maxFoodLevel = 100;
-    private final int foodDecayRate = 20;
+    private final int foodDecayRate = -20;
     private String name;
     private CrewType crewType;
     private int health;
