@@ -20,7 +20,7 @@ public class SpaceExplorerGui {
     static BufferedImage shipImage;
     static String shipImageLocation;
 
-    public static JFrame getControlFrame() {
+    static JFrame getControlFrame() {
         return controlFrame;
     }
 
@@ -40,13 +40,7 @@ public class SpaceExplorerGui {
         controlFrame.pack();
     }
 
-    static void cleanGameState() {
-        currentDay = 0;
-        gameDuration = 0;
-        spaceShip = null;
-        shipImage = null;
-        shipImageLocation = null;
-        planets = null;
-        currentPlanet = null;
+    public static void popup(String message) {
+        JOptionPane.showMessageDialog(controlFrame, message);
     }
 }

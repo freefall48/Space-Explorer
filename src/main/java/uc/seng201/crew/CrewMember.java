@@ -63,6 +63,66 @@ public class CrewMember {
         return this.name;
     }
 
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getBaseHealthRegen() {
+        return baseHealthRegen;
+    }
+
+    public int getRepairAmount() {
+        return repairAmount;
+    }
+
+    public int getMaxTiredness() {
+        return maxTiredness;
+    }
+
+    public int getTirednessRate() {
+        return tirednessRate;
+    }
+
+    public int getMaxFoodLevel() {
+        return maxFoodLevel;
+    }
+
+    public int getFoodDecayRate() {
+        return foodDecayRate;
+    }
+
+    public CrewType getCrewType() {
+        return crewType;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getCurrentHealthRegen() {
+        return currentHealthRegen;
+    }
+
+    public int getTiredness() {
+        return tiredness;
+    }
+
+    public int getActionsLeftToday() {
+        return actionsLeftToday;
+    }
+
+    public List<Illnesses> getIllnesses() {
+        return illnesses;
+    }
+
+    public List<Abilities> getAbilities() {
+        return abilities;
+    }
+
+    public int getFoodLevel() {
+        return foodLevel;
+    }
+
     public void alterFood(int food) {
         int newLevel = this.foodLevel + food;
         if (newLevel >= this.maxFoodLevel) {
@@ -141,28 +201,12 @@ public class CrewMember {
         }
         alterFood(this.foodDecayRate);
         alterTiredness(this.tirednessRate);
-        if (this.foodLevel == 0 || this.tiredness == 100) {
-            this.actionsLeftToday = 0;
-        } else {
-            this.actionsLeftToday = 2;
-        }
+        actionsLeftToday = 2;
 
-    }
-
-    public boolean isAlive() {
-        if (this.health > 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public boolean canPerformActions() {
-        if (this.actionsLeftToday > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.actionsLeftToday > 0;
     }
 
     public void performAction() {

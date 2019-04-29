@@ -5,8 +5,6 @@ import uc.seng201.helpers.Helpers;
 import uc.seng201.helpers.StateActions;
 import uc.seng201.events.EventTrigger;
 import uc.seng201.events.RandomEvents;
-import uc.seng201.items.Items;
-import uc.seng201.targets.Planet;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -104,6 +102,7 @@ public class MainScreen implements Screen {
                 event.onTrigger(SpaceExplorerGui.spaceShip);
             }
         }
+        updateTablesModels();
         reloadState();
     }
 

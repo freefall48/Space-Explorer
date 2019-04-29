@@ -2,6 +2,7 @@ package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InsufficientBalance;
+import uc.seng201.gui.SpaceExplorerGui;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.items.Items;
 
@@ -165,5 +166,13 @@ public class SpaceShip {
 
     public void startOfDay() {
         this.shipCrew.forEach(CrewMember::updateStats);
+        this.shipCrew.forEach(crewMember -> {
+            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
+                crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
+                crewMember.performAction();
+                SpaceExplorerGui.popup(crewMember.getName() + " was overcome with tiredness and forced to spend" +
+                        "an action sleeping.");
+            }
+        });
     }
 }

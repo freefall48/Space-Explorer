@@ -27,21 +27,8 @@ public class PerformAction extends JDialog {
     private CrewMember additionalCrewMember;
 
     private DefaultComboBoxModel<String> additionalCrewModal = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<Action> availableActionsModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<Planet> targetPlanetsModel = new DefaultComboBoxModel<>();
-
-    private void updateModels() {
-        SpaceExplorerGui.spaceShip.getShipCrew().forEach(coActor -> {
-            if (!coActor.equals(primaryCrewMember) && coActor.canPerformActions()) {
-                additionalCrewModal.addElement(coActor.getName());
-            }
-        });
-
-        SpaceExplorerGui.planets.forEach(planet -> {
-            if (!planet.equals(SpaceExplorerGui.currentPlanet)) {
-                targetPlanetsModel.addElement(planet);
-            }
-        });
-    }
 
     PerformAction(CrewMember crewMember) {
         setContentPane(contentPane);
@@ -51,7 +38,7 @@ public class PerformAction extends JDialog {
         updateModels();
         lblName.setText(crewMember.getName());
         lblActionText.setText(String.format("What will %s do?", primaryCrewMember.getName()));
-        comboActions.setModel(new DefaultComboBoxModel<>(Action.values()));
+        comboActions.setModel(availableActionsModel);
         comboPlanets.setModel(targetPlanetsModel);
         comboAdditionalCrew.setModel(additionalCrewModal);
         comboAdditionalCrew.addActionListener(e -> {
@@ -84,6 +71,37 @@ public class PerformAction extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private void updateModels() {
+        additionalCrewModal.removeAllElements();
+        availableActionsModel.removeAllElements();
+        targetPlanetsModel.removeAllElements();
+
+        SpaceExplorerGui.spaceShip.getShipCrew().forEach(coActor -> {
+            if (!coActor.equals(primaryCrewMember) && coActor.canPerformActions()) {
+                additionalCrewModal.addElement(coActor.getName());
+            }
+        });
+
+        SpaceExplorerGui.planets.forEach(planet -> {
+            if (!planet.equals(SpaceExplorerGui.currentPlanet)) {
+                targetPlanetsModel.addElement(planet);
+            }
+        });
+
+        Action[] actionCache = Action.values();
+        for (Action action : actionCache) {
+            if (action.getCrewRequired() == 1) {
+                availableActionsModel.addElement(action);
+            } else if (additionalCrewModal.getSize() >= (action.getCrewRequired() - 1)) {
+                availableActionsModel.addElement(action);
+            }
+        }
+
+        this.revalidate();
+        this.repaint();
+
+    }
+
     private void onOK() {
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
         if (actionToPerform.getCostsActionPoint()) {
@@ -91,31 +109,8 @@ public class PerformAction extends JDialog {
             if (additionalCrewMember != null) {
                 additionalCrewMember.performAction();
             }
-            switch (actionToPerform) {
-
-                case PILOT:
-                    SpaceExplorerGui.currentPlanet = (Planet) comboPlanets.getSelectedItem();
-                    if (Helpers.randomGenerator.nextBoolean()) {
-                        RandomEvents event = RandomEvents.values()[Helpers.randomGenerator.nextInt(RandomEvents.values().length)];
-                        if (event.getTrigger().equals(EventTrigger.START_DAY)) {
-                            JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
-                                    String.format(event.getEventDescription(), SpaceExplorerGui.spaceShip.getShipName(),
-                                            primaryCrewMember.getName(), additionalCrewMember.getName()));
-                            event.onTrigger(SpaceExplorerGui.spaceShip);
-                        }
-                    }
-                    break;
-                case SEARCH:
-                    String foundMessage = SpaceExplorerGui.currentPlanet.onSearch(primaryCrewMember, SpaceExplorerGui.spaceShip);
-                    JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(), foundMessage);
-                    break;
-                case SLEEP:
-                    primaryCrewMember.alterTiredness(-100);
-                    break;
-                case EAT:
-                    break;
-            }
         }
+        performAction(actionToPerform);
         dispose();
     }
 
@@ -126,29 +121,46 @@ public class PerformAction extends JDialog {
     private void onAdditionalCrewSelected() {
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
         if (actionToPerform == Action.PILOT) {
-            lblTargetPlanet.setVisible(true);
-            comboPlanets.setVisible(true);
+            lblActionText.setText(lblActionText.getText() + " " + additionalCrewMember.getName() + " takes the co-pilot seat.");
         }
     }
 
+    private void setAdditionalInputVisible(boolean visible) {
+        comboAdditionalCrew.setVisible(visible);
+        lblAdditionalCrew.setVisible(visible);
+        lblTargetPlanet.setVisible(visible);
+        comboPlanets.setVisible(visible);
+    }
+
     private void onActionSelected() {
+        setAdditionalInputVisible(false);
         buttonOK.setEnabled(false);
         this.additionalCrewMember = null;
         lblActionText.setText("");
+        boolean enableOkButton = false;
+
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
-        if (actionToPerform.getCrewRequired() == 2 && this.comboAdditionalCrew.getItemCount() != 0) {
-            lblAdditionalCrew.setVisible(true);
-            comboAdditionalCrew.setVisible(true);
-            return;
-        } else if (actionToPerform.getCrewRequired() == 2 && this.comboAdditionalCrew.getItemCount() == 0) {
-            comboAdditionalCrew.removeItem(Action.PILOT);
-            lblAdditionalCrew.setVisible(false);
-            comboAdditionalCrew.setVisible(false);
+        if (actionToPerform.getCrewRequired() == 2) {
+            if (this.comboAdditionalCrew.getItemCount() != 0) {
+                setAdditionalInputVisible(true);
+            } else {
+                availableActionsModel.removeElement(Action.PILOT);
+                this.revalidate();
+                this.repaint();
+            }
         } else {
-            comboAdditionalCrew.setVisible(false);
-            lblAdditionalCrew.setVisible(false);
+            enableOkButton = true;
         }
-        switch (actionToPerform) {
+        setActionText(actionToPerform);
+        buttonOK.setEnabled(enableOkButton);
+    }
+
+    private void setActionText(Action action) {
+        switch (action) {
+            case PILOT:
+                lblActionText.setText(String.format("%s readies %s for flight!", primaryCrewMember.getName(),
+                        SpaceExplorerGui.spaceShip.getShipName()));
+                break;
             case SEARCH:
                 lblActionText.setText(String.format(Action.SEARCH.getActionText(), primaryCrewMember.getName(),
                         SpaceExplorerGui.currentPlanet, SpaceExplorerGui.currentPlanet.getPartFound()));
@@ -157,9 +169,35 @@ public class PerformAction extends JDialog {
                 lblActionText.setText(String.format(Action.SLEEP.getActionText(), primaryCrewMember.getName()));
                 break;
             case EAT:
+                lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(), "Food"));
                 break;
         }
-        buttonOK.setEnabled(true);
+    }
+
+    private void performAction(Action action) {
+        switch (action) {
+            case PILOT:
+                SpaceExplorerGui.currentPlanet = (Planet) comboPlanets.getSelectedItem();
+                if (Helpers.randomGenerator.nextBoolean()) {
+                    RandomEvents event = RandomEvents.values()[Helpers.randomGenerator.nextInt(RandomEvents.values().length)];
+                    if (event.getTrigger().equals(EventTrigger.START_DAY)) {
+                        JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
+                                String.format(event.getEventDescription(), SpaceExplorerGui.spaceShip.getShipName(),
+                                        primaryCrewMember.getName(), additionalCrewMember.getName()));
+                        event.onTrigger(SpaceExplorerGui.spaceShip);
+                    }
+                }
+                break;
+            case SEARCH:
+                String foundMessage = SpaceExplorerGui.currentPlanet.onSearch(primaryCrewMember, SpaceExplorerGui.spaceShip);
+                JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(), foundMessage);
+                break;
+            case SLEEP:
+                primaryCrewMember.alterTiredness(0 - primaryCrewMember.getMaxTiredness());
+                break;
+            case EAT:
+                break;
+        }
     }
 
     {
