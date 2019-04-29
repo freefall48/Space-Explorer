@@ -4,11 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import uc.seng201.GameState;
 import uc.seng201.SpaceShip;
-import uc.seng201.crew.CrewMember;
 import uc.seng201.targets.Planet;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
