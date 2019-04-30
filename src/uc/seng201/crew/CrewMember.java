@@ -216,4 +216,8 @@ public class CrewMember {
             throw new ActionException();
         }
     }
+
+    public boolean isAlive() {
+        return this.health > 0;
+    }
 }

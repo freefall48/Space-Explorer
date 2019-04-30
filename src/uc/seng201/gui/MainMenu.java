@@ -33,7 +33,7 @@ public class MainMenu extends JPanel implements Screen {
                     if (SpaceExplorerGui.shipImageLocation != null) {
                         SpaceExplorerGui.shipImage = ImageIO.read(new File(SpaceExplorerGui.shipImageLocation));
                     }
-                    SpaceExplorerGui.redraw(new MainScreen().getRootPanel());
+                    SpaceExplorerGui.redrawRoot(new MainScreen().getRootPanel());
                 } catch (IOException error) {
                     JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
                             "Failed to load the selected saved game!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -41,7 +41,7 @@ public class MainMenu extends JPanel implements Screen {
             }
             fd.dispose();
         });
-        btnNewGame.addActionListener(e -> SpaceExplorerGui.redraw(new AdventureCreator().getRootPanel()));
+        btnNewGame.addActionListener(e -> SpaceExplorerGui.redrawRoot(new AdventureCreator().getRootPanel()));
     }
 
     @Override

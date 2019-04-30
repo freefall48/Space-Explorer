@@ -47,7 +47,7 @@ public class AdventureCreator extends JPanel implements Screen {
         listCrew.setModel(listCrewModal);
         listCrew.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 
-        btnBack.addActionListener(e -> SpaceExplorerGui.redraw(new MainMenu().getRootPanel()));
+        btnBack.addActionListener(e -> SpaceExplorerGui.redrawRoot(new MainMenu().getRootPanel()));
 
         btnAddCrew.addActionListener(e -> {
             JDialog createCrewMember = new CreateCrewMember();
@@ -61,7 +61,7 @@ public class AdventureCreator extends JPanel implements Screen {
             SpaceExplorerGui.gameDuration = sliderDuration.getValue();
             SpaceExplorerGui.planets = Helpers.generatePlanets(sliderDuration.getValue());
             SpaceExplorerGui.currentPlanet = SpaceExplorerGui.planets.get(0);
-            SpaceExplorerGui.redraw(new MainScreen().getRootPanel());
+            SpaceExplorerGui.redrawRoot(new MainScreen().getRootPanel());
         });
 
         checkboxCustomShipFile.addActionListener(e -> {

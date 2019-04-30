@@ -89,9 +89,7 @@ public class MainScreen implements Screen {
             SpaceExplorerGui.currentDay = nextDay;
             updateHUD();
         } else {
-            JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(), "On no! It seems" +
-                    "you have failed to rebuild your ship! Err....", "Failure", JOptionPane.INFORMATION_MESSAGE);
-            System.exit(0);
+            SpaceExplorerGui.failedGame("On no! It seems you have failed to rebuild your ship in time! Err....");
         }
         SpaceExplorerGui.spaceShip.startOfDay();
         if (Helpers.randomGenerator.nextBoolean()) {
@@ -111,10 +109,17 @@ public class MainScreen implements Screen {
         performAction.setSize(450, 350);
         performAction.setLocationRelativeTo(null);
         performAction.setVisible(true);
+        checkAllPartsFound();
         updateHUD();
         reloadState();
         listCrew.clearSelection();
         btnPerformAction.setEnabled(false);
+    }
+
+    private void checkAllPartsFound() {
+        if (SpaceExplorerGui.spaceShip.getMissingParts() == 0) {
+            SpaceExplorerGui.completedGame();
+        }
     }
 
     private void onCrewMemberSelection(ListSelectionEvent event) {

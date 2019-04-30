@@ -175,4 +175,18 @@ public class SpaceShip {
             }
         });
     }
+
+    public void checkShipState() {
+        this.shipCrew.forEach(crewMember -> {
+            if (!crewMember.isAlive()) {
+                this.shipCrew.remove(crewMember);
+            }
+        });
+        if (this.shipCrew.size() == 0) {
+            SpaceExplorerGui.failedGame("Looks like you have run out of crew...");
+        }
+        if (this.shieldCount == 0) {
+            SpaceExplorerGui.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
+        }
+    }
 }

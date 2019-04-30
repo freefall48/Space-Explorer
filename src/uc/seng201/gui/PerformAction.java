@@ -1,11 +1,13 @@
 package uc.seng201.gui;
 
+import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.Action;
 import uc.seng201.events.EventTrigger;
 import uc.seng201.events.RandomEvents;
 import uc.seng201.helpers.Helpers;
-import uc.seng201.targets.Planet;
+import uc.seng201.items.ItemType;
+import uc.seng201.items.Items;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,17 +20,18 @@ public class PerformAction extends JDialog {
     private JComboBox<Action> comboActions;
     private JLabel lblName;
     private JLabel lblActionText;
-    private JComboBox<String> comboAdditionalCrew;
-    private JLabel lblAdditionalCrew;
-    private JLabel lblTargetPlanet;
-    private JComboBox<Planet> comboPlanets;
+    private JComboBox<String> comboAdditionalInfo1;
+    private JLabel lblAdditionalInfo1;
+    private JLabel lblAdditionalInfo2;
+    private JComboBox<String> comboAdditionaInfo2;
 
     private CrewMember primaryCrewMember;
     private CrewMember additionalCrewMember;
 
     private DefaultComboBoxModel<String> additionalCrewModal = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<Action> availableActionsModel = new DefaultComboBoxModel<>();
-    private DefaultComboBoxModel<Planet> targetPlanetsModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<String> targetPlanetsModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<String> itemModel = new DefaultComboBoxModel<>();
 
     PerformAction(CrewMember crewMember) {
         setContentPane(contentPane);
@@ -37,26 +40,16 @@ public class PerformAction extends JDialog {
         this.primaryCrewMember = crewMember;
         updateModels();
         lblName.setText(crewMember.getName());
-        lblActionText.setText(String.format("What will %s do?", primaryCrewMember.getName()));
+
         comboActions.setModel(availableActionsModel);
-        comboPlanets.setModel(targetPlanetsModel);
-        comboAdditionalCrew.setModel(additionalCrewModal);
-        comboAdditionalCrew.addActionListener(e -> {
-            this.additionalCrewMember = SpaceExplorerGui.spaceShip.findCrewMember(comboAdditionalCrew.getItemAt(
-                    comboAdditionalCrew.getSelectedIndex()));
-            this.onAdditionalCrewSelected();
-        });
+
+        Action defaultAction = Action.SEARCH;
+        availableActionsModel.setSelectedItem(defaultAction);
+        setActionDialog(defaultAction);
 
         buttonOK.addActionListener(e -> onOK());
-
         buttonCancel.addActionListener(e -> onCancel());
         comboActions.addActionListener(e -> onActionSelected());
-
-        comboPlanets.addActionListener(e -> {
-            buttonOK.setEnabled(true);
-            lblActionText.setText(String.format(Action.PILOT.getActionText(), primaryCrewMember.getName(), additionalCrewMember.getName(),
-                    SpaceExplorerGui.spaceShip.getShipName(), comboPlanets.getSelectedItem()));
-        });
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -84,10 +77,17 @@ public class PerformAction extends JDialog {
 
         SpaceExplorerGui.planets.forEach(planet -> {
             if (!planet.equals(SpaceExplorerGui.currentPlanet)) {
-                targetPlanetsModel.addElement(planet);
+                targetPlanetsModel.addElement(planet.getPlanetName());
             }
         });
 
+        generateAvailableActions();
+        this.revalidate();
+        this.repaint();
+
+    }
+
+    private void generateAvailableActions() {
         Action[] actionCache = Action.values();
         for (Action action : actionCache) {
             if (action.getCrewRequired() == 1) {
@@ -96,14 +96,29 @@ public class PerformAction extends JDialog {
                 availableActionsModel.addElement(action);
             }
         }
-
-        this.revalidate();
-        this.repaint();
-
+        boolean foodPresent = false;
+        boolean medicalPresent = false;
+        for (Items item : SpaceExplorerGui.spaceShip.getShipItems()) {
+            if (item.getItemType().equals(ItemType.FOOD)) {
+                foodPresent = true;
+            } else if (item.getItemType().equals(ItemType.MEDICAL)) {
+                medicalPresent = true;
+            }
+        }
+        if (!foodPresent) {
+            availableActionsModel.removeElement(Action.EAT);
+        }
+        if (!medicalPresent) {
+            availableActionsModel.removeElement(Action.MEDICAL);
+        }
     }
 
     private void onOK() {
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
+        if (actionToPerform.getCrewRequired() == 2) {
+            this.additionalCrewMember = SpaceExplorerGui.spaceShip.findCrewMember(
+                    (String) additionalCrewModal.getSelectedItem());
+        }
         if (actionToPerform.getCostsActionPoint()) {
             this.primaryCrewMember.performAction();
             if (additionalCrewMember != null) {
@@ -118,48 +133,64 @@ public class PerformAction extends JDialog {
         dispose();
     }
 
-    private void onAdditionalCrewSelected() {
-        Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
-        if (actionToPerform == Action.PILOT) {
-            lblActionText.setText(lblActionText.getText() + " " + additionalCrewMember.getName() + " takes the co-pilot seat.");
-        }
+    private void setAdditionalInputVisible(boolean visible) {
+        comboAdditionalInfo1.setVisible(visible);
+        lblAdditionalInfo1.setVisible(visible);
+        lblAdditionalInfo2.setVisible(visible);
+        comboAdditionaInfo2.setVisible(visible);
     }
 
-    private void setAdditionalInputVisible(boolean visible) {
-        comboAdditionalCrew.setVisible(visible);
-        lblAdditionalCrew.setVisible(visible);
-        lblTargetPlanet.setVisible(visible);
-        comboPlanets.setVisible(visible);
+    private void setAdditionalInputVisible(int additionalInputs) {
+        switch (additionalInputs) {
+            case 2:
+                comboAdditionaInfo2.setVisible(true);
+                lblAdditionalInfo2.setVisible(true);
+            case 1:
+                comboAdditionalInfo1.setVisible(true);
+                lblAdditionalInfo1.setVisible(true);
+                break;
+        }
     }
 
     private void onActionSelected() {
         setAdditionalInputVisible(false);
-        buttonOK.setEnabled(false);
-        this.additionalCrewMember = null;
-        lblActionText.setText("");
-        boolean enableOkButton = false;
 
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
-        if (actionToPerform.getCrewRequired() == 2) {
-            if (this.comboAdditionalCrew.getItemCount() != 0) {
-                setAdditionalInputVisible(true);
-            } else {
-                availableActionsModel.removeElement(Action.PILOT);
-                this.revalidate();
-                this.repaint();
-            }
-        } else {
-            enableOkButton = true;
-        }
-        setActionText(actionToPerform);
-        buttonOK.setEnabled(enableOkButton);
+        setActionDialog(actionToPerform);
     }
 
-    private void setActionText(Action action) {
+    private void setItemsModel(ItemType itemType) {
+        itemModel.removeAllElements();
+        for (Items item : SpaceExplorerGui.spaceShip.getShipItems()) {
+            if (item.getItemType().equals(itemType) && !itemModelContains(item)) {
+                itemModel.addElement(item.toString());
+            }
+        }
+    }
+
+    private boolean itemModelContains(Items item) {
+        for (int i = 0; i < itemModel.getSize(); i++) {
+            if (itemModel.getElementAt(i).equals(item.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setActionDialog(Action action) {
+        buttonOK.setEnabled(true);
         switch (action) {
             case PILOT:
-                lblActionText.setText(String.format("%s readies %s for flight!", primaryCrewMember.getName(),
-                        SpaceExplorerGui.spaceShip.getShipName()));
+                lblAdditionalInfo1.setText("Co-pilot:");
+                comboAdditionalInfo1.setModel(additionalCrewModal);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                lblAdditionalInfo2.setText("Destination Planet:");
+                comboAdditionaInfo2.setModel(targetPlanetsModel);
+                comboAdditionaInfo2.setSelectedIndex(0);
+                setAdditionalInputVisible(2);
+                lblActionText.setText(String.format(Action.PILOT.getActionText(), primaryCrewMember.getName(),
+                        comboAdditionalInfo1.getSelectedItem(), SpaceExplorerGui.spaceShip.getShipName(),
+                        comboAdditionaInfo2.getSelectedItem()));
                 break;
             case SEARCH:
                 lblActionText.setText(String.format(Action.SEARCH.getActionText(), primaryCrewMember.getName(),
@@ -169,18 +200,31 @@ public class PerformAction extends JDialog {
                 lblActionText.setText(String.format(Action.SLEEP.getActionText(), primaryCrewMember.getName()));
                 break;
             case EAT:
-                lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(), "Food"));
+                setItemsModel(ItemType.FOOD);
+                if (itemModel.getSize() != 0) {
+                    lblAdditionalInfo1.setText("Snack on:");
+                    comboAdditionalInfo1.setModel(itemModel);
+                    comboAdditionalInfo1.setSelectedIndex(0);
+                    setAdditionalInputVisible(1);
+                    lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(),
+                            comboAdditionalInfo1.getSelectedItem()));
+                } else {
+                    buttonOK.setEnabled(false);
+                }
                 break;
+            case MEDICAL:
+                lblActionText.setText(String.format(Action.MEDICAL.getActionText(), primaryCrewMember.getName(), ""));
+
         }
     }
 
     private void performAction(Action action) {
         switch (action) {
             case PILOT:
-                SpaceExplorerGui.currentPlanet = (Planet) comboPlanets.getSelectedItem();
+                SpaceExplorerGui.currentPlanet = SpaceExplorerGui.getPlanet((String) comboAdditionaInfo2.getSelectedItem());
                 if (Helpers.randomGenerator.nextBoolean()) {
                     RandomEvents event = RandomEvents.values()[Helpers.randomGenerator.nextInt(RandomEvents.values().length)];
-                    if (event.getTrigger().equals(EventTrigger.START_DAY)) {
+                    if (event.getTrigger().equals(EventTrigger.TRAVEL)) {
                         JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
                                 String.format(event.getEventDescription(), SpaceExplorerGui.spaceShip.getShipName(),
                                         primaryCrewMember.getName(), additionalCrewMember.getName()));
@@ -196,6 +240,9 @@ public class PerformAction extends JDialog {
                 primaryCrewMember.alterTiredness(0 - primaryCrewMember.getMaxTiredness());
                 break;
             case EAT:
+                Items item = Items.valueOf((String) comboAdditionalInfo1.getSelectedItem());
+                SpaceExplorerGui.spaceShip.remove(item);
+                item.onConsume(primaryCrewMember);
                 break;
         }
     }
@@ -236,7 +283,7 @@ public class PerformAction extends JDialog {
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
         buttonOK = new JButton();
-        buttonOK.setEnabled(false);
+        buttonOK.setEnabled(true);
         buttonOK.setText("OK");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -311,44 +358,44 @@ public class PerformAction extends JDialog {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         panel4.add(label2, gbc);
-        comboAdditionalCrew = new JComboBox();
-        comboAdditionalCrew.setToolTipText("Select an action to perform.");
-        comboAdditionalCrew.setVisible(false);
+        comboAdditionalInfo1 = new JComboBox();
+        comboAdditionalInfo1.setToolTipText("Select an action to perform.");
+        comboAdditionalInfo1.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 0, 0);
-        panel4.add(comboAdditionalCrew, gbc);
-        lblAdditionalCrew = new JLabel();
-        lblAdditionalCrew.setText("Additional Crew:");
-        lblAdditionalCrew.setVisible(false);
+        panel4.add(comboAdditionalInfo1, gbc);
+        lblAdditionalInfo1 = new JLabel();
+        lblAdditionalInfo1.setText("Additional Crew:");
+        lblAdditionalInfo1.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel4.add(lblAdditionalCrew, gbc);
-        comboPlanets = new JComboBox();
-        comboPlanets.setToolTipText("Select an action to perform.");
-        comboPlanets.setVisible(false);
+        panel4.add(lblAdditionalInfo1, gbc);
+        comboAdditionaInfo2 = new JComboBox();
+        comboAdditionaInfo2.setToolTipText("Select an action to perform.");
+        comboAdditionaInfo2.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 0, 0);
-        panel4.add(comboPlanets, gbc);
-        lblTargetPlanet = new JLabel();
-        lblTargetPlanet.setText("Select Destination:");
-        lblTargetPlanet.setVisible(false);
+        panel4.add(comboAdditionaInfo2, gbc);
+        lblAdditionalInfo2 = new JLabel();
+        lblAdditionalInfo2.setText("Select Destination:");
+        lblAdditionalInfo2.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel4.add(lblTargetPlanet, gbc);
+        panel4.add(lblAdditionalInfo2, gbc);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
