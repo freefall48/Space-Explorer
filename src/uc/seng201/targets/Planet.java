@@ -29,7 +29,7 @@ public class Planet {
 
     public String onSearch(CrewMember crewMember, SpaceShip spaceShip) {
         int action = Helpers.randomGenerator.nextInt(5);
-        String message;
+        String message = String.format("Unfortunately %s did not find anything this time.", crewMember.getName());
         switch (action) {
             case 0:
                 int bucks = Helpers.randomGenerator.nextInt(16) + 10;
@@ -37,19 +37,17 @@ public class Planet {
                 message = String.format("%s found $%d while searching!", crewMember.getName(), bucks);
                 break;
             case 1:
-                this.partFound = true;
-                spaceShip.partFound();
-                message = String.format("%s FOUND A PART OF THE SHIP!", crewMember.getName().toUpperCase());
+                if (!this.partFound) {
+                    this.partFound = true;
+                    spaceShip.partFound();
+                    message = String.format("%s FOUND A PART OF THE SHIP!", crewMember.getName().toUpperCase());
+                }
                 break;
             case 2:
-            case 3:
                 int itemId = Helpers.randomGenerator.nextInt(Items.values().length);
                 Items itemFound = Items.values()[itemId];
                 spaceShip.add(itemFound);
                 message = String.format("%s found %s while exploring!", crewMember.getName(), itemFound);
-                break;
-            default:
-                message = String.format("Unfortunately %s did not find anything this time.", crewMember.getName());
                 break;
         }
         return message;

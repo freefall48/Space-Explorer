@@ -1,17 +1,21 @@
 package uc.seng201.gui;
 
+import uc.seng201.SpaceExplorerGui;
 import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.modifers.Modifications;
+import uc.seng201.events.IRandomEvent;
+import uc.seng201.events.RandomEvent;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.helpers.StateActions;
 import uc.seng201.events.EventTrigger;
-import uc.seng201.events.RandomEvents;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Iterator;
 
-public class MainScreen implements Screen {
+public class MainScreen {
 
     private JPanel panelRoot;
     private JLabel lblSpaceShipName;
@@ -28,6 +32,8 @@ public class MainScreen implements Screen {
     private JList<String> listFoodItems;
     private JList<String> listMedicalSupplies;
     private JList<String> listPlanets;
+    private JButton btnHelp;
+    private JButton btnInspect;
 
     private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
     private DefaultListModel<String> listMedicalSuppliesModel = new DefaultListModel<>();
@@ -48,7 +54,18 @@ public class MainScreen implements Screen {
 
         btnPerformAction.addActionListener(e -> onPerformAction());
 
+        btnInspect.addActionListener(e -> {
+            JDialog inspectCrewDialog = new JDialog();
+            inspectCrewDialog.setSize(400, 200);
+            inspectCrewDialog.setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
+            inspectCrewDialog.setVisible(true);
+        });
+
         btnSave.addActionListener(e -> onSave());
+
+        btnHelp.addActionListener(e -> {
+            JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(), Helpers.listToString(Modifications.values()));
+        });
     }
 
     private void onSave() {
@@ -93,14 +110,12 @@ public class MainScreen implements Screen {
         }
         SpaceExplorerGui.spaceShip.startOfDay();
         if (Helpers.randomGenerator.nextBoolean()) {
-            RandomEvents event = RandomEvents.values()[Helpers.randomGenerator.nextInt(RandomEvents.values().length)];
-            if (event.getTrigger().equals(EventTrigger.START_DAY)) {
-                JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
-                        String.format(event.getEventDescription(), SpaceExplorerGui.spaceShip.getShipName()));
-                event.onTrigger(SpaceExplorerGui.spaceShip);
-            }
+            RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
+            event.getInstance().onTrigger(SpaceExplorerGui.spaceShip);
+            SpaceExplorerGui.popup(event.getEventDescription());
         }
         updateTablesModels();
+        checkActionButtonState();
         reloadState();
     }
 
@@ -113,7 +128,22 @@ public class MainScreen implements Screen {
         updateHUD();
         reloadState();
         listCrew.clearSelection();
-        btnPerformAction.setEnabled(false);
+        checkActionButtonState();
+    }
+
+    private void checkActionButtonState() {
+        btnPerformAction.setEnabled(setDefaultSelectedCrewMember());
+    }
+
+    private boolean setDefaultSelectedCrewMember() {
+        for (Iterator<CrewMember> iterator = listCrewModal.elements().asIterator(); iterator.hasNext(); ) {
+            CrewMember crewMember = iterator.next();
+            if (crewMember.getActionsLeftToday() > 0) {
+                listCrew.setSelectedValue(crewMember, true);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void checkAllPartsFound() {
@@ -135,9 +165,13 @@ public class MainScreen implements Screen {
     private void initialiseTables() {
         listCrewModal.addAll(SpaceExplorerGui.spaceShip.getShipCrew());
         listCrew.setModel(listCrewModal);
+        setDefaultSelectedCrewMember();
         listFoodItems.setModel(listFoodItemsModel);
+        listFoodItems.setSelectedIndex(0);
         listMedicalSupplies.setModel(listMedicalSuppliesModel);
+        listMedicalSupplies.setSelectedIndex(0);
         listPlanets.setModel(listPlanetsModel);
+        listPlanets.setSelectedIndex(0);
     }
 
     private void updateTablesModels() {
@@ -164,8 +198,7 @@ public class MainScreen implements Screen {
         lblOrbiting.setText(SpaceExplorerGui.currentPlanet.toString());
         lblMissingParts.setText(String.valueOf(SpaceExplorerGui.spaceShip.getMissingParts()));
         lblBalance.setText("$" + SpaceExplorerGui.spaceShip.getSpaceBucks());
-        lblShipHealth.setText(String.format("%d of %d", SpaceExplorerGui.spaceShip.getShieldCount(),
-                SpaceExplorerGui.spaceShip.getMaxShieldCount()));
+        lblShipHealth.setText(String.format("%d", SpaceExplorerGui.spaceShip.getShieldCount()));
     }
 
     private void reloadState() {
@@ -361,6 +394,7 @@ public class MainScreen implements Screen {
         gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 0, 10, 0);
         panel6.add(separator1, gbc);
         btnNextDay = new JButton();
         Font btnNextDayFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnNextDay.getFont());
@@ -368,23 +402,22 @@ public class MainScreen implements Screen {
         btnNextDay.setText("Next Day");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel6.add(btnNextDay, gbc);
+        btnPerformAction = new JButton();
+        btnPerformAction.setEnabled(true);
+        Font btnPerformActionFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnPerformAction.getFont());
+        if (btnPerformActionFont != null) btnPerformAction.setFont(btnPerformActionFont);
+        btnPerformAction.setText("Crew Action");
+        btnPerformAction.setToolTipText("Perform actions that require crew members.");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 0, 5, 0);
-        panel6.add(btnNextDay, gbc);
-        btnPerformAction = new JButton();
-        btnPerformAction.setEnabled(false);
-        Font btnPerformActionFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnPerformAction.getFont());
-        if (btnPerformActionFont != null) btnPerformAction.setFont(btnPerformActionFont);
-        btnPerformAction.setText("Perform  Crew Action");
-        btnPerformAction.setToolTipText("Select a crew member to perform an action!");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.insets = new Insets(2, 0, 0, 0);
         panel6.add(btnPerformAction, gbc);
         final JLabel label4 = new JLabel();
         Font label4Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label4.getFont());
@@ -426,6 +459,27 @@ public class MainScreen implements Screen {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
         panel6.add(lblShipHealth, gbc);
+        btnInspect = new JButton();
+        btnInspect.setEnabled(true);
+        Font btnInspectFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnInspect.getFont());
+        if (btnInspectFont != null) btnInspect.setFont(btnInspectFont);
+        btnInspect.setText("Space Traders");
+        btnInspect.setToolTipText("Visit your local space traders.");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 2, 0);
+        panel6.add(btnInspect, gbc);
+        final JSeparator separator2 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        panel6.add(separator2, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -456,21 +510,28 @@ public class MainScreen implements Screen {
         btnSave = new JButton();
         btnSave.setText("Save");
         gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 0, 20);
+        panel8.add(btnSave, gbc);
+        btnHelp = new JButton();
+        btnHelp.setText("Help");
+        gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 10.0;
-        gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 20);
-        panel8.add(btnSave, gbc);
-        final JSeparator separator2 = new JSeparator();
+        gbc.insets = new Insets(0, 0, 0, 2);
+        panel8.add(btnHelp, gbc);
+        final JSeparator separator3 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 20, 0, 20);
-        panelRoot.add(separator2, gbc);
+        panelRoot.add(separator3, gbc);
     }
 
     /**

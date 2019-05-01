@@ -1,5 +1,6 @@
 package uc.seng201.gui;
 
+import uc.seng201.SpaceExplorerGui;
 import uc.seng201.crew.*;
 
 import javax.swing.*;
@@ -13,12 +14,25 @@ public class CreateCrewMember extends JDialog {
     private JButton buttonCancel;
     private JTextField txtName;
     private JComboBox<CrewType> comboType;
+    private JLabel lblTitle;
+
+    private CrewMember crewMember;
+
+    CreateCrewMember(CrewMember crewMember) {
+        this();
+        this.crewMember = crewMember;
+        txtName.setText(crewMember.getName());
+        comboType.setSelectedItem(crewMember.getCrewType());
+        lblTitle.setText("Update Crew Member");
+    }
 
     CreateCrewMember() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        lblTitle.setText("Add Crew Member");
         comboType.setModel(new DefaultComboBoxModel<>(CrewType.values()));
+        comboType.setSelectedIndex(0);
 
         buttonOK.addActionListener(e -> onOK());
 
@@ -26,15 +40,17 @@ public class CreateCrewMember extends JDialog {
 
         txtName.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 super.keyTyped(e);
-                if (!txtName.getText().equals("") && txtName.getText().matches("^([a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*){1,12}$")) {
+                if (isValidState()) {
                     buttonOK.setEnabled(true);
                 } else {
                     buttonOK.setEnabled(false);
                 }
             }
         });
+
+        comboType.addActionListener(e -> buttonOK.setEnabled(isValidState()));
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -48,37 +64,36 @@ public class CreateCrewMember extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private boolean isValidState() {
+        if (this.crewMember != null) {
+            return !txtName.getText().equals(crewMember.getName())
+                    || !comboType.getSelectedItem().equals(crewMember.getCrewType());
+        } else {
+            return (!txtName.getText().equals("")
+                    && txtName.getText().matches("^([a-zA-Z]){1,12}$"));
+        }
+    }
+
+
     private void onOK() {
         CrewType crewType = (CrewType) comboType.getSelectedItem();
         if (crewType == null) {
             return;
         }
-        switch (crewType) {
-            case HUMAN:
-                AdventureCreator.listCrewModal.addElement(new Human(txtName.getText()));
-                break;
-            case CRYSTAL:
-                AdventureCreator.listCrewModal.addElement(new Crystal(txtName.getText()));
-                break;
-            case ENGI:
-                AdventureCreator.listCrewModal.addElement(new Engi((txtName.getText())));
-                break;
-            case SLUG:
-                AdventureCreator.listCrewModal.addElement(new Slug(txtName.getText()));
-                break;
-            case LANIUS:
-                AdventureCreator.listCrewModal.addElement(new Lanius(txtName.getText()));
-                break;
-            case ZOLTAN:
-                AdventureCreator.listCrewModal.addElement(new Zoltan(txtName.getText()));
-                break;
-        }
+        this.crewMember = crewType.getInstance(txtName.getText());
         dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
+        this.crewMember = null;
         dispose();
+    }
+
+    CrewMember showDialog() {
+        setSize(450, 250);
+        setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
+        setVisible(true);
+        return this.crewMember;
     }
 
     {
@@ -148,35 +163,74 @@ public class CreateCrewMember extends JDialog {
         contentPane.add(panel3, gbc);
         txtName = new JTextField();
         gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipadx = 200;
+        gbc.insets = new Insets(0, 0, 5, 0);
         panel3.add(txtName, gbc);
         final JLabel label1 = new JLabel();
-        label1.setText("Name");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        panel3.add(label1, gbc);
-        final JLabel label2 = new JLabel();
-        label2.setText("Type");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        panel3.add(label2, gbc);
-        comboType = new JComboBox();
+        label1.setHorizontalAlignment(4);
+        label1.setText("Name:");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 5, 5);
+        panel3.add(label1, gbc);
+        final JLabel label2 = new JLabel();
+        label2.setHorizontalAlignment(4);
+        label2.setText("Type:");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 0, 0, 5);
+        panel3.add(label2, gbc);
+        comboType = new JComboBox();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 0, 0, 0);
         panel3.add(comboType, gbc);
+        final JSeparator separator1 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.weightx = 10.0;
+        gbc.weighty = 2.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 20, 0, 20);
+        panel3.add(separator1, gbc);
+        final JSeparator separator2 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 4;
+        gbc.weightx = 10.0;
+        gbc.weighty = 2.0;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 20, 0, 20);
+        panel3.add(separator2, gbc);
+        final JPanel spacer1 = new JPanel();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel3.add(spacer1, gbc);
+        final JPanel spacer2 = new JPanel();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel3.add(spacer2, gbc);
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -186,29 +240,16 @@ public class CreateCrewMember extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel4, gbc);
-        final JLabel label3 = new JLabel();
-        Font label3Font = this.$$$getFont$$$("Droid Sans Mono", -1, 36, label3.getFont());
-        if (label3Font != null) label3.setFont(label3Font);
-        label3.setPreferredSize(new Dimension(396, 43));
-        label3.setText("Create Crew Member");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel4.add(label3, gbc);
-        final JPanel spacer1 = new JPanel();
+        lblTitle = new JLabel();
+        Font lblTitleFont = this.$$$getFont$$$("Droid Sans Mono", -1, 36, lblTitle.getFont());
+        if (lblTitleFont != null) lblTitle.setFont(lblTitleFont);
+        lblTitle.setHorizontalAlignment(0);
+        lblTitle.setPreferredSize(new Dimension(396, 43));
+        lblTitle.setText("######");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 10.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel4.add(spacer1, gbc);
-        final JPanel spacer2 = new JPanel();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 10.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel4.add(spacer2, gbc);
+        panel4.add(lblTitle, gbc);
         label1.setLabelFor(txtName);
         label2.setLabelFor(comboType);
     }

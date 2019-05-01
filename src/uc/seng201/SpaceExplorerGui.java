@@ -1,6 +1,6 @@
-package uc.seng201.gui;
+package uc.seng201;
 
-import uc.seng201.SpaceShip;
+import uc.seng201.gui.MainMenu;
 import uc.seng201.targets.Planet;
 
 import javax.swing.*;
@@ -12,30 +12,30 @@ public class SpaceExplorerGui {
 
     private static JFrame controlFrame;
 
-    static int gameDuration;
-    static int currentDay = 1;
-    static SpaceShip spaceShip;
-    static List<Planet> planets;
-    static Planet currentPlanet;
-    static BufferedImage shipImage;
-    static String shipImageLocation;
+    public static int gameDuration;
+    public static int currentDay = 1;
+    public static SpaceShip spaceShip;
+    public static List<Planet> planets;
+    public static Planet currentPlanet;
+    public static BufferedImage shipImage;
+    public static String shipImageLocation;
 
-    static JFrame getControlFrame() {
+    public static JFrame getControlFrame() {
         return controlFrame;
     }
 
     public static void main(String[] args) {
 
         controlFrame = new JFrame("Space Explorer");
-        controlFrame.setContentPane(new MainMenu().getRootPanel());
+        controlFrame.setContentPane(new MainMenu().$$$getRootComponent$$$());
         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlFrame.setResizable(false);
         controlFrame.pack();
-        controlFrame.setLocationRelativeTo(null);
+        controlFrame.setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
         controlFrame.setVisible(true);
     }
 
-    static void redrawRoot(JPanel panel) {
+    public static void redrawRoot(JComponent panel) {
         controlFrame.setContentPane(panel);
         controlFrame.pack();
     }
@@ -54,7 +54,7 @@ public class SpaceExplorerGui {
         System.exit(0);
     }
 
-    static Planet getPlanet(String planetName) {
+    public static Planet getPlanet(String planetName) {
         for (Planet planet : planets) {
             if (planet.getPlanetName().equals(planetName)) {
                 return planet;

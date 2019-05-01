@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="uc.seng201.gui.AdventureCreator">
   <grid id="27dc6" binding="panelCreator" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="850" height="506"/>
+      <xy x="20" y="20" width="850" height="576"/>
     </constraints>
     <properties>
       <preferredSize width="650" height="500"/>
@@ -35,99 +35,34 @@
       <grid id="5e66d" layout-manager="GridBagLayout">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="7.0"/>
+          <gridbag top="0" left="20" bottom="0" right="20" weightx="0.0" weighty="7.0"/>
         </constraints>
         <properties>
           <autoscrolls value="true"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="3026d" class="javax.swing.JTextField" binding="textShipName">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-              <gridbag weightx="0.0" weighty="0.0" ipadx="100"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="5ca31" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="15" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Duration:"/>
-            </properties>
-          </component>
-          <component id="4bf2f" class="javax.swing.JSlider" binding="sliderDuration">
-            <constraints>
-              <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0" ipadx="150"/>
-            </constraints>
-            <properties>
-              <majorTickSpacing value="1"/>
-              <maximum value="10"/>
-              <minimum value="3"/>
-              <paintLabels value="true"/>
-              <paintTicks value="false"/>
-              <snapToTicks value="true"/>
-              <value value="5"/>
-              <valueIsAdjusting value="false"/>
-            </properties>
-          </component>
           <component id="f83c1" class="javax.swing.JSeparator">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties/>
           </component>
           <component id="449ec" class="javax.swing.JLabel">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <font name="Droid Sans Mono" size="20"/>
               <text value="Current Crew"/>
             </properties>
           </component>
-          <component id="6ec3b" class="javax.swing.JCheckBox" binding="checkboxCustomShipFile">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="15" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Custom Ship"/>
-            </properties>
-          </component>
-          <hspacer id="dc545">
-            <constraints>
-              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag weightx="5.0" weighty="0.0"/>
-            </constraints>
-          </hspacer>
-          <hspacer id="9c06">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag weightx="5.0" weighty="0.0"/>
-            </constraints>
-          </hspacer>
-          <component id="87063" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="0" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <labelFor value="3026d"/>
-              <text value="Ship Name:"/>
-            </properties>
-          </component>
           <scrollpane id="ba16e">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag weightx="0.0" weighty="7.0"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="10.0" weighty="7.0"/>
             </constraints>
             <properties>
               <horizontalScrollBarPolicy value="30"/>
@@ -149,51 +84,166 @@
               </component>
             </children>
           </scrollpane>
+          <grid id="2db9" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="8c4a1" class="javax.swing.JButton" binding="btnRemoveCrewMember">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Remove"/>
+                  <toolTipText value="Add a crew member to our force"/>
+                </properties>
+              </component>
+              <component id="19425" class="javax.swing.JButton" binding="btnUpdateCrewMember">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Update"/>
+                  <toolTipText value="Add a crew member to our force"/>
+                </properties>
+              </component>
+              <component id="bb3d0" class="javax.swing.JButton" binding="btnAddCrewMember">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                  <toolTipText value="Add a crew member to our force"/>
+                </properties>
+              </component>
+              <vspacer id="13cce">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="10.0"/>
+                </constraints>
+              </vspacer>
+            </children>
+          </grid>
+          <grid id="a7db1" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="3026d" class="javax.swing.JTextField" binding="textShipName">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0" ipadx="100"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="4bf2f" class="javax.swing.JSlider" binding="sliderDuration">
+                <constraints>
+                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0" ipadx="150"/>
+                </constraints>
+                <properties>
+                  <majorTickSpacing value="1"/>
+                  <maximum value="10"/>
+                  <minimum value="3"/>
+                  <paintLabels value="true"/>
+                  <paintTicks value="false"/>
+                  <snapToTicks value="true"/>
+                  <value value="5"/>
+                  <valueIsAdjusting value="false"/>
+                </properties>
+              </component>
+              <component id="87063" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="0" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <labelFor value="3026d"/>
+                  <text value="Ship Name:"/>
+                </properties>
+              </component>
+              <component id="5ca31" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="15" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Duration:"/>
+                </properties>
+              </component>
+              <component id="6ec3b" class="javax.swing.JCheckBox" binding="checkboxCustomShipFile">
+                <constraints>
+                  <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="15" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Custom Ship"/>
+                </properties>
+              </component>
+              <component id="ea1ae" class="javax.swing.JSeparator">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag top="10" left="0" bottom="10" right="0" weightx="10.0" weighty="0.0"/>
+                </constraints>
+                <properties/>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
       <grid id="bb17c" layout-manager="GridBagLayout">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <gridbag top="0" left="20" bottom="20" right="20" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="bb3d0" class="javax.swing.JButton" binding="btnAddCrew">
+          <component id="58c85" class="javax.swing.JButton" binding="btnBack">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="10" bottom="20" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="0" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <enabled value="false"/>
-              <text value="Add Crew"/>
-              <toolTipText value="Add a crew member to our force"/>
+              <text value="Main Menu"/>
             </properties>
           </component>
           <component id="6c11d" class="javax.swing.JButton" binding="btnContinue">
             <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="10" bottom="20" right="20" weightx="0.0" weighty="0.0"/>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <enabled value="false"/>
-              <text value="Continue"/>
+              <text value="Start Adventure"/>
             </properties>
           </component>
-          <hspacer id="29019">
+          <hspacer id="80d5b">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag weightx="10.0" weighty="0.0"/>
             </constraints>
           </hspacer>
-          <component id="58c85" class="javax.swing.JButton" binding="btnBack">
+          <component id="e982" class="javax.swing.JSeparator">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="20" bottom="20" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
-            <properties>
-              <text value="Back"/>
-            </properties>
+            <properties/>
           </component>
         </children>
       </grid>

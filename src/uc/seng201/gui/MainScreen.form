@@ -217,14 +217,14 @@
           <component id="adcfa" class="javax.swing.JSeparator">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag weightx="0.0" weighty="0.0"/>
+              <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties/>
           </component>
           <component id="fb5f0" class="javax.swing.JButton" binding="btnNextDay">
             <constraints>
-              <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <font name="Droid Sans Mono" size="16"/>
@@ -233,14 +233,14 @@
           </component>
           <component id="ac4c4" class="javax.swing.JButton" binding="btnPerformAction">
             <constraints>
-              <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0"/>
+              <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="2" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <enabled value="false"/>
+              <enabled value="true"/>
               <font name="Droid Sans Mono" size="16"/>
-              <text value="Perform  Crew Action"/>
-              <toolTipText value="Select a crew member to perform an action!"/>
+              <text value="Crew Action"/>
+              <toolTipText value="Perform actions that require crew members."/>
             </properties>
           </component>
           <component id="44fe3" class="javax.swing.JLabel">
@@ -283,6 +283,25 @@
               <text value="X"/>
             </properties>
           </component>
+          <component id="965ca" class="javax.swing.JButton" binding="btnInspect">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="0" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <font name="Droid Sans Mono" size="16"/>
+              <text value="Space Traders"/>
+              <toolTipText value="Visit your local space traders."/>
+            </properties>
+          </component>
+          <component id="cb5f1" class="javax.swing.JSeparator">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+          </component>
         </children>
       </grid>
       <grid id="7918f" layout-manager="GridBagLayout">
@@ -315,11 +334,20 @@
         <children>
           <component id="c9617" class="javax.swing.JButton" binding="btnSave">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="0" bottom="0" right="20" weightx="10.0" weighty="1.0"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="2" bottom="0" right="20" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <text value="Save"/>
+            </properties>
+          </component>
+          <component id="d3ee7" class="javax.swing.JButton" binding="btnHelp">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="0" bottom="0" right="2" weightx="10.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Help"/>
             </properties>
           </component>
         </children>

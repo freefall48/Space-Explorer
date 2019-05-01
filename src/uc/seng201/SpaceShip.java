@@ -2,7 +2,6 @@ package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InsufficientBalance;
-import uc.seng201.gui.SpaceExplorerGui;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.items.Items;
 
@@ -11,7 +10,6 @@ import java.util.List;
 
 public class SpaceShip {
 
-    private final int maxShieldCount = 4;
     private String shipName;
     private List<CrewMember> shipCrew;
     private List<Items> shipItems;
@@ -34,11 +32,11 @@ public class SpaceShip {
     }
 
     public String toString() {
-        return String.format("The spaceship '%s' has %d|%d shields and missing %d parts.\n",
-                this.shipName, this.shieldCount, this.maxShieldCount, this.missingParts) +
-                String.format("The crew consists of: \n%s\n", Helpers.listToString(this.shipCrew, true)) +
-                String.format("Items onboard:\n%s\n", Helpers.listToString(this.shipItems)) +
-                String.format("Spacebucks balance: $%d\n", this.spaceBucks);
+        return String.format("'%s' has %d shields and missing %d parts.\n",
+                this.shipName, this.shieldCount, this.missingParts) +
+                String.format("Crew: \n%s\n", Helpers.listToString(this.shipCrew, true)) +
+                String.format("Items:\n%s\n", Helpers.listToString(this.shipItems)) +
+                String.format("Money: $%d\n", this.spaceBucks);
     }
 
     /**
@@ -121,10 +119,6 @@ public class SpaceShip {
         return shipItems;
     }
 
-    public int getMaxShieldCount() {
-        return maxShieldCount;
-    }
-
     public int getSpaceBucks() {
         return spaceBucks;
     }
@@ -148,9 +142,7 @@ public class SpaceShip {
 
     public void alterShield(int value) {
         int newShieldValue = this.shieldCount + value;
-        if (newShieldValue > this.maxShieldCount) {
-            newShieldValue = this.maxShieldCount;
-        } else if (newShieldValue < 0) {
+        if (newShieldValue < 0) {
             newShieldValue = 0;
         }
         this.shieldCount = newShieldValue;

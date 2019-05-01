@@ -1,7 +1,7 @@
 package uc.seng201.crew;
 
-import uc.seng201.crew.modifers.Abilities;
-import uc.seng201.crew.modifers.Illnesses;
+import uc.seng201.crew.modifers.IModification;
+import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.ActionException;
 import uc.seng201.helpers.Helpers;
 
@@ -16,19 +16,18 @@ public class CrewMember {
 
     private final int maxHealth;
     private final int baseHealthRegen;
-    private final int repairAmount;
+    private int repairAmount;
     private final int maxTiredness = 100;
     private final int tirednessRate = 25;
-    private final int maxFoodLevel = 100;
-    private final int foodDecayRate = -20;
+    private int maxFoodLevel = 100;
+    private int foodDecayRate = -20;
     private String name;
     private CrewType crewType;
     private int health;
     private int currentHealthRegen;
     private int tiredness;
     private int actionsLeftToday = 2;
-    private List<Illnesses> illnesses = new ArrayList<>();
-    private List<Abilities> abilities = new ArrayList<>();
+    private List<IModification> modifications = new ArrayList<>();
     private int foodLevel = maxFoodLevel;
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount) {
@@ -41,14 +40,12 @@ public class CrewMember {
 
     @Override
     public String toString() {
-        return String.format("%s, a %s that has %d actions left today, ",
+        return String.format("%s the %s has %d actions. ",
                 this.name, this.crewType, this.actionsLeftToday) +
-                String.format("%d|%d health with regen of %d/pt, %d|%d food decaying " +
-                                "at %d/pt and %d|%d tiredness at %d/pt. ",
+                String.format("[%d/%d %d/day] HP. [%d/%d %d/day] Food. [%d/%d %d/day] Tiredness. ",
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
                         this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
-                String.format("They have abilities '%s', but illnesses '%s'",
-                        Helpers.listToString(this.abilities, true), Helpers.listToString(this.illnesses, true));
+                String.format("Modifiers [%s]", Helpers.listToString(this.modifications, false));
     }
 
     @Override
@@ -79,17 +76,6 @@ public class CrewMember {
         return maxTiredness;
     }
 
-    public int getTirednessRate() {
-        return tirednessRate;
-    }
-
-    public int getMaxFoodLevel() {
-        return maxFoodLevel;
-    }
-
-    public int getFoodDecayRate() {
-        return foodDecayRate;
-    }
 
     public CrewType getCrewType() {
         return crewType;
@@ -111,16 +97,29 @@ public class CrewMember {
         return actionsLeftToday;
     }
 
-    public List<Illnesses> getIllnesses() {
-        return illnesses;
+    public List<IModification> getModifications() {
+        return modifications;
     }
 
-    public List<Abilities> getAbilities() {
-        return abilities;
-    }
 
     public int getFoodLevel() {
         return foodLevel;
+    }
+
+    public void setRepairAmount(int repairAmount) {
+        this.repairAmount = repairAmount;
+    }
+
+    public void setMaxFoodLevel(int maxFoodLevel) {
+        this.maxFoodLevel = maxFoodLevel;
+    }
+
+    public void setFoodDecayRate(int foodDecayRate) {
+        this.foodDecayRate = foodDecayRate;
+    }
+
+    public void setHealthRegen(int regenRate) {
+        this.currentHealthRegen = regenRate;
     }
 
     public void alterFood(int food) {
@@ -164,17 +163,13 @@ public class CrewMember {
      * Applies an illness to the crew member. The Illnesses onAdd() method
      * is called.
      *
-     * @param illness The Illness to apply to the crew member.
+     * @param modificationType Modification to add to crew member
      */
-    public void addIllness(Illnesses illness) {
-        this.illnesses.add(illness);
-        switch (illness) {
-            case SPACE_PLAGUE:
-                this.currentHealthRegen = 0;
-                break;
-            case SPACE_PARASITE:
-                this.currentHealthRegen = -10;
-                break;
+    public void addModification(Modifications modificationType) {
+        IModification modification = modificationType.getInstance();
+        if (!this.modifications.contains(modification)) {
+            this.modifications.add(modification);
+            modification.onAdd(this);
         }
     }
 
@@ -182,11 +177,14 @@ public class CrewMember {
      * Removes an illness from a crew member. The Illnesses onRemove()
      * method is called.
      *
-     * @param illness The Illness to remove from the crew member.
+     * @param modificationType The Illness to remove from the crew member.
      */
-    public void removeIllness(Illnesses illness) {
-        this.illnesses.remove(illness);
-        this.currentHealthRegen = this.baseHealthRegen;
+    public void removeModification(Modifications modificationType) {
+        IModification modification = modificationType.getInstance();
+        if (this.modifications.contains(modification)) {
+            this.modifications.remove(modification);
+            modification.onRemove(this);
+        }
     }
 
     /**
@@ -194,14 +192,12 @@ public class CrewMember {
      * crew member actions for the day. Called at the start of every day for each crew member.
      */
     public void updateStats() {
-        if (this.abilities.contains(Abilities.HEALING_HANDS)) {
-            alterHealth((int) (this.currentHealthRegen * 1.25));
-        } else {
-            alterHealth(this.currentHealthRegen);
-        }
+        alterHealth(this.currentHealthRegen);
         alterFood(this.foodDecayRate);
         alterTiredness(this.tirednessRate);
         actionsLeftToday = 2;
+
+        this.modifications.forEach(modification -> modification.onTick(this));
 
     }
 

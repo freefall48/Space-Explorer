@@ -1,10 +1,11 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceShip;
+import uc.seng201.SpaceExplorerGui;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.Action;
 import uc.seng201.events.EventTrigger;
-import uc.seng201.events.RandomEvents;
+import uc.seng201.events.IRandomEvent;
+import uc.seng201.events.RandomEvent;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.items.ItemType;
 import uc.seng201.items.Items;
@@ -23,7 +24,7 @@ public class PerformAction extends JDialog {
     private JComboBox<String> comboAdditionalInfo1;
     private JLabel lblAdditionalInfo1;
     private JLabel lblAdditionalInfo2;
-    private JComboBox<String> comboAdditionaInfo2;
+    private JComboBox<String> comboAdditionalInfo2;
 
     private CrewMember primaryCrewMember;
     private CrewMember additionalCrewMember;
@@ -137,13 +138,13 @@ public class PerformAction extends JDialog {
         comboAdditionalInfo1.setVisible(visible);
         lblAdditionalInfo1.setVisible(visible);
         lblAdditionalInfo2.setVisible(visible);
-        comboAdditionaInfo2.setVisible(visible);
+        comboAdditionalInfo2.setVisible(visible);
     }
 
     private void setAdditionalInputVisible(int additionalInputs) {
         switch (additionalInputs) {
             case 2:
-                comboAdditionaInfo2.setVisible(true);
+                comboAdditionalInfo2.setVisible(true);
                 lblAdditionalInfo2.setVisible(true);
             case 1:
                 comboAdditionalInfo1.setVisible(true);
@@ -185,12 +186,12 @@ public class PerformAction extends JDialog {
                 comboAdditionalInfo1.setModel(additionalCrewModal);
                 comboAdditionalInfo1.setSelectedIndex(0);
                 lblAdditionalInfo2.setText("Destination Planet:");
-                comboAdditionaInfo2.setModel(targetPlanetsModel);
-                comboAdditionaInfo2.setSelectedIndex(0);
+                comboAdditionalInfo2.setModel(targetPlanetsModel);
+                comboAdditionalInfo2.setSelectedIndex(0);
                 setAdditionalInputVisible(2);
                 lblActionText.setText(String.format(Action.PILOT.getActionText(), primaryCrewMember.getName(),
                         comboAdditionalInfo1.getSelectedItem(), SpaceExplorerGui.spaceShip.getShipName(),
-                        comboAdditionaInfo2.getSelectedItem()));
+                        comboAdditionalInfo2.getSelectedItem()));
                 break;
             case SEARCH:
                 lblActionText.setText(String.format(Action.SEARCH.getActionText(), primaryCrewMember.getName(),
@@ -201,19 +202,28 @@ public class PerformAction extends JDialog {
                 break;
             case EAT:
                 setItemsModel(ItemType.FOOD);
-                if (itemModel.getSize() != 0) {
-                    lblAdditionalInfo1.setText("Snack on:");
-                    comboAdditionalInfo1.setModel(itemModel);
-                    comboAdditionalInfo1.setSelectedIndex(0);
-                    setAdditionalInputVisible(1);
-                    lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(),
-                            comboAdditionalInfo1.getSelectedItem()));
-                } else {
-                    buttonOK.setEnabled(false);
-                }
+                lblAdditionalInfo1.setText("Snack on:");
+                comboAdditionalInfo1.setModel(itemModel);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                setAdditionalInputVisible(1);
+                lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(),
+                        comboAdditionalInfo1.getSelectedItem()));
                 break;
             case MEDICAL:
-                lblActionText.setText(String.format(Action.MEDICAL.getActionText(), primaryCrewMember.getName(), ""));
+                setItemsModel(ItemType.MEDICAL);
+                lblAdditionalInfo1.setText("Apply:");
+                comboAdditionalInfo1.setModel(itemModel);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                setAdditionalInputVisible(1);
+                lblActionText.setText(String.format(Action.MEDICAL.getActionText(), primaryCrewMember.getName(),
+                        comboAdditionalInfo1.getSelectedItem()));
+                break;
+            case REPAIR:
+                lblActionText.setText(String.format(Action.REPAIR.getActionText(), primaryCrewMember.getName(),
+                        SpaceExplorerGui.spaceShip.getShipName()));
+                break;
+
+
 
         }
     }
@@ -221,15 +231,11 @@ public class PerformAction extends JDialog {
     private void performAction(Action action) {
         switch (action) {
             case PILOT:
-                SpaceExplorerGui.currentPlanet = SpaceExplorerGui.getPlanet((String) comboAdditionaInfo2.getSelectedItem());
+                SpaceExplorerGui.currentPlanet = SpaceExplorerGui.getPlanet((String) comboAdditionalInfo2.getSelectedItem());
                 if (Helpers.randomGenerator.nextBoolean()) {
-                    RandomEvents event = RandomEvents.values()[Helpers.randomGenerator.nextInt(RandomEvents.values().length)];
-                    if (event.getTrigger().equals(EventTrigger.TRAVEL)) {
-                        JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
-                                String.format(event.getEventDescription(), SpaceExplorerGui.spaceShip.getShipName(),
-                                        primaryCrewMember.getName(), additionalCrewMember.getName()));
-                        event.onTrigger(SpaceExplorerGui.spaceShip);
-                    }
+                    RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.TRAVEL);
+                    event.getInstance().onTrigger(SpaceExplorerGui.spaceShip);
+                    SpaceExplorerGui.popup(event.getEventDescription());
                 }
                 break;
             case SEARCH:
@@ -240,9 +246,13 @@ public class PerformAction extends JDialog {
                 primaryCrewMember.alterTiredness(0 - primaryCrewMember.getMaxTiredness());
                 break;
             case EAT:
+            case MEDICAL:
                 Items item = Items.valueOf((String) comboAdditionalInfo1.getSelectedItem());
                 SpaceExplorerGui.spaceShip.remove(item);
                 item.onConsume(primaryCrewMember);
+                break;
+            case REPAIR:
+                SpaceExplorerGui.spaceShip.alterShield(primaryCrewMember.getRepairAmount());
                 break;
         }
     }
@@ -377,16 +387,16 @@ public class PerformAction extends JDialog {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 0, 0);
         panel4.add(lblAdditionalInfo1, gbc);
-        comboAdditionaInfo2 = new JComboBox();
-        comboAdditionaInfo2.setToolTipText("Select an action to perform.");
-        comboAdditionaInfo2.setVisible(false);
+        comboAdditionalInfo2 = new JComboBox();
+        comboAdditionalInfo2.setToolTipText("Select an action to perform.");
+        comboAdditionalInfo2.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 0, 0);
-        panel4.add(comboAdditionaInfo2, gbc);
+        panel4.add(comboAdditionalInfo2, gbc);
         lblAdditionalInfo2 = new JLabel();
         lblAdditionalInfo2.setText("Select Destination:");
         lblAdditionalInfo2.setVisible(false);
