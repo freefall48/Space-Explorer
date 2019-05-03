@@ -1,6 +1,6 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorerGui;
+import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.*;
 
 import javax.swing.*;
@@ -91,7 +91,7 @@ public class CreateCrewMember extends JDialog {
 
     CrewMember showDialog() {
         setSize(450, 250);
-        setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
+        setLocationRelativeTo(SpaceExplorer.getControlFrame());
         setVisible(true);
         return this.crewMember;
     }

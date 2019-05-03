@@ -1,7 +1,7 @@
 package uc.seng201.gui;
 
 import uc.seng201.GameState;
-import uc.seng201.SpaceExplorerGui;
+import uc.seng201.SpaceExplorer;
 import uc.seng201.helpers.StateActions;
 
 import javax.imageio.ImageIO;
@@ -17,31 +17,31 @@ public class MainMenu extends JComponent {
 
     public MainMenu() {
         btnLoadGame.addActionListener(e -> onLoadGame());
-        btnNewGame.addActionListener(e -> SpaceExplorerGui.redrawRoot(new AdventureCreator().$$$getRootComponent$$$()));
+        btnNewGame.addActionListener(e -> SpaceExplorer.redrawRoot(new AdventureCreator().$$$getRootComponent$$$()));
     }
 
     private void onLoadGame() {
-        FileDialog fd = new FileDialog(SpaceExplorerGui.getControlFrame(), "Choose a file", FileDialog.LOAD);
+        FileDialog fd = new FileDialog(SpaceExplorer.getControlFrame(), "Choose a file", FileDialog.LOAD);
         fd.setFile("*.json");
         fd.setFilenameFilter((dir, name) -> name.toUpperCase().endsWith(".JSON"));
         fd.setMultipleMode(false);
-        fd.setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
+        fd.setLocationRelativeTo(SpaceExplorer.getControlFrame());
         fd.setVisible(true);
         if (fd.getFile() != null) {
             try {
                 GameState gameState = StateActions.loadState(fd.getDirectory() + fd.getFile());
-                SpaceExplorerGui.spaceShip = gameState.getSpaceShip();
-                SpaceExplorerGui.gameDuration = gameState.getDuration();
-                SpaceExplorerGui.currentDay = gameState.getCurrentDay();
-                SpaceExplorerGui.currentPlanet = gameState.getCurrentPlanet();
-                SpaceExplorerGui.planets = gameState.getPlanets();
-                SpaceExplorerGui.shipImageLocation = gameState.getShipImage();
-                if (SpaceExplorerGui.shipImageLocation != null) {
-                    SpaceExplorerGui.shipImage = ImageIO.read(new File(SpaceExplorerGui.shipImageLocation));
+                SpaceExplorer.spaceShip = gameState.getSpaceShip();
+                SpaceExplorer.gameDuration = gameState.getDuration();
+                SpaceExplorer.currentDay = gameState.getCurrentDay();
+                SpaceExplorer.currentPlanet = gameState.getCurrentPlanet();
+                SpaceExplorer.planets = gameState.getPlanets();
+                SpaceExplorer.shipImageLocation = gameState.getShipImage();
+                if (SpaceExplorer.shipImageLocation != null) {
+                    SpaceExplorer.shipImage = ImageIO.read(new File(SpaceExplorer.shipImageLocation));
                 }
-                SpaceExplorerGui.redrawRoot(new MainScreen().$$$getRootComponent$$$());
+                SpaceExplorer.redrawRoot(new MainScreen().$$$getRootComponent$$$());
             } catch (IOException error) {
-                JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
+                JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
                         "Failed to load the selected saved game!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }

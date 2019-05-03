@@ -162,7 +162,7 @@ public class SpaceShip {
             if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
                 crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
                 crewMember.performAction();
-                SpaceExplorerGui.popup(crewMember.getName() + " was overcome with tiredness and forced to spend" +
+                SpaceExplorer.popup(crewMember.getName() + " was overcome with tiredness and forced to spend" +
                         "an action sleeping.");
             }
         });
@@ -175,10 +175,10 @@ public class SpaceShip {
             }
         });
         if (this.shipCrew.size() == 0) {
-            SpaceExplorerGui.failedGame("Looks like you have run out of crew...");
+            SpaceExplorer.failedGame("Looks like you have run out of crew...");
         }
         if (this.shieldCount == 0) {
-            SpaceExplorerGui.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
+            SpaceExplorer.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
         }
     }
 }

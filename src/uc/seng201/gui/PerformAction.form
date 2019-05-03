@@ -162,6 +162,8 @@
             </constraints>
             <properties>
               <font name="Droid Sans Mono" size="12" style="2"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
               <text value="#ActionText"/>
               <visible value="true"/>
             </properties>

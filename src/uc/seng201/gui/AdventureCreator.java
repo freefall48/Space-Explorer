@@ -1,6 +1,6 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorerGui;
+import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.helpers.Helpers;
@@ -44,7 +44,7 @@ public class AdventureCreator extends JComponent {
             btnUpdateCrewMember.setEnabled(true);
         });
 
-        btnBack.addActionListener(e -> SpaceExplorerGui.redrawRoot(new MainMenu().$$$getRootComponent$$$()));
+        btnBack.addActionListener(e -> SpaceExplorer.redrawRoot(new MainMenu().$$$getRootComponent$$$()));
 
         btnAddCrewMember.addActionListener(e -> onAddCrewMember());
         btnContinue.addActionListener(e -> onContinue());
@@ -54,13 +54,13 @@ public class AdventureCreator extends JComponent {
     }
 
     private void onContinue() {
-        SpaceExplorerGui.spaceShip = new SpaceShip(textShipName.getText(),
+        SpaceExplorer.spaceShip = new SpaceShip(textShipName.getText(),
                 Helpers.calcPartsToFind(sliderDuration.getValue()));
-        SpaceExplorerGui.spaceShip.add(listCrewModal.toArray());
-        SpaceExplorerGui.gameDuration = sliderDuration.getValue();
-        SpaceExplorerGui.planets = Helpers.generatePlanets(sliderDuration.getValue());
-        SpaceExplorerGui.currentPlanet = SpaceExplorerGui.planets.get(0);
-        SpaceExplorerGui.redrawRoot(new MainScreen().getRootPanel());
+        SpaceExplorer.spaceShip.add(listCrewModal.toArray());
+        SpaceExplorer.gameDuration = sliderDuration.getValue();
+        SpaceExplorer.planets = Helpers.generatePlanets(sliderDuration.getValue());
+        SpaceExplorer.currentPlanet = SpaceExplorer.planets.get(0);
+        SpaceExplorer.redrawRoot(new MainScreen().$$$getRootComponent$$$());
     }
 
     private void onAddCrewMember() {
@@ -102,16 +102,16 @@ public class AdventureCreator extends JComponent {
 
     private void onAddCustomShipFile() {
         if (checkboxCustomShipFile.isSelected()) {
-            FileDialog fd = new FileDialog(SpaceExplorerGui.getControlFrame(), "Choose a file", FileDialog.LOAD);
+            FileDialog fd = new FileDialog(SpaceExplorer.getControlFrame(), "Choose a file", FileDialog.LOAD);
             fd.setFile("*.png");
             fd.setMultipleMode(false);
             fd.setVisible(true);
             if (fd.getFile() != null) {
                 try {
-                    SpaceExplorerGui.shipImage = ImageIO.read(fd.getFiles()[0]);
-                    SpaceExplorerGui.shipImageLocation = fd.getDirectory() + fd.getFile();
+                    SpaceExplorer.shipImage = ImageIO.read(fd.getFiles()[0]);
+                    SpaceExplorer.shipImageLocation = fd.getDirectory() + fd.getFile();
                 } catch (IOException error) {
-                    JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(),
+                    JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
                             "Failed to load the selected image!", "Error", JOptionPane.ERROR_MESSAGE);
                     checkboxCustomShipFile.setSelected(false);
                 }

@@ -7,21 +7,21 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class SpaceExplorerGui {
+public class SpaceExplorer {
 
 
     private static JFrame controlFrame;
-
-    public static int gameDuration;
-    public static int currentDay = 1;
-    public static SpaceShip spaceShip;
-    public static List<Planet> planets;
-    public static Planet currentPlanet;
     public static BufferedImage shipImage;
-    public static String shipImageLocation;
+    private static GameState gameState;
 
     public static JFrame getControlFrame() {
         return controlFrame;
+    }
+
+
+
+    public static GameState getGameState() {
+        return gameState;
     }
 
     public static void main(String[] args) {
@@ -31,7 +31,7 @@ public class SpaceExplorerGui {
         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlFrame.setResizable(false);
         controlFrame.pack();
-        controlFrame.setLocationRelativeTo(SpaceExplorerGui.getControlFrame());
+        controlFrame.setLocationRelativeTo(SpaceExplorer.getControlFrame());
         controlFrame.setVisible(true);
     }
 
@@ -54,7 +54,7 @@ public class SpaceExplorerGui {
         System.exit(0);
     }
 
-    public static Planet getPlanet(String planetName) {
+    public static Planet getPlanetFromName(String planetName) {
         for (Planet planet : planets) {
             if (planet.getPlanetName().equals(planetName)) {
                 return planet;

@@ -59,9 +59,9 @@ public class Planet {
 
     public String description() {
         if (this.partFound) {
-            return getPlanetName() + " does not have a part.";
+            return getPlanetName() + " - The transporter part for this planet has been found.";
         } else {
-            return getPlanetName() + " still has a part hidden!";
+            return getPlanetName() + " - Could hold a transporter part.";
         }
     }
 

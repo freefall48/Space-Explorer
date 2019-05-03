@@ -2,12 +2,12 @@ package uc.seng201.crew;
 
 public enum Action {
 
-    PILOT("%s and %s will fly %s to %s!", 2, true),
-    SEARCH("%s will search the current planet '%s'.\nShip part found here? %b", 1, true),
-    SLEEP("%s will sleep to remove tiredness.", 1, true),
-    EAT("%s will eat %s", 1, true),
-    MEDICAL("%s will use %s", 1, true),
-    REPAIR("%s will repair %s", 1, true);
+    PILOT("<html>%s and %s will fly %s to %s!", 2, true),
+    SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1, true),
+    SLEEP("<html>%s will sleep to remove tiredness.", 1, true),
+    EAT("<html>%s will eat %s", 1, true),
+    MEDICAL("<html>%s will use %s", 1, true),
+    REPAIR("<html>%s will repair %s", 1, true);
 
     private String actionText;
     private int crewRequired;

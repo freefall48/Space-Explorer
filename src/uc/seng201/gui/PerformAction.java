@@ -1,6 +1,6 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorerGui;
+import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.Action;
 import uc.seng201.events.EventTrigger;
@@ -37,6 +37,7 @@ public class PerformAction extends JDialog {
     PerformAction(CrewMember crewMember) {
         setContentPane(contentPane);
         setModal(true);
+        setResizable(false);
         getRootPane().setDefaultButton(buttonOK);
         this.primaryCrewMember = crewMember;
         updateModels();
@@ -51,6 +52,8 @@ public class PerformAction extends JDialog {
         buttonOK.addActionListener(e -> onOK());
         buttonCancel.addActionListener(e -> onCancel());
         comboActions.addActionListener(e -> onActionSelected());
+        comboAdditionalInfo1.addActionListener(e -> setActionDialog((Action) comboActions.getSelectedItem()));
+        comboAdditionalInfo2.addActionListener(e -> setActionDialog((Action) comboActions.getSelectedItem()));
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -70,14 +73,14 @@ public class PerformAction extends JDialog {
         availableActionsModel.removeAllElements();
         targetPlanetsModel.removeAllElements();
 
-        SpaceExplorerGui.spaceShip.getShipCrew().forEach(coActor -> {
+        SpaceExplorer.spaceShip.getShipCrew().forEach(coActor -> {
             if (!coActor.equals(primaryCrewMember) && coActor.canPerformActions()) {
                 additionalCrewModal.addElement(coActor.getName());
             }
         });
 
-        SpaceExplorerGui.planets.forEach(planet -> {
-            if (!planet.equals(SpaceExplorerGui.currentPlanet)) {
+        SpaceExplorer.planets.forEach(planet -> {
+            if (!planet.equals(SpaceExplorer.currentPlanet)) {
                 targetPlanetsModel.addElement(planet.getPlanetName());
             }
         });
@@ -99,7 +102,7 @@ public class PerformAction extends JDialog {
         }
         boolean foodPresent = false;
         boolean medicalPresent = false;
-        for (Items item : SpaceExplorerGui.spaceShip.getShipItems()) {
+        for (Items item : SpaceExplorer.spaceShip.getShipItems()) {
             if (item.getItemType().equals(ItemType.FOOD)) {
                 foodPresent = true;
             } else if (item.getItemType().equals(ItemType.MEDICAL)) {
@@ -117,7 +120,7 @@ public class PerformAction extends JDialog {
     private void onOK() {
         Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
         if (actionToPerform.getCrewRequired() == 2) {
-            this.additionalCrewMember = SpaceExplorerGui.spaceShip.findCrewMember(
+            this.additionalCrewMember = SpaceExplorer.spaceShip.findCrewMember(
                     (String) additionalCrewModal.getSelectedItem());
         }
         if (actionToPerform.getCostsActionPoint()) {
@@ -162,13 +165,14 @@ public class PerformAction extends JDialog {
 
     private void setItemsModel(ItemType itemType) {
         itemModel.removeAllElements();
-        for (Items item : SpaceExplorerGui.spaceShip.getShipItems()) {
+        for (Items item : SpaceExplorer.spaceShip.getShipItems()) {
             if (item.getItemType().equals(itemType) && !itemModelContains(item)) {
                 itemModel.addElement(item.toString());
             }
         }
     }
 
+    //TODO: Move this logic to the spaceship
     private boolean itemModelContains(Items item) {
         for (int i = 0; i < itemModel.getSize(); i++) {
             if (itemModel.getElementAt(i).equals(item.toString())) {
@@ -182,6 +186,7 @@ public class PerformAction extends JDialog {
         buttonOK.setEnabled(true);
         switch (action) {
             case PILOT:
+                // TODO: need to fix action text not updating for change in other combos
                 lblAdditionalInfo1.setText("Co-pilot:");
                 comboAdditionalInfo1.setModel(additionalCrewModal);
                 comboAdditionalInfo1.setSelectedIndex(0);
@@ -190,12 +195,12 @@ public class PerformAction extends JDialog {
                 comboAdditionalInfo2.setSelectedIndex(0);
                 setAdditionalInputVisible(2);
                 lblActionText.setText(String.format(Action.PILOT.getActionText(), primaryCrewMember.getName(),
-                        comboAdditionalInfo1.getSelectedItem(), SpaceExplorerGui.spaceShip.getShipName(),
+                        comboAdditionalInfo1.getSelectedItem(), SpaceExplorer.spaceShip.getShipName(),
                         comboAdditionalInfo2.getSelectedItem()));
                 break;
             case SEARCH:
                 lblActionText.setText(String.format(Action.SEARCH.getActionText(), primaryCrewMember.getName(),
-                        SpaceExplorerGui.currentPlanet, SpaceExplorerGui.currentPlanet.getPartFound()));
+                        SpaceExplorer.currentPlanet, SpaceExplorer.currentPlanet.description()));
                 break;
             case SLEEP:
                 lblActionText.setText(String.format(Action.SLEEP.getActionText(), primaryCrewMember.getName()));
@@ -220,27 +225,26 @@ public class PerformAction extends JDialog {
                 break;
             case REPAIR:
                 lblActionText.setText(String.format(Action.REPAIR.getActionText(), primaryCrewMember.getName(),
-                        SpaceExplorerGui.spaceShip.getShipName()));
+                        SpaceExplorer.spaceShip.getShipName()));
                 break;
-
-
-
         }
+        repaint();
+        revalidate();
     }
 
     private void performAction(Action action) {
         switch (action) {
             case PILOT:
-                SpaceExplorerGui.currentPlanet = SpaceExplorerGui.getPlanet((String) comboAdditionalInfo2.getSelectedItem());
+                SpaceExplorer.currentPlanet = SpaceExplorer.getPlanetFromName((String) comboAdditionalInfo2.getSelectedItem());
                 if (Helpers.randomGenerator.nextBoolean()) {
                     RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.TRAVEL);
-                    event.getInstance().onTrigger(SpaceExplorerGui.spaceShip);
-                    SpaceExplorerGui.popup(event.getEventDescription());
+                    event.getInstance().onTrigger(SpaceExplorer.spaceShip);
+                    SpaceExplorer.popup(event.getEventDescription());
                 }
                 break;
             case SEARCH:
-                String foundMessage = SpaceExplorerGui.currentPlanet.onSearch(primaryCrewMember, SpaceExplorerGui.spaceShip);
-                JOptionPane.showMessageDialog(SpaceExplorerGui.getControlFrame(), foundMessage);
+                String foundMessage = SpaceExplorer.currentPlanet.onSearch(primaryCrewMember, SpaceExplorer.spaceShip);
+                JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(), foundMessage);
                 break;
             case SLEEP:
                 primaryCrewMember.alterTiredness(0 - primaryCrewMember.getMaxTiredness());
@@ -248,11 +252,11 @@ public class PerformAction extends JDialog {
             case EAT:
             case MEDICAL:
                 Items item = Items.valueOf((String) comboAdditionalInfo1.getSelectedItem());
-                SpaceExplorerGui.spaceShip.remove(item);
+                SpaceExplorer.spaceShip.remove(item);
                 item.onConsume(primaryCrewMember);
                 break;
             case REPAIR:
-                SpaceExplorerGui.spaceShip.alterShield(primaryCrewMember.getRepairAmount());
+                SpaceExplorer.spaceShip.alterShield(primaryCrewMember.getRepairAmount());
                 break;
         }
     }
@@ -417,6 +421,8 @@ public class PerformAction extends JDialog {
         lblActionText = new JLabel();
         Font lblActionTextFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 12, lblActionText.getFont());
         if (lblActionTextFont != null) lblActionText.setFont(lblActionTextFont);
+        lblActionText.setHorizontalAlignment(0);
+        lblActionText.setHorizontalTextPosition(0);
         lblActionText.setText("#ActionText");
         lblActionText.setVisible(true);
         gbc = new GridBagConstraints();
