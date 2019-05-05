@@ -11,6 +11,6 @@ public class Engi extends CrewMember {
      * @param name Name of the crew member.
      */
     public Engi(String name) {
-        super(name, CrewType.ENGI, 100, 15, 2);
+        super(name, CrewType.ENGI, 100, 15, 2,100);
     }
 }

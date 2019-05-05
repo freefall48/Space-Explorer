@@ -11,6 +11,6 @@ public class Slug extends CrewMember {
      * @param name Name of the crew member.
      */
     public Slug(String name) {
-        super(name, CrewType.SLUG, 100, 15, 2);
+        super(name, CrewType.SLUG, 100, 15, 2,100);
     }
 }

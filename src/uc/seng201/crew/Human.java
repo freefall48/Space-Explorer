@@ -14,7 +14,7 @@ public class Human extends CrewMember {
      */
     public Human(String name) {
 
-        super(name, CrewType.HUMAN, 100, 15, 2);
+        super(name, CrewType.HUMAN, 100, 15, 2,100);
         this.addModification(Modifications.FRIENDLY);
     }
 }

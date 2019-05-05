@@ -104,16 +104,10 @@ public class SpaceShip {
      */
     public List<CrewMember> getShipCrew() {
 
-        return new ArrayList<>(this.shipCrew);
+        return this.shipCrew;
 
     }
-    public List<CrewMember> getShipCrew(boolean mutable) {
-        if (mutable) {
-            return this.shipCrew;
-        } else {
-            return getShipCrew();
-        }
-    }
+
 
     public List<Items> getShipItems() {
         return shipItems;
@@ -157,16 +151,17 @@ public class SpaceShip {
     }
 
 
-    public void checkShipState() {
-        this.shipCrew.forEach(crewMember -> {
+    public void nextDay() {
+        shipCrew.forEach(CrewMember::nextDay);
+        shipCrew.forEach(crewMember -> {
             if (!crewMember.isAlive()) {
-                this.shipCrew.remove(crewMember);
+                shipCrew.remove(crewMember);
             }
         });
-        if (this.shipCrew.size() == 0) {
+        if (shipCrew.size() == 0) {
             SpaceExplorer.failedGame("Looks like you have run out of crew...");
         }
-        if (this.shieldCount == 0) {
+        if (shieldCount == 0) {
             SpaceExplorer.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
         }
     }

@@ -3,6 +3,7 @@ package uc.seng201.crew.actions;
 import uc.seng201.GameState;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.ActionException;
+import uc.seng201.items.ItemType;
 import uc.seng201.items.Items;
 
 public class ActionConsumeItem implements IAction {
@@ -13,8 +14,9 @@ public class ActionConsumeItem implements IAction {
             throw new ActionException("Invalid args provided");
         }
         if (args[0] instanceof Items) {
-            gameState.getSpaceShip().remove((Items) args[0]);
-            ((Items) args[0]).onConsume(crewMembers[0]);
+            Items item = (Items) args[0];
+            gameState.getSpaceShip().remove(item);
+            (item).onConsume(crewMembers[0]);
         }
         return null;
     }

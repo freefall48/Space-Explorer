@@ -50,6 +50,7 @@ public enum Items{
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.alterFood(getPrice()*2);
+            crewMember.setHealthRegen(crewMember.getBaseHealthRegen());
         }
     };
 

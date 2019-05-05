@@ -1,5 +1,8 @@
 package uc.seng201;
 
+import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.actions.CrewAction;
+import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.destinations.Planet;
@@ -47,7 +50,7 @@ public class GameState {
     }
 
     public Planet planetFromName(String name) {
-        for (Planet planet : this.planets) {
+        for (Planet planet : planets) {
             if (planet.getPlanetName().equals(name)) {
                 return planet;
             }
@@ -64,7 +67,7 @@ public class GameState {
     }
 
     public SpaceTraders getTrader() {
-        return this.traders;
+        return traders;
     }
 
     public void setTraders(SpaceTraders traders) {
@@ -72,26 +75,27 @@ public class GameState {
     }
 
     public boolean hasNextDay() {
-        return this.currentDay + 1 <= this.duration;
+        return currentDay + 1 <= duration;
     }
 
     public void nextDay() throws InvalidGameState {
-        if (hasNextDay()) {
-            this.currentDay += 1;
-        } else {
+        if (!hasNextDay()) {
             throw new InvalidGameState();
         }
+        currentDay += 1;
+        spaceShip.nextDay();
+
+        boolean isFriendly = false;
+        for (CrewMember crewMember: spaceShip.getShipCrew()) {
+            if (crewMember.getModifications().contains(Modifications.FRIENDLY)) {
+                isFriendly = true;
+            }
+        }
+        traders.generateAvailableItemsToday(isFriendly);
     }
 
     public boolean isMissingShipParts() {
-        return this.spaceShip.getMissingParts() > 0;
-    }
-
-    public boolean isValidState() {
-        if (this.spaceShip.getShieldCount() == 0) {
-            return false;
-        }
-        return this.spaceShip.getShipCrew().size() != 0;
+        return spaceShip.getMissingParts() > 0;
     }
 
 }

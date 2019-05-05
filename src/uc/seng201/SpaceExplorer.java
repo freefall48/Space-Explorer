@@ -2,8 +2,6 @@ package uc.seng201;
 
 import uc.seng201.gui.Screen;
 import uc.seng201.gui.ScreenComponent;
-import uc.seng201.helpers.Helpers;
-import uc.seng201.items.Items;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -18,15 +16,18 @@ public class SpaceExplorer {
     private static SpaceExplorer spaceExplorer;
 
 
-    public void changeScreen(Screen screen) {
+    public void changeScreen(Screen screen, boolean isStale) {
         ScreenComponent component = screens.get(screen);
-        if (component == null) {
+        if (component == null || isStale) {
             component = screen.createInstance(this);
             screens.replace(screen, component);
         }
         rootFrame.setContentPane(component.getRootComponent());
         rootFrame.pack();
         rootFrame.repaint();
+    }
+    public void changeScreen(Screen screen) {
+        changeScreen(screen, false);
     }
 
     public JFrame getRootFrame() {
@@ -67,11 +68,11 @@ public class SpaceExplorer {
      */
     public static void failedGame(String message) {
         JOptionPane.showMessageDialog(null, message, "Failed Game", JOptionPane.WARNING_MESSAGE);
-        spaceExplorer.changeScreen(Screen.MAIN_MENU);
+        spaceExplorer.changeScreen(Screen.MAIN_MENU, true);
     }
 
     public static void completedGame() {
         JOptionPane.showMessageDialog(null, "Well done!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        spaceExplorer.changeScreen(Screen.MAIN_MENU);
+        spaceExplorer.changeScreen(Screen.MAIN_MENU, true);
     }
 }

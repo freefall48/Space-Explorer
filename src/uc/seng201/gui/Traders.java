@@ -12,6 +12,7 @@ public class Traders extends JDialog {
     private JButton btnBuy;
     private JButton btnLeave;
     private JList<String> listAvailableItems;
+    private JLabel lblBalance;
 
     private GameState gameState;
     private DefaultListModel<String> availableItems;
@@ -43,7 +44,13 @@ public class Traders extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private void updateBalanceDisplay() {
+        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getSpaceBucks()));
+        repaint();
+    }
+
     private void updateAvailableItemsModel() {
+        updateBalanceDisplay();
         availableItems.clear();
         this.gameState.getTrader().getAvailableItems().forEach(item -> {
             this.availableItems.addElement(String.format("%dx %s  - %s", item.getQuantity(), item.getItem().toString(),
@@ -68,9 +75,9 @@ public class Traders extends JDialog {
                 .get(this.listAvailableItems.getSelectedIndex());
         if (listing.isOneRemaining()) {
             listing.removeOne();
-            updateAvailableItemsModel();
             this.gameState.getSpaceShip().alterSpaceBucks(0 - listing.getItem().getPrice());
             this.gameState.getSpaceShip().add(listing.getItem());
+            updateAvailableItemsModel();
         }
         btnBuy.setEnabled(false);
     }
@@ -163,15 +170,47 @@ public class Traders extends JDialog {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.insets = new Insets(0, 0, 10, 0);
         panel4.add(label1, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 4;
         gbc.weightx = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
         panel4.add(separator1, gbc);
+        final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$(null, -1, 16, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
+        label2.setHorizontalAlignment(0);
+        label2.setText("Balance:");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        panel4.add(label2, gbc);
+        lblBalance = new JLabel();
+        Font lblBalanceFont = this.$$$getFont$$$(null, -1, 16, lblBalance.getFont());
+        if (lblBalanceFont != null) lblBalance.setFont(lblBalanceFont);
+        lblBalance.setText("####");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 0);
+        panel4.add(lblBalance, gbc);
+        final JPanel spacer1 = new JPanel();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel4.add(spacer1, gbc);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();

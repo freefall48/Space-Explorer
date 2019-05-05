@@ -11,6 +11,6 @@ public class Lanius extends CrewMember {
      * @param name Name of the crew member.
      */
     public Lanius(String name) {
-        super(name, CrewType.LANIUS, 100, 15, 2);
+        super(name, CrewType.LANIUS, 100, 15, 2,100);
     }
 }

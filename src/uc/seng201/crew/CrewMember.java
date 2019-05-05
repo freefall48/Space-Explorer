@@ -13,12 +13,11 @@ import java.util.List;
  */
 public class CrewMember {
 
-    private final int maxHealth;
-    private final int baseHealthRegen;
+    private int maxHealth;
+    private int baseHealthRegen;
     private int repairAmount;
-    private final int maxTiredness = 100;
-    private final int tirednessRate = 25;
-    private int maxFoodLevel = 100;
+    private int maxTiredness = 100;
+    private int tirednessRate = 25;
     private int foodDecayRate = -20;
     private String name;
     private CrewType crewType;
@@ -27,14 +26,16 @@ public class CrewMember {
     private int tiredness;
     private int actionsLeftToday = 2;
     private List<Modifications> modifications = new ArrayList<>();
-    private int foodLevel = maxFoodLevel;
+    private int foodLevel;
+    private int maxFoodLevel;
 
-    public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount) {
+    public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount, int foodLevel) {
         this.name = name;
         this.crewType = crewType;
         this.maxHealth = this.health = maxHealth;
         this.baseHealthRegen = this.currentHealthRegen = baseHealthRegen;
         this.repairAmount = repairAmount;
+        this.foodLevel = this.maxFoodLevel = foodLevel;
     }
 
     @Override
@@ -200,11 +201,20 @@ public class CrewMember {
      * Alters the current stats of the crew member by applying the given rates to them. Gives the
      * crew member actions for the day. Called at the start of every day for each crew member.
      */
-    public void updateStats() {
-        alterHealth(this.currentHealthRegen);
-        alterFood(this.foodDecayRate);
+    public void nextDay() {
+        alterHealth(currentHealthRegen);
+
+        alterFood(foodDecayRate);
+        if (foodLevel == 0) {
+            setHealthRegen(-20);
+        }
+
         alterTiredness(this.tirednessRate);
-        actionsLeftToday = 2;
+        if (tiredness == maxTiredness) {
+            actionsLeftToday = 1;
+        } else {
+            actionsLeftToday = 2;
+        }
 
         this.modifications.forEach(modification -> modification.getInstance().onTick(this));
 

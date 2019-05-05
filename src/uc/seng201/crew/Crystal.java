@@ -11,6 +11,6 @@ public class Crystal extends CrewMember {
      * @param name Name of the crew member.
      */
     public Crystal(String name) {
-        super(name, CrewType.CRYSTAL, 100, 15, 2);
+        super(name, CrewType.CRYSTAL, 100, 15, 2, 100);
     }
 }

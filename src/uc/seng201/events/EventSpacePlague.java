@@ -8,6 +8,6 @@ public class EventSpacePlague implements IRandomEvent {
     @Override
     public void onTrigger(SpaceShip spaceShip) {
         int crewToInfectIndex = Helpers.randomGenerator.nextInt(spaceShip.getShipCrew().size());
-        spaceShip.getShipCrew(true).get(crewToInfectIndex).addModification(Modifications.SPACE_PLAGUE);
+        spaceShip.getShipCrew().get(crewToInfectIndex).addModification(Modifications.SPACE_PLAGUE);
     }
 }

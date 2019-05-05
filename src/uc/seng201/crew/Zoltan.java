@@ -11,6 +11,6 @@ public class Zoltan extends CrewMember {
      * @param name Name of the crew member.
      */
     public Zoltan(String name) {
-        super(name, CrewType.ZOLTAN, 100, 15, 2);
+        super(name, CrewType.ZOLTAN, 100, 15, 2,100);
     }
 }

@@ -112,14 +112,8 @@ class MainScreen extends ScreenComponent {
     }
 
     private void onNextDay() {
-
-        if (this.spaceExplorer.getGameState().getSpaceShip().hasCrewActionsRemaining()) {
-            int confirmed = JOptionPane.showConfirmDialog(this,
-                    "Do you really want to move to the next day? Some crew members can still perform actions!",
-                    "Actions Left Today", JOptionPane.YES_NO_OPTION);
-            if (confirmed != 0) {
-                return;
-            }
+        if (!isNextDayNeeded()) {
+            return;
         }
         if (this.spaceExplorer.getGameState().hasNextDay()) {
             this.spaceExplorer.getGameState().nextDay();
@@ -128,29 +122,37 @@ class MainScreen extends ScreenComponent {
             SpaceExplorer.failedGame("On no! It seems you have failed to rebuild your ship in time! Err....");
             return;
         }
-
         if (Helpers.randomGenerator.nextBoolean()) {
             RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
             event.getInstance().onTrigger(this.spaceExplorer.getGameState().getSpaceShip());
             JOptionPane.showMessageDialog(this, event.getEventDescription());
         }
-        crewNewDay();
+        forceRequiredActions();
         updateTablesModels();
         defaultSelectedCrewMember();
-        this.spaceExplorer.getGameState().getTrader().generateAvailableItemsToday(false);
         panelRoot.repaint();
     }
 
-    private void crewNewDay() {
-        this.spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(CrewMember::updateStats);
-        this.spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(crewMember -> {
+    private boolean isNextDayNeeded() {
+        if (this.spaceExplorer.getGameState().getSpaceShip().hasCrewActionsRemaining()) {
+            int confirmed = JOptionPane.showConfirmDialog(this,
+                    "Do you really want to move to the next day? Some crew members can still perform actions!",
+                    "Actions Left Today", JOptionPane.YES_NO_OPTION);
+            return confirmed == 0;
+        }
+        return true;
+    }
+
+    private void forceRequiredActions() {
+        spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(crewMember -> {
             if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
                 crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
                 crewMember.performAction();
                 JOptionPane.showMessageDialog(this, crewMember.getName() +
-                        " was overcome with tiredness and forced to spend an action sleeping.");
+                        " was overcome with tiredness and forced to spend the day sleeping.");
             }
         });
+
     }
 
     private void onPerformAction() {
@@ -164,9 +166,6 @@ class MainScreen extends ScreenComponent {
             SpaceExplorer.completedGame();
         }
 
-        if (!this.spaceExplorer.getGameState().isValidState()) {
-            SpaceExplorer.failedGame("Failed!");
-        }
         updateInfoPane();
         defaultSelectedCrewMember();
         panelRoot.repaint();
