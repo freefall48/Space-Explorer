@@ -1,12 +1,8 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorer;
+import uc.seng201.GameState;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.Action;
-import uc.seng201.events.EventTrigger;
-import uc.seng201.events.IRandomEvent;
-import uc.seng201.events.RandomEvent;
-import uc.seng201.helpers.Helpers;
+import uc.seng201.crew.actions.*;
 import uc.seng201.items.ItemType;
 import uc.seng201.items.Items;
 
@@ -18,7 +14,7 @@ public class PerformAction extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JComboBox<Action> comboActions;
+    private JComboBox<CrewAction> comboActions;
     private JLabel lblName;
     private JLabel lblActionText;
     private JComboBox<String> comboAdditionalInfo1;
@@ -26,15 +22,17 @@ public class PerformAction extends JDialog {
     private JLabel lblAdditionalInfo2;
     private JComboBox<String> comboAdditionalInfo2;
 
+    private GameState gameState;
     private CrewMember primaryCrewMember;
-    private CrewMember additionalCrewMember;
+    private CrewMember extraCrewMember;
 
     private DefaultComboBoxModel<String> additionalCrewModal = new DefaultComboBoxModel<>();
-    private DefaultComboBoxModel<Action> availableActionsModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<CrewAction> availableActionsModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> targetPlanetsModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> itemModel = new DefaultComboBoxModel<>();
 
-    PerformAction(CrewMember crewMember) {
+    PerformAction(GameState gameState, CrewMember crewMember) {
+        this.gameState = gameState;
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
@@ -45,15 +43,15 @@ public class PerformAction extends JDialog {
 
         comboActions.setModel(availableActionsModel);
 
-        Action defaultAction = Action.SEARCH;
+        CrewAction defaultAction = CrewAction.SEARCH;
         availableActionsModel.setSelectedItem(defaultAction);
-        setActionDialog(defaultAction);
+        actionDialog(defaultAction);
 
         buttonOK.addActionListener(e -> onOK());
         buttonCancel.addActionListener(e -> onCancel());
         comboActions.addActionListener(e -> onActionSelected());
-        comboAdditionalInfo1.addActionListener(e -> setActionDialog((Action) comboActions.getSelectedItem()));
-        comboAdditionalInfo2.addActionListener(e -> setActionDialog((Action) comboActions.getSelectedItem()));
+        comboAdditionalInfo1.addActionListener(e -> onAdditionalInput());
+        comboAdditionalInfo2.addActionListener(e -> onAdditionalInput());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -68,19 +66,24 @@ public class PerformAction extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private void onAdditionalInput() {
+        CrewAction action = comboActions.getItemAt(comboActions.getSelectedIndex());
+        actionDialog(action);
+    }
+
     private void updateModels() {
         additionalCrewModal.removeAllElements();
         availableActionsModel.removeAllElements();
         targetPlanetsModel.removeAllElements();
 
-        SpaceExplorer.spaceShip.getShipCrew().forEach(coActor -> {
-            if (!coActor.equals(primaryCrewMember) && coActor.canPerformActions()) {
-                additionalCrewModal.addElement(coActor.getName());
+        this.gameState.getSpaceShip().getShipCrew().forEach(additionalCrewMember -> {
+            if (!additionalCrewMember.equals(primaryCrewMember) && additionalCrewMember.canPerformActions()) {
+                additionalCrewModal.addElement(additionalCrewMember.getName());
             }
         });
 
-        SpaceExplorer.planets.forEach(planet -> {
-            if (!planet.equals(SpaceExplorer.currentPlanet)) {
+        this.gameState.getPlanets().forEach(planet -> {
+            if (!planet.equals(this.gameState.getCurrentPlanet())) {
                 targetPlanetsModel.addElement(planet.getPlanetName());
             }
         });
@@ -92,8 +95,8 @@ public class PerformAction extends JDialog {
     }
 
     private void generateAvailableActions() {
-        Action[] actionCache = Action.values();
-        for (Action action : actionCache) {
+        CrewAction[] actionCache = CrewAction.values();
+        for (CrewAction action : actionCache) {
             if (action.getCrewRequired() == 1) {
                 availableActionsModel.addElement(action);
             } else if (additionalCrewModal.getSize() >= (action.getCrewRequired() - 1)) {
@@ -102,7 +105,7 @@ public class PerformAction extends JDialog {
         }
         boolean foodPresent = false;
         boolean medicalPresent = false;
-        for (Items item : SpaceExplorer.spaceShip.getShipItems()) {
+        for (Items item : this.gameState.getSpaceShip().getShipItems()) {
             if (item.getItemType().equals(ItemType.FOOD)) {
                 foodPresent = true;
             } else if (item.getItemType().equals(ItemType.MEDICAL)) {
@@ -110,23 +113,23 @@ public class PerformAction extends JDialog {
             }
         }
         if (!foodPresent) {
-            availableActionsModel.removeElement(Action.EAT);
+            availableActionsModel.removeElement(CrewAction.EAT);
         }
         if (!medicalPresent) {
-            availableActionsModel.removeElement(Action.MEDICAL);
+            availableActionsModel.removeElement(CrewAction.MEDICAL);
         }
     }
 
     private void onOK() {
-        Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
+        CrewAction actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
         if (actionToPerform.getCrewRequired() == 2) {
-            this.additionalCrewMember = SpaceExplorer.spaceShip.findCrewMember(
+            this.extraCrewMember = this.gameState.getSpaceShip().findCrewMember(
                     (String) additionalCrewModal.getSelectedItem());
         }
         if (actionToPerform.getCostsActionPoint()) {
             this.primaryCrewMember.performAction();
-            if (additionalCrewMember != null) {
-                additionalCrewMember.performAction();
+            if (extraCrewMember != null) {
+                extraCrewMember.performAction();
             }
         }
         performAction(actionToPerform);
@@ -158,14 +161,38 @@ public class PerformAction extends JDialog {
 
     private void onActionSelected() {
         setAdditionalInputVisible(false);
-
-        Action actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
-        setActionDialog(actionToPerform);
+        CrewAction actionToPerform = comboActions.getItemAt(comboActions.getSelectedIndex());
+        switch (actionToPerform) {
+            case PILOT:
+                lblAdditionalInfo1.setText("Co-pilot:");
+                comboAdditionalInfo1.setModel(additionalCrewModal);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                lblAdditionalInfo2.setText("Destination Planet:");
+                comboAdditionalInfo2.setModel(targetPlanetsModel);
+                comboAdditionalInfo2.setSelectedIndex(0);
+                setAdditionalInputVisible(2);
+                break;
+            case EAT:
+                setItemsModel(ItemType.FOOD);
+                lblAdditionalInfo1.setText("Snack on:");
+                comboAdditionalInfo1.setModel(itemModel);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                setAdditionalInputVisible(1);
+                break;
+            case MEDICAL:
+                setItemsModel(ItemType.MEDICAL);
+                lblAdditionalInfo1.setText("Apply:");
+                comboAdditionalInfo1.setModel(itemModel);
+                comboAdditionalInfo1.setSelectedIndex(0);
+                setAdditionalInputVisible(1);
+                break;
+        }
+        actionDialog(actionToPerform);
     }
 
     private void setItemsModel(ItemType itemType) {
         itemModel.removeAllElements();
-        for (Items item : SpaceExplorer.spaceShip.getShipItems()) {
+        for (Items item : this.gameState.getSpaceShip().getShipItems()) {
             if (item.getItemType().equals(itemType) && !itemModelContains(item)) {
                 itemModel.addElement(item.toString());
             }
@@ -182,82 +209,63 @@ public class PerformAction extends JDialog {
         return false;
     }
 
-    private void setActionDialog(Action action) {
-        buttonOK.setEnabled(true);
+    private void actionDialog(CrewAction action) {
         switch (action) {
             case PILOT:
-                // TODO: need to fix action text not updating for change in other combos
-                lblAdditionalInfo1.setText("Co-pilot:");
-                comboAdditionalInfo1.setModel(additionalCrewModal);
-                comboAdditionalInfo1.setSelectedIndex(0);
-                lblAdditionalInfo2.setText("Destination Planet:");
-                comboAdditionalInfo2.setModel(targetPlanetsModel);
-                comboAdditionalInfo2.setSelectedIndex(0);
-                setAdditionalInputVisible(2);
-                lblActionText.setText(String.format(Action.PILOT.getActionText(), primaryCrewMember.getName(),
-                        comboAdditionalInfo1.getSelectedItem(), SpaceExplorer.spaceShip.getShipName(),
+                lblActionText.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
+                        comboAdditionalInfo1.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
                         comboAdditionalInfo2.getSelectedItem()));
                 break;
             case SEARCH:
-                lblActionText.setText(String.format(Action.SEARCH.getActionText(), primaryCrewMember.getName(),
-                        SpaceExplorer.currentPlanet, SpaceExplorer.currentPlanet.description()));
+                lblActionText.setText(String.format(CrewAction.SEARCH.getActionText(), primaryCrewMember.getName(),
+                        this.gameState.getCurrentPlanet(), this.gameState.getCurrentPlanet().description()));
                 break;
             case SLEEP:
-                lblActionText.setText(String.format(Action.SLEEP.getActionText(), primaryCrewMember.getName()));
+                lblActionText.setText(String.format(CrewAction.SLEEP.getActionText(), primaryCrewMember.getName()));
                 break;
             case EAT:
-                setItemsModel(ItemType.FOOD);
-                lblAdditionalInfo1.setText("Snack on:");
-                comboAdditionalInfo1.setModel(itemModel);
-                comboAdditionalInfo1.setSelectedIndex(0);
-                setAdditionalInputVisible(1);
-                lblActionText.setText(String.format(Action.EAT.getActionText(), primaryCrewMember.getName(),
+
+                lblActionText.setText(String.format(CrewAction.EAT.getActionText(), primaryCrewMember.getName(),
                         comboAdditionalInfo1.getSelectedItem()));
                 break;
             case MEDICAL:
-                setItemsModel(ItemType.MEDICAL);
-                lblAdditionalInfo1.setText("Apply:");
-                comboAdditionalInfo1.setModel(itemModel);
-                comboAdditionalInfo1.setSelectedIndex(0);
-                setAdditionalInputVisible(1);
-                lblActionText.setText(String.format(Action.MEDICAL.getActionText(), primaryCrewMember.getName(),
+
+                lblActionText.setText(String.format(CrewAction.MEDICAL.getActionText(), primaryCrewMember.getName(),
                         comboAdditionalInfo1.getSelectedItem()));
                 break;
             case REPAIR:
-                lblActionText.setText(String.format(Action.REPAIR.getActionText(), primaryCrewMember.getName(),
-                        SpaceExplorer.spaceShip.getShipName()));
+                lblActionText.setText(String.format(CrewAction.REPAIR.getActionText(), primaryCrewMember.getName(),
+                        this.gameState.getSpaceShip().getShipName()));
                 break;
         }
         repaint();
-        revalidate();
     }
 
-    private void performAction(Action action) {
+    private void performAction(CrewAction action) {
+        String message = null;
         switch (action) {
             case PILOT:
-                SpaceExplorer.currentPlanet = SpaceExplorer.getPlanetFromName((String) comboAdditionalInfo2.getSelectedItem());
-                if (Helpers.randomGenerator.nextBoolean()) {
-                    RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.TRAVEL);
-                    event.getInstance().onTrigger(SpaceExplorer.spaceShip);
-                    SpaceExplorer.popup(event.getEventDescription());
-                }
+                message = new ActionPilot().perform(gameState, new Object[]{gameState.planetFromName(
+                        (String) comboAdditionalInfo2.getSelectedItem())}, primaryCrewMember, extraCrewMember);
                 break;
             case SEARCH:
-                String foundMessage = SpaceExplorer.currentPlanet.onSearch(primaryCrewMember, SpaceExplorer.spaceShip);
-                JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(), foundMessage);
+                message = new ActionSearch().perform(gameState, new Object[]{gameState.getCurrentPlanet()},
+                        primaryCrewMember);
                 break;
             case SLEEP:
-                primaryCrewMember.alterTiredness(0 - primaryCrewMember.getMaxTiredness());
+                message = new ActionSleep().perform(gameState, null, primaryCrewMember);
                 break;
             case EAT:
             case MEDICAL:
                 Items item = Items.valueOf((String) comboAdditionalInfo1.getSelectedItem());
-                SpaceExplorer.spaceShip.remove(item);
-                item.onConsume(primaryCrewMember);
+                message = new ActionConsumeItem().perform(gameState, new Object[]{item}, primaryCrewMember);
                 break;
             case REPAIR:
-                SpaceExplorer.spaceShip.alterShield(primaryCrewMember.getRepairAmount());
+                message = new ActionRepair().perform(gameState, null, primaryCrewMember);
                 break;
+        }
+        if (message != null) {
+            JOptionPane.showMessageDialog(this, message);
         }
     }
 
@@ -283,7 +291,7 @@ public class PerformAction extends JDialog {
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 0, 20, 20);
@@ -351,7 +359,7 @@ public class PerformAction extends JDialog {
         panel4.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 7.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -414,7 +422,7 @@ public class PerformAction extends JDialog {
         panel5.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weighty = 3.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel5, gbc);
@@ -431,6 +439,22 @@ public class PerformAction extends JDialog {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         panel5.add(lblActionText, gbc);
+        final JSeparator separator1 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 20, 10, 20);
+        panel5.add(separator1, gbc);
+        final JSeparator separator2 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 10.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 20, 10, 20);
+        contentPane.add(separator2, gbc);
         label2.setLabelFor(comboActions);
     }
 

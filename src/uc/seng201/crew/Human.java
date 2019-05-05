@@ -1,5 +1,7 @@
 package uc.seng201.crew;
 
+import uc.seng201.crew.modifers.Modifications;
+
 /**
  * Specific crew member type.
  */
@@ -11,6 +13,8 @@ public class Human extends CrewMember {
      * @param name Name of the crew member.
      */
     public Human(String name) {
+
         super(name, CrewType.HUMAN, 100, 15, 2);
+        this.addModification(Modifications.FRIENDLY);
     }
 }

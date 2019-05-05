@@ -5,12 +5,7 @@ import uc.seng201.crew.CrewMember;
 public class ModSpacePlague extends ModificationAdapter {
     @Override
     public void onAdd(CrewMember crewMember) {
-        crewMember.setHealthRegen(0);
-    }
-
-    @Override
-    public void onTick(CrewMember crewMember) {
-        crewMember.alterHealth(-15);
+        crewMember.setHealthRegen(-15);
     }
 
     @Override

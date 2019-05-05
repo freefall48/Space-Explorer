@@ -1,6 +1,6 @@
-package uc.seng201.crew;
+package uc.seng201.crew.actions;
 
-public enum Action {
+public enum CrewAction {
 
     PILOT("<html>%s and %s will fly %s to %s!", 2, true),
     SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1, true),
@@ -13,7 +13,7 @@ public enum Action {
     private int crewRequired;
     private boolean costsActionPoint;
 
-    Action(String actionText, int crewRequired, boolean costsActionPoint) {
+    CrewAction(String actionText, int crewRequired, boolean costsActionPoint) {
         this.actionText = actionText;
         this.crewRequired = crewRequired;
         this.costsActionPoint = costsActionPoint;

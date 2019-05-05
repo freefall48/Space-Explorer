@@ -91,7 +91,6 @@ public class CreateCrewMember extends JDialog {
 
     CrewMember showDialog() {
         setSize(450, 250);
-        setLocationRelativeTo(SpaceExplorer.getControlFrame());
         setVisible(true);
         return this.crewMember;
     }

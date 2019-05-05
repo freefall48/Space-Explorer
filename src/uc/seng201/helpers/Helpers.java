@@ -1,10 +1,9 @@
 package uc.seng201.helpers;
 
 
-import uc.seng201.targets.Planet;
+import uc.seng201.destinations.Planet;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.SecureRandom;

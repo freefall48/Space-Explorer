@@ -156,17 +156,6 @@ public class SpaceShip {
         this.spaceBucks = newBalance;
     }
 
-    public void startOfDay() {
-        this.shipCrew.forEach(CrewMember::updateStats);
-        this.shipCrew.forEach(crewMember -> {
-            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
-                crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
-                crewMember.performAction();
-                SpaceExplorer.popup(crewMember.getName() + " was overcome with tiredness and forced to spend" +
-                        "an action sleeping.");
-            }
-        });
-    }
 
     public void checkShipState() {
         this.shipCrew.forEach(crewMember -> {
@@ -180,5 +169,14 @@ public class SpaceShip {
         if (this.shieldCount == 0) {
             SpaceExplorer.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
         }
+    }
+
+    public boolean hasCrewActionsRemaining() {
+        for (CrewMember crewMember : this.shipCrew) {
+            if (crewMember.getActionsLeftToday() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

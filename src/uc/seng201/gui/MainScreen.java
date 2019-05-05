@@ -2,20 +2,21 @@ package uc.seng201.gui;
 
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.events.IRandomEvent;
 import uc.seng201.events.RandomEvent;
 import uc.seng201.helpers.Helpers;
+import uc.seng201.helpers.SavedGameFileFilter;
 import uc.seng201.helpers.StateActions;
 import uc.seng201.events.EventTrigger;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class MainScreen {
+class MainScreen extends ScreenComponent {
 
     private JPanel panelRoot;
     private JLabel lblSpaceShipName;
@@ -34,15 +35,20 @@ public class MainScreen {
     private JList<String> listPlanets;
     private JButton btnHelp;
     private JButton btnSpaceTraders;
+    private JButton btnInspect;
 
     private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
     private DefaultListModel<String> listMedicalSuppliesModel = new DefaultListModel<>();
     private DefaultListModel<String> listFoodItemsModel = new DefaultListModel<>();
     private DefaultListModel<String> listPlanetsModel = new DefaultListModel<>();
 
-    MainScreen() {
+    private SpaceExplorer spaceExplorer;
+
+    MainScreen(SpaceExplorer spaceExplorer) {
+        this.spaceExplorer = spaceExplorer;
+
         initialiseTables();
-        updateHUD();
+        updateInfoPane();
 
         btnNextDay.addActionListener(e -> onNextDay());
 
@@ -50,105 +56,135 @@ public class MainScreen {
 
         btnPerformAction.addActionListener(e -> onPerformAction());
 
-        btnSpaceTraders.addActionListener(e -> {
-            // TODO: Finish the space traders logic
-            JDialog inspectCrewDialog = new JDialog();
-            inspectCrewDialog.setSize(400, 200);
-            inspectCrewDialog.setLocationRelativeTo(SpaceExplorer.getControlFrame());
-            inspectCrewDialog.setVisible(true);
-        });
+        btnSpaceTraders.addActionListener(e -> onTrade());
 
         btnSave.addActionListener(e -> onSave());
 
-        btnHelp.addActionListener(e -> {
-            // TODO: Generate the help message
-            JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(), Helpers.listToString(Modifications.values()));
-        });
+        btnInspect.addActionListener(e -> onInspect());
+
+//        btnHelp.addActionListener(e -> {
+//            // TODO: Generate the help message
+//            JOptionPane.showMessageDialog(this, Helpers.listToString(Modifications.values()));
+//        });
+
+        defaultSelectedCrewMember();
+
+    }
+
+    private void onInspect() {
+        JDialog inspectCrewMember = new InspectCrewMember(listCrew.getSelectedValue());
+        inspectCrewMember.setSize(700, 500);
+        inspectCrewMember.setResizable(false);
+        inspectCrewMember.setLocationRelativeTo(spaceExplorer.getRootFrame());
+        inspectCrewMember.setVisible(true);
+    }
+
+    private void onTrade() {
+        JDialog traders = new Traders(this.spaceExplorer.getGameState());
+        traders.setSize(600, 400);
+        traders.setLocationRelativeTo(this.spaceExplorer.getRootFrame());
+        traders.setVisible(true);
+        updateTablesModels();
+        updateInfoPane();
+        panelRoot.repaint();
+    }
+
+    @Override
+    public JComponent getRootComponent() {
+        return panelRoot;
     }
 
     private void onSave() {
-        FileDialog fd = new FileDialog(SpaceExplorer.getControlFrame(), "Save", FileDialog.SAVE);
-        fd.setFilenameFilter((dir, name) -> name.toUpperCase().endsWith(".JSON"));
-        fd.setVisible(true);
-        try {
-            if (fd.getFile() != null) {
-                StateActions.saveState(fd.getDirectory() + fd.getFile(), SpaceExplorer.spaceShip,
-                        SpaceExplorer.planets, SpaceExplorer.currentPlanet, SpaceExplorer.currentDay,
-                        SpaceExplorer.gameDuration, SpaceExplorer.shipImageLocation);
-            } else {
-                throw new IOException();
+        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        fileChooser.setFileFilter(new SavedGameFileFilter());
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        int success = fileChooser.showSaveDialog(this);
+        if (success == JFileChooser.APPROVE_OPTION) {
+            String fileLocation = fileChooser.getSelectedFile().getAbsolutePath();
+            try {
+                StateActions.saveState(this.spaceExplorer.getGameState(), fileLocation);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Failed to save!",
+                        "Failed", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
-        } catch (IOException error) {
-            JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
-                    "Failed to save or was cancelled!", "Could not save", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void onNextDay() {
-        boolean showActionsLeftWarning = false;
-        for (int i = 0; i < listCrewModal.getSize(); i++) {
-            if (listCrewModal.get(i).canPerformActions()) {
-                showActionsLeftWarning = true;
-            }
-        }
-        if (showActionsLeftWarning) {
-            int confirmed = JOptionPane.showConfirmDialog(SpaceExplorer.getControlFrame(),
+
+        if (this.spaceExplorer.getGameState().getSpaceShip().hasCrewActionsRemaining()) {
+            int confirmed = JOptionPane.showConfirmDialog(this,
                     "Do you really want to move to the next day? Some crew members can still perform actions!",
                     "Actions Left Today", JOptionPane.YES_NO_OPTION);
             if (confirmed != 0) {
                 return;
             }
         }
-        int nextDay = SpaceExplorer.currentDay + 1;
-        if (nextDay <= SpaceExplorer.gameDuration) {
-            SpaceExplorer.currentDay = nextDay;
-            updateHUD();
+        if (this.spaceExplorer.getGameState().hasNextDay()) {
+            this.spaceExplorer.getGameState().nextDay();
+            updateInfoPane();
         } else {
             SpaceExplorer.failedGame("On no! It seems you have failed to rebuild your ship in time! Err....");
+            return;
         }
-        SpaceExplorer.spaceShip.startOfDay();
+
         if (Helpers.randomGenerator.nextBoolean()) {
             RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
-            event.getInstance().onTrigger(SpaceExplorer.spaceShip);
-            SpaceExplorer.popup(event.getEventDescription());
+            event.getInstance().onTrigger(this.spaceExplorer.getGameState().getSpaceShip());
+            JOptionPane.showMessageDialog(this, event.getEventDescription());
         }
+        crewNewDay();
         updateTablesModels();
-        checkActionButtonState();
-        reloadState();
+        defaultSelectedCrewMember();
+        this.spaceExplorer.getGameState().getTrader().generateAvailableItemsToday(false);
+        panelRoot.repaint();
+    }
+
+    private void crewNewDay() {
+        this.spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(CrewMember::updateStats);
+        this.spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(crewMember -> {
+            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
+                crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
+                crewMember.performAction();
+                JOptionPane.showMessageDialog(this, crewMember.getName() +
+                        " was overcome with tiredness and forced to spend an action sleeping.");
+            }
+        });
     }
 
     private void onPerformAction() {
-        JDialog performAction = new PerformAction(listCrewModal.get(listCrew.getSelectedIndex()));
+        JDialog performAction = new PerformAction(this.spaceExplorer.getGameState(),
+                listCrewModal.get(listCrew.getSelectedIndex()));
         performAction.setSize(450, 350);
-        performAction.setLocationRelativeTo(null);
+        performAction.setLocationRelativeTo(spaceExplorer.getRootFrame());
         performAction.setVisible(true);
-        checkAllPartsFound();
-        updateHUD();
-        reloadState();
-        listCrew.clearSelection();
-        checkActionButtonState();
+
+        if (!this.spaceExplorer.getGameState().isMissingShipParts()) {
+            SpaceExplorer.completedGame();
+        }
+
+        if (!this.spaceExplorer.getGameState().isValidState()) {
+            SpaceExplorer.failedGame("Failed!");
+        }
+        updateInfoPane();
+        defaultSelectedCrewMember();
+        panelRoot.repaint();
     }
 
-    private void checkActionButtonState() {
-        btnPerformAction.setEnabled(setDefaultSelectedCrewMember());
-    }
-
-    private boolean setDefaultSelectedCrewMember() {
+    private void defaultSelectedCrewMember() {
         for (Iterator<CrewMember> iterator = listCrewModal.elements().asIterator(); iterator.hasNext(); ) {
             CrewMember crewMember = iterator.next();
             if (crewMember.getActionsLeftToday() > 0) {
                 listCrew.setSelectedValue(crewMember, true);
-                return true;
+                btnPerformAction.setEnabled(true);
+                return;
             }
         }
-        return false;
+        listCrew.setSelectedIndex(0);
+        btnPerformAction.setEnabled(false);
     }
 
-    private void checkAllPartsFound() {
-        if (SpaceExplorer.spaceShip.getMissingParts() == 0) {
-            SpaceExplorer.completedGame();
-        }
-    }
 
     private void onCrewMemberSelection(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting() && listCrew.getSelectedIndex() != -1) {
@@ -161,23 +197,23 @@ public class MainScreen {
     }
 
     private void initialiseTables() {
-        listCrewModal.addAll(SpaceExplorer.spaceShip.getShipCrew());
+        listCrewModal.addAll(this.spaceExplorer.getGameState().getSpaceShip().getShipCrew());
         listCrew.setModel(listCrewModal);
-        setDefaultSelectedCrewMember();
+        defaultSelectedCrewMember();
+
         listFoodItems.setModel(listFoodItemsModel);
-        listFoodItems.setSelectedIndex(0);
         listMedicalSupplies.setModel(listMedicalSuppliesModel);
-        listMedicalSupplies.setSelectedIndex(0);
         listPlanets.setModel(listPlanetsModel);
-        listPlanets.setSelectedIndex(0);
     }
 
     private void updateTablesModels() {
-        listFoodItemsModel.removeAllElements();
-        listMedicalSuppliesModel.removeAllElements();
-        listPlanetsModel.removeAllElements();
-        SpaceExplorer.planets.forEach(planet -> listPlanetsModel.addElement(planet.description()));
-        SpaceExplorer.spaceShip.getShipItems().forEach(item -> {
+        listFoodItemsModel.clear();
+        listMedicalSuppliesModel.clear();
+        listPlanetsModel.clear();
+
+        this.spaceExplorer.getGameState().getPlanets().forEach(planet -> listPlanetsModel.addElement(
+                planet.description()));
+        this.spaceExplorer.getGameState().getSpaceShip().getShipItems().forEach(item -> {
             switch (item.getItemType()) {
                 case FOOD:
                     listFoodItemsModel.addElement(item.toString() + " - " + item.getItemDescription());
@@ -189,20 +225,17 @@ public class MainScreen {
         });
     }
 
-    private void updateHUD() {
+    private void updateInfoPane() {
         updateTablesModels();
-        lblSpaceShipName.setText(SpaceExplorer.spaceShip.getShipName());
-        lblDay.setText(String.format("%d of %d", SpaceExplorer.currentDay, SpaceExplorer.gameDuration));
-        lblOrbiting.setText(SpaceExplorer.currentPlanet.toString());
-        lblMissingParts.setText(String.valueOf(SpaceExplorer.spaceShip.getMissingParts()));
-        lblBalance.setText("$" + SpaceExplorer.spaceShip.getSpaceBucks());
-        lblShipHealth.setText(String.format("%d", SpaceExplorer.spaceShip.getShieldCount()));
+        lblSpaceShipName.setText(this.spaceExplorer.getGameState().getSpaceShip().getShipName());
+        lblDay.setText(String.format("%d of %d", this.spaceExplorer.getGameState().getCurrentDay(),
+                this.spaceExplorer.getGameState().getDuration()));
+        lblOrbiting.setText(this.spaceExplorer.getGameState().getCurrentPlanet().toString());
+        lblMissingParts.setText(String.valueOf(this.spaceExplorer.getGameState().getSpaceShip().getMissingParts()));
+        lblBalance.setText("$" + this.spaceExplorer.getGameState().getSpaceShip().getSpaceBucks());
+        lblShipHealth.setText(String.format("%d", this.spaceExplorer.getGameState().getSpaceShip().getShieldCount()));
     }
 
-    private void reloadState() {
-        panelRoot.revalidate();
-        panelRoot.repaint();
-    }
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer
@@ -234,6 +267,7 @@ public class MainScreen {
         gbc.insets = new Insets(10, 20, 20, 5);
         panelRoot.add(panel1, gbc);
         tabbedContentMenu = new JTabbedPane();
+        tabbedContentMenu.setEnabled(true);
         Font tabbedContentMenuFont = this.$$$getFont$$$("Droid Sans Mono", -1, 14, tabbedContentMenu.getFont());
         if (tabbedContentMenuFont != null) tabbedContentMenu.setFont(tabbedContentMenuFont);
         gbc = new GridBagConstraints();
@@ -273,6 +307,7 @@ public class MainScreen {
         gbc.fill = GridBagConstraints.BOTH;
         panel3.add(scrollPane2, gbc);
         listFoodItems = new JList();
+        listFoodItems.setEnabled(true);
         listFoodItems.setFixedCellHeight(30);
         Font listFoodItemsFont = this.$$$getFont$$$("Droid Sans Mono", -1, 14, listFoodItems.getFont());
         if (listFoodItemsFont != null) listFoodItems.setFont(listFoodItemsFont);
@@ -289,6 +324,7 @@ public class MainScreen {
         gbc.fill = GridBagConstraints.BOTH;
         panel4.add(scrollPane3, gbc);
         listMedicalSupplies = new JList();
+        listMedicalSupplies.setEnabled(true);
         listMedicalSupplies.setFixedCellHeight(30);
         Font listMedicalSuppliesFont = this.$$$getFont$$$("Droid Sans Mono", -1, 14, listMedicalSupplies.getFont());
         if (listMedicalSuppliesFont != null) listMedicalSupplies.setFont(listMedicalSuppliesFont);
@@ -305,6 +341,7 @@ public class MainScreen {
         gbc.fill = GridBagConstraints.BOTH;
         panel5.add(scrollPane4, gbc);
         listPlanets = new JList();
+        listPlanets.setEnabled(true);
         listPlanets.setFixedCellHeight(30);
         Font listPlanetsFont = this.$$$getFont$$$("Droid Sans Mono", -1, 14, listPlanets.getFont());
         if (listPlanetsFont != null) listPlanets.setFont(listPlanetsFont);
@@ -389,7 +426,7 @@ public class MainScreen {
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -400,7 +437,7 @@ public class MainScreen {
         btnNextDay.setText("Next Day");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel6.add(btnNextDay, gbc);
@@ -408,11 +445,11 @@ public class MainScreen {
         btnPerformAction.setEnabled(true);
         Font btnPerformActionFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnPerformAction.getFont());
         if (btnPerformActionFont != null) btnPerformAction.setFont(btnPerformActionFont);
-        btnPerformAction.setText("Crew Action");
+        btnPerformAction.setText("Action");
         btnPerformAction.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
@@ -457,6 +494,14 @@ public class MainScreen {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
         panel6.add(lblShipHealth, gbc);
+        final JSeparator separator2 = new JSeparator();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        panel6.add(separator2, gbc);
         btnSpaceTraders = new JButton();
         btnSpaceTraders.setEnabled(true);
         Font btnSpaceTradersFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnSpaceTraders.getFont());
@@ -465,19 +510,24 @@ public class MainScreen {
         btnSpaceTraders.setToolTipText("Visit your local space traders.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 2, 0);
         panel6.add(btnSpaceTraders, gbc);
-        final JSeparator separator2 = new JSeparator();
+        btnInspect = new JButton();
+        btnInspect.setEnabled(true);
+        Font btnInspectFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnInspect.getFont());
+        if (btnInspectFont != null) btnInspect.setFont(btnInspectFont);
+        btnInspect.setText("Inspect");
+        btnInspect.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 0, 10, 0);
-        panel6.add(separator2, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(2, 0, 0, 0);
+        panel6.add(btnInspect, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();

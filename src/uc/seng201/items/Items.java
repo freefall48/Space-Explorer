@@ -16,8 +16,37 @@ public enum Items{
             crewMember.alterHealth(getPrice());
         }
     },
-
     PORK(ItemType.FOOD, 15,"Yummy yummy pork.") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice()*2);
+        }
+    },
+    CRICKETS(ItemType.FOOD, 15,"Bear would do it.") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice()*2);
+        }
+    },
+    CRACKERS(ItemType.FOOD, 15,"now what flavor?") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice()*2);
+        }
+    },
+    CARROT(ItemType.FOOD, 5,"At least its healthy...") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice()*2);
+        }
+    },
+    CHICKEN(ItemType.FOOD, 15,"Time for roast.") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice()*2);
+        }
+    },
+    SPACESNACK(ItemType.FOOD, 15,"Not sure what this is?") {
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.alterFood(getPrice()*2);

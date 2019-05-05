@@ -1,4 +1,4 @@
-package uc.seng201.targets;
+package uc.seng201.destinations;
 
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;

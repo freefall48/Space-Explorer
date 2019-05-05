@@ -1,65 +1,77 @@
 package uc.seng201;
 
-import uc.seng201.gui.MainMenu;
-import uc.seng201.targets.Planet;
+import uc.seng201.gui.Screen;
+import uc.seng201.gui.ScreenComponent;
+import uc.seng201.helpers.Helpers;
+import uc.seng201.items.Items;
 
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpaceExplorer {
 
+    private JFrame rootFrame;
+    private GameState gameState;
+    private Map<Screen, ScreenComponent> screens;
 
-    private static JFrame controlFrame;
-    public static BufferedImage shipImage;
-    private static GameState gameState;
+    private static SpaceExplorer spaceExplorer;
 
-    public static JFrame getControlFrame() {
-        return controlFrame;
+
+    public void changeScreen(Screen screen) {
+        ScreenComponent component = screens.get(screen);
+        if (component == null) {
+            component = screen.createInstance(this);
+            screens.replace(screen, component);
+        }
+        rootFrame.setContentPane(component.getRootComponent());
+        rootFrame.pack();
+        rootFrame.repaint();
     }
 
+    public JFrame getRootFrame() {
+        return this.rootFrame;
+    }
 
-
-    public static GameState getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
 
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     public static void main(String[] args) {
-
-        controlFrame = new JFrame("Space Explorer");
-        controlFrame.setContentPane(new MainMenu().$$$getRootComponent$$$());
-        controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        controlFrame.setResizable(false);
-        controlFrame.pack();
-        controlFrame.setLocationRelativeTo(SpaceExplorer.getControlFrame());
-        controlFrame.setVisible(true);
+        spaceExplorer = new SpaceExplorer();
+        spaceExplorer.setupGUI();
     }
 
-    public static void redrawRoot(JComponent panel) {
-        controlFrame.setContentPane(panel);
-        controlFrame.pack();
+    private void setupGUI() {
+        rootFrame = new JFrame("Space Explorer");
+        rootFrame.setSize(800, 600);
+        rootFrame.setResizable(false);
+        rootFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        rootFrame.setLocationRelativeTo(null);
+
+        screens = new HashMap<>();
+        screens.put(Screen.MAIN_MENU, null);
+        screens.put(Screen.MAIN_SCREEN, null);
+        screens.put(Screen.ADVENTURE_CREATOR, null);
+
+        changeScreen(Screen.MAIN_MENU);
+        rootFrame.setVisible(true);
     }
 
-    public static void popup(String message) {
-        JOptionPane.showMessageDialog(controlFrame, message);
-    }
-
+    /**
+     * @param message Message to be displayed.
+     */
     public static void failedGame(String message) {
-        JOptionPane.showMessageDialog(controlFrame, message, "Failed Game", JOptionPane.WARNING_MESSAGE);
-        System.exit(0);
+        JOptionPane.showMessageDialog(null, message, "Failed Game", JOptionPane.WARNING_MESSAGE);
+        spaceExplorer.changeScreen(Screen.MAIN_MENU);
     }
 
     public static void completedGame() {
-        JOptionPane.showMessageDialog(controlFrame, "Well done!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        System.exit(0);
-    }
-
-    public static Planet getPlanetFromName(String planetName) {
-        for (Planet planet : planets) {
-            if (planet.getPlanetName().equals(planetName)) {
-                return planet;
-            }
-        }
-        return null;
+        JOptionPane.showMessageDialog(null, "Well done!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        spaceExplorer.changeScreen(Screen.MAIN_MENU);
     }
 }

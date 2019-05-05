@@ -1,6 +1,5 @@
 package uc.seng201.crew;
 
-import uc.seng201.crew.modifers.IModification;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.ActionException;
 import uc.seng201.helpers.Helpers;
@@ -27,7 +26,7 @@ public class CrewMember {
     private int currentHealthRegen;
     private int tiredness;
     private int actionsLeftToday = 2;
-    private List<IModification> modifications = new ArrayList<>();
+    private List<Modifications> modifications = new ArrayList<>();
     private int foodLevel = maxFoodLevel;
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount) {
@@ -54,6 +53,18 @@ public class CrewMember {
             return (((CrewMember) object).getName().toUpperCase().equals(this.name.toUpperCase()));
         }
         return false;
+    }
+
+    public int getTirednessRate() {
+        return tirednessRate;
+    }
+
+    public int getMaxFoodLevel() {
+        return maxFoodLevel;
+    }
+
+    public int getFoodDecayRate() {
+        return foodDecayRate;
     }
 
     public String getName() {
@@ -97,7 +108,7 @@ public class CrewMember {
         return actionsLeftToday;
     }
 
-    public List<IModification> getModifications() {
+    public List<Modifications> getModifications() {
         return modifications;
     }
 
@@ -163,13 +174,12 @@ public class CrewMember {
      * Applies an illness to the crew member. The Illnesses onAdd() method
      * is called.
      *
-     * @param modificationType Modification to add to crew member
+     * @param modification Modification to add to crew member
      */
-    public void addModification(Modifications modificationType) {
-        IModification modification = modificationType.getInstance();
+    public void addModification(Modifications modification) {
         if (!this.modifications.contains(modification)) {
             this.modifications.add(modification);
-            modification.onAdd(this);
+            modification.getInstance().onAdd(this);
         }
     }
 
@@ -177,13 +187,12 @@ public class CrewMember {
      * Removes an illness from a crew member. The Illnesses onRemove()
      * method is called.
      *
-     * @param modificationType The Illness to remove from the crew member.
+     * @param modification The Illness to remove from the crew member.
      */
-    public void removeModification(Modifications modificationType) {
-        IModification modification = modificationType.getInstance();
+    public void removeModification(Modifications modification) {
         if (this.modifications.contains(modification)) {
             this.modifications.remove(modification);
-            modification.onRemove(this);
+            modification.getInstance().onRemove(this);
         }
     }
 
@@ -197,7 +206,7 @@ public class CrewMember {
         alterTiredness(this.tirednessRate);
         actionsLeftToday = 2;
 
-        this.modifications.forEach(modification -> modification.onTick(this));
+        this.modifications.forEach(modification -> modification.getInstance().onTick(this));
 
     }
 

@@ -1,18 +1,20 @@
 package uc.seng201.gui;
 
+import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
+import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.helpers.Helpers;
+import uc.seng201.destinations.Planet;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.util.List;
 
-public class AdventureCreator extends JComponent {
+class AdventureCreator extends ScreenComponent {
     private JTextField textShipName;
     private JSlider sliderDuration;
     private JPanel panelCreator;
@@ -24,10 +26,11 @@ public class AdventureCreator extends JComponent {
     private JButton btnUpdateCrewMember;
     private JButton btnRemoveCrewMember;
 
+    private SpaceExplorer spaceExplorer;
     private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
 
-
-    AdventureCreator() {
+    AdventureCreator(SpaceExplorer spaceExplorer) {
+        this.spaceExplorer = spaceExplorer;
 
         textShipName.addKeyListener(new KeyAdapter() {
             @Override
@@ -44,8 +47,7 @@ public class AdventureCreator extends JComponent {
             btnUpdateCrewMember.setEnabled(true);
         });
 
-        btnBack.addActionListener(e -> SpaceExplorer.redrawRoot(new MainMenu().$$$getRootComponent$$$()));
-
+        btnBack.addActionListener(e -> this.spaceExplorer.changeScreen(Screen.MAIN_MENU));
         btnAddCrewMember.addActionListener(e -> onAddCrewMember());
         btnContinue.addActionListener(e -> onContinue());
         btnUpdateCrewMember.addActionListener(e -> onUpdateCrewMember());
@@ -53,18 +55,28 @@ public class AdventureCreator extends JComponent {
         checkboxCustomShipFile.addActionListener(e -> onAddCustomShipFile());
     }
 
+    @Override
+    public JComponent getRootComponent() {
+        return panelCreator;
+    }
+
     private void onContinue() {
-        SpaceExplorer.spaceShip = new SpaceShip(textShipName.getText(),
-                Helpers.calcPartsToFind(sliderDuration.getValue()));
-        SpaceExplorer.spaceShip.add(listCrewModal.toArray());
-        SpaceExplorer.gameDuration = sliderDuration.getValue();
-        SpaceExplorer.planets = Helpers.generatePlanets(sliderDuration.getValue());
-        SpaceExplorer.currentPlanet = SpaceExplorer.planets.get(0);
-        SpaceExplorer.redrawRoot(new MainScreen().$$$getRootComponent$$$());
+        int gameDuration = sliderDuration.getValue();
+        SpaceShip spaceShip = new SpaceShip(textShipName.getText(), Helpers.calcPartsToFind(gameDuration));
+        spaceShip.add(listCrewModal.toArray());
+
+        List<Planet> planets = Helpers.generatePlanets(gameDuration);
+
+        this.spaceExplorer.setGameState(new GameState(spaceShip, gameDuration, planets));
+        this.spaceExplorer.getGameState().setTraders(new SpaceTraders());
+        this.spaceExplorer.getGameState().getTrader().generateAvailableItemsToday(false);
+        this.spaceExplorer.changeScreen(Screen.MAIN_SCREEN);
     }
 
     private void onAddCrewMember() {
-        this.listCrewModal.addElement(new CreateCrewMember().showDialog());
+        CreateCrewMember createDialog = new CreateCrewMember();
+        createDialog.setLocationRelativeTo(this);
+        this.listCrewModal.addElement(createDialog.showDialog());
         resetCrewButtons();
         validateState();
 
@@ -101,25 +113,26 @@ public class AdventureCreator extends JComponent {
     }
 
     private void onAddCustomShipFile() {
-        if (checkboxCustomShipFile.isSelected()) {
-            FileDialog fd = new FileDialog(SpaceExplorer.getControlFrame(), "Choose a file", FileDialog.LOAD);
-            fd.setFile("*.png");
-            fd.setMultipleMode(false);
-            fd.setVisible(true);
-            if (fd.getFile() != null) {
-                try {
-                    SpaceExplorer.shipImage = ImageIO.read(fd.getFiles()[0]);
-                    SpaceExplorer.shipImageLocation = fd.getDirectory() + fd.getFile();
-                } catch (IOException error) {
-                    JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
-                            "Failed to load the selected image!", "Error", JOptionPane.ERROR_MESSAGE);
-                    checkboxCustomShipFile.setSelected(false);
-                }
-            } else {
-                checkboxCustomShipFile.setSelected(false);
-            }
-            fd.dispose();
-        }
+
+//        if (checkboxCustomShipFile.isSelected()) {
+//            FileDialog fd = new FileDialog(SpaceExplorer.getRootFrame(), "Choose a file", FileDialog.LOAD);
+//            fd.setFile("*.png");
+//            fd.setMultipleMode(false);
+//            fd.setVisible(true);
+//            if (fd.getFile() != null) {
+//                try {
+//                    SpaceExplorer.shipImage = ImageIO.read(fd.getFiles()[0]);
+//                    SpaceExplorer.shipImageLocation = fd.getDirectory() + fd.getFile();
+//                } catch (IOException error) {
+//                    JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
+//                            "Failed to load the selected image!", "Error", JOptionPane.ERROR_MESSAGE);
+//                    checkboxCustomShipFile.setSelected(false);
+//                }
+//            } else {
+//                checkboxCustomShipFile.setSelected(false);
+//            }
+//            fd.dispose();
+//        }
     }
 
     {

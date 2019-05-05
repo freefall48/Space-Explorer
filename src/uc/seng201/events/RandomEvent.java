@@ -1,7 +1,7 @@
 package uc.seng201.events;
 
 /**
- * Possible random targets that can occur during the game.
+ * Possible random destinations that can occur during the game.
  */
 public enum RandomEvent {
     ALIEN_PIRATES(EventTrigger.START_DAY,"Oh no! Space pirates have boarded and stolen an item!") {
