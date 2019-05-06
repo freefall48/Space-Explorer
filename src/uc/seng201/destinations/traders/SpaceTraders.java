@@ -1,7 +1,7 @@
 package uc.seng201.destinations.traders;
 
 import uc.seng201.helpers.Helpers;
-import uc.seng201.items.Items;
+import uc.seng201.items.SpaceItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ public class SpaceTraders {
 
     public void generateAvailableItemsToday(boolean friendly) {
         availableItems = new ArrayList<>();
-        int quantityToDisplay = Helpers.randomGenerator.nextInt(Items.values().length / 2) + 4;
+        int quantityToDisplay = Helpers.randomGenerator.nextInt(SpaceItem.values().length / 2) + 4;
         if (friendly) {
             quantityToDisplay += 10;
         }
         while (quantityToDisplay > 0) {
-            int itemId = Helpers.randomGenerator.nextInt(Items.values().length);
-            TradersListing newListing = new TradersListing(1, Items.values()[itemId]);
+            int itemId = Helpers.randomGenerator.nextInt(SpaceItem.values().length);
+            TradersListing newListing = new TradersListing(1, SpaceItem.values()[itemId]);
             if (this.availableItems.contains(newListing)) {
                 int currentPosition = this.availableItems.indexOf(newListing);
                 TradersListing currentListing = this.availableItems.get(currentPosition);

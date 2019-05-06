@@ -1,5 +1,6 @@
 package uc.seng201;
 
+import uc.seng201.gui.EndScreen;
 import uc.seng201.gui.Screen;
 import uc.seng201.gui.ScreenComponent;
 
@@ -18,9 +19,12 @@ public class SpaceExplorer {
 
     public void changeScreen(Screen screen, boolean isStale) {
         ScreenComponent component = screens.get(screen);
-        if (component == null || isStale) {
+        if (component == null) {
             component = screen.createInstance(this);
             screens.replace(screen, component);
+        }
+        if (isStale) {
+            screens.forEach((key, value) -> screens.put(key, null));
         }
         rootFrame.setContentPane(component.getRootComponent());
         rootFrame.pack();
@@ -66,13 +70,11 @@ public class SpaceExplorer {
     /**
      * @param message Message to be displayed.
      */
-    public static void failedGame(String message) {
-        JOptionPane.showMessageDialog(null, message, "Failed Game", JOptionPane.WARNING_MESSAGE);
-        spaceExplorer.changeScreen(Screen.MAIN_MENU, true);
-    }
-
-    public static void completedGame() {
-        JOptionPane.showMessageDialog(null, "Well done!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    public static void endGame(String message, boolean isVictory) {
+        JDialog endScreen = new EndScreen(spaceExplorer.gameState, isVictory, message);
+        endScreen.setLocationRelativeTo(spaceExplorer.getRootFrame());
+        endScreen.setSize(600, 350);
+        endScreen.setVisible(true);
         spaceExplorer.changeScreen(Screen.MAIN_MENU, true);
     }
 }

@@ -3,8 +3,7 @@ package uc.seng201.crew.actions;
 import uc.seng201.GameState;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.ActionException;
-import uc.seng201.items.ItemType;
-import uc.seng201.items.Items;
+import uc.seng201.items.SpaceItem;
 
 public class ActionConsumeItem implements IAction {
     @Override
@@ -13,8 +12,8 @@ public class ActionConsumeItem implements IAction {
         if (args.length != 1 && crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");
         }
-        if (args[0] instanceof Items) {
-            Items item = (Items) args[0];
+        if (args[0] instanceof SpaceItem) {
+            SpaceItem item = (SpaceItem) args[0];
             gameState.getSpaceShip().remove(item);
             (item).onConsume(crewMembers[0]);
         }

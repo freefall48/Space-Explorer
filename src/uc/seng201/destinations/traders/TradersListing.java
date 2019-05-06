@@ -1,13 +1,13 @@
 package uc.seng201.destinations.traders;
 
-import uc.seng201.items.Items;
+import uc.seng201.items.SpaceItem;
 
 public class TradersListing {
 
     private int quantity;
-    private Items item;
+    private SpaceItem item;
 
-    public TradersListing(int quantity, Items item) {
+    public TradersListing(int quantity, SpaceItem item) {
         this.quantity = quantity;
         this.item = item;
     }
@@ -24,7 +24,7 @@ public class TradersListing {
         return quantity;
     }
 
-    public Items getItem() {
+    public SpaceItem getItem() {
         return item;
     }
 

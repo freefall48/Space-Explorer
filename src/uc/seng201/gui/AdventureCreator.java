@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 class AdventureCreator extends ScreenComponent {
@@ -20,17 +21,21 @@ class AdventureCreator extends ScreenComponent {
     private JPanel panelCreator;
     private JButton btnContinue;
     private JButton btnAddCrewMember;
-    private JList<CrewMember> listCrew;
+    private JList<String> listCrew;
     private JCheckBox checkboxCustomShipFile;
     private JButton btnBack;
     private JButton btnUpdateCrewMember;
     private JButton btnRemoveCrewMember;
 
     private SpaceExplorer spaceExplorer;
-    private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
+
+    private List<CrewMember> crewMembers;
+    private DefaultListModel<String> listCrewModal;
 
     AdventureCreator(SpaceExplorer spaceExplorer) {
         this.spaceExplorer = spaceExplorer;
+        crewMembers = new ArrayList<>();
+        listCrewModal = new DefaultListModel<>();
 
         textShipName.addKeyListener(new KeyAdapter() {
             @Override
@@ -63,7 +68,7 @@ class AdventureCreator extends ScreenComponent {
     private void onContinue() {
         int gameDuration = sliderDuration.getValue();
         SpaceShip spaceShip = new SpaceShip(textShipName.getText(), Helpers.calcPartsToFind(gameDuration));
-        spaceShip.add(listCrewModal.toArray());
+        spaceShip.add(crewMembers);
 
         List<Planet> planets = Helpers.generatePlanets(gameDuration);
 
@@ -76,7 +81,9 @@ class AdventureCreator extends ScreenComponent {
     private void onAddCrewMember() {
         CreateCrewMember createDialog = new CreateCrewMember();
         createDialog.setLocationRelativeTo(this);
-        this.listCrewModal.addElement(createDialog.showDialog());
+        createDialog.setResizable(false);
+        crewMembers.add(createDialog.showDialog());
+        updateModels();
         resetCrewButtons();
         validateState();
 
@@ -89,15 +96,20 @@ class AdventureCreator extends ScreenComponent {
     }
 
     private void onUpdateCrewMember() {
-        CrewMember currentCrewMember = listCrewModal.get(listCrew.getSelectedIndex());
-        CrewMember newCrewMember = new CreateCrewMember(currentCrewMember).showDialog();
-        if (newCrewMember != null) {
-            listCrewModal.removeElement(currentCrewMember);
-            listCrewModal.addElement(newCrewMember);
+        CrewMember currentCrewMember = crewMembers.get(listCrew.getSelectedIndex());
+        CrewMember alteredCrewMember = new CreateCrewMember(currentCrewMember).showDialog();
+        if (alteredCrewMember != null) {
+            crewMembers.set(listCrew.getSelectedIndex(), alteredCrewMember);
+            updateModels();
             resetCrewButtons();
             validateState();
         }
 
+    }
+
+    private void updateModels() {
+        listCrewModal.removeAllElements();
+        crewMembers.forEach(crewMember -> listCrewModal.addElement(crewMember.toString()));
     }
 
     private void resetCrewButtons() {

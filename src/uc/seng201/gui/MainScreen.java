@@ -2,12 +2,9 @@ package uc.seng201.gui;
 
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.events.IRandomEvent;
-import uc.seng201.events.RandomEvent;
-import uc.seng201.helpers.Helpers;
+import uc.seng201.crew.actions.ActionSleep;
 import uc.seng201.helpers.SavedGameFileFilter;
 import uc.seng201.helpers.StateActions;
-import uc.seng201.events.EventTrigger;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -36,6 +33,7 @@ class MainScreen extends ScreenComponent {
     private JButton btnHelp;
     private JButton btnSpaceTraders;
     private JButton btnInspect;
+    private JLabel currentScoreLabel;
 
     private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
     private DefaultListModel<String> listMedicalSuppliesModel = new DefaultListModel<>();
@@ -47,26 +45,19 @@ class MainScreen extends ScreenComponent {
     MainScreen(SpaceExplorer spaceExplorer) {
         this.spaceExplorer = spaceExplorer;
 
-        initialiseTables();
-        updateInfoPane();
-
         btnNextDay.addActionListener(e -> onNextDay());
-
         listCrew.addListSelectionListener(this::onCrewMemberSelection);
-
         btnPerformAction.addActionListener(e -> onPerformAction());
-
         btnSpaceTraders.addActionListener(e -> onTrade());
-
         btnSave.addActionListener(e -> onSave());
-
         btnInspect.addActionListener(e -> onInspect());
-
 //        btnHelp.addActionListener(e -> {
 //            // TODO: Generate the help message
 //            JOptionPane.showMessageDialog(this, Helpers.listToString(Modifications.values()));
 //        });
 
+        initialiseTables();
+        updateInfoPane();
         defaultSelectedCrewMember();
 
     }
@@ -115,22 +106,14 @@ class MainScreen extends ScreenComponent {
         if (!isNextDayNeeded()) {
             return;
         }
-        if (this.spaceExplorer.getGameState().hasNextDay()) {
-            this.spaceExplorer.getGameState().nextDay();
-            updateInfoPane();
-        } else {
-            SpaceExplorer.failedGame("On no! It seems you have failed to rebuild your ship in time! Err....");
-            return;
-        }
-        if (Helpers.randomGenerator.nextBoolean()) {
-            RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
-            event.getInstance().onTrigger(this.spaceExplorer.getGameState().getSpaceShip());
-            JOptionPane.showMessageDialog(this, event.getEventDescription());
+        String eventMessage = spaceExplorer.getGameState().nextDay();
+        if (eventMessage != null) {
+            JOptionPane.showMessageDialog(this, eventMessage);
         }
         forceRequiredActions();
         updateTablesModels();
         defaultSelectedCrewMember();
-        panelRoot.repaint();
+        repaint();
     }
 
     private boolean isNextDayNeeded() {
@@ -146,13 +129,11 @@ class MainScreen extends ScreenComponent {
     private void forceRequiredActions() {
         spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(crewMember -> {
             if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
-                crewMember.alterTiredness(0 - crewMember.getMaxTiredness());
-                crewMember.performAction();
+                new ActionSleep().perform(spaceExplorer.getGameState(), null, crewMember);
                 JOptionPane.showMessageDialog(this, crewMember.getName() +
                         " was overcome with tiredness and forced to spend the day sleeping.");
             }
         });
-
     }
 
     private void onPerformAction() {
@@ -163,7 +144,7 @@ class MainScreen extends ScreenComponent {
         performAction.setVisible(true);
 
         if (!this.spaceExplorer.getGameState().isMissingShipParts()) {
-            SpaceExplorer.completedGame();
+            SpaceExplorer.endGame("Found all parts!", true);
         }
 
         updateInfoPane();
@@ -212,13 +193,16 @@ class MainScreen extends ScreenComponent {
 
         this.spaceExplorer.getGameState().getPlanets().forEach(planet -> listPlanetsModel.addElement(
                 planet.description()));
-        this.spaceExplorer.getGameState().getSpaceShip().getShipItems().forEach(item -> {
+
+        this.spaceExplorer.getGameState().getSpaceShip().getShipItems().forEach((item, qty) -> {
             switch (item.getItemType()) {
                 case FOOD:
-                    listFoodItemsModel.addElement(item.toString() + " - " + item.getItemDescription());
+                    listFoodItemsModel.addElement(String.format("%d x %s - %s", qty, item.toString(),
+                            item.getItemDescription()));
                     break;
                 case MEDICAL:
-                    listMedicalSuppliesModel.addElement(item.toString() + " - " + item.getItemDescription());
+                    listMedicalSuppliesModel.addElement(String.format("%d x %s - %s", qty, item.toString(),
+                            item.getItemDescription()));
                     break;
             }
         });
@@ -233,6 +217,9 @@ class MainScreen extends ScreenComponent {
         lblMissingParts.setText(String.valueOf(this.spaceExplorer.getGameState().getSpaceShip().getMissingParts()));
         lblBalance.setText("$" + this.spaceExplorer.getGameState().getSpaceShip().getSpaceBucks());
         lblShipHealth.setText(String.format("%d", this.spaceExplorer.getGameState().getSpaceShip().getShieldCount()));
+
+        spaceExplorer.getGameState().computeScore();
+        currentScoreLabel.setText(String.valueOf(spaceExplorer.getGameState().getScore()));
     }
 
 
@@ -418,14 +405,14 @@ class MainScreen extends ScreenComponent {
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.weighty = 10.0;
         gbc.fill = GridBagConstraints.VERTICAL;
         panel6.add(spacer1, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -436,7 +423,7 @@ class MainScreen extends ScreenComponent {
         btnNextDay.setText("Next Day");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel6.add(btnNextDay, gbc);
@@ -448,7 +435,7 @@ class MainScreen extends ScreenComponent {
         btnPerformAction.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
@@ -496,7 +483,7 @@ class MainScreen extends ScreenComponent {
         final JSeparator separator2 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -509,7 +496,7 @@ class MainScreen extends ScreenComponent {
         btnSpaceTraders.setToolTipText("Visit your local space traders.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 2, 0);
@@ -522,11 +509,31 @@ class MainScreen extends ScreenComponent {
         btnInspect.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
         panel6.add(btnInspect, gbc);
+        final JLabel label6 = new JLabel();
+        Font label6Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label6.getFont());
+        if (label6Font != null) label6.setFont(label6Font);
+        label6.setText("Current Score:");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 10, 5);
+        panel6.add(label6, gbc);
+        currentScoreLabel = new JLabel();
+        Font currentScoreLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, currentScoreLabel.getFont());
+        if (currentScoreLabelFont != null) currentScoreLabel.setFont(currentScoreLabelFont);
+        currentScoreLabel.setText("X");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        panel6.add(currentScoreLabel, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();

@@ -2,9 +2,11 @@ package uc.seng201.crew;
 
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.ActionException;
+import uc.seng201.errors.CrewMemberException;
 import uc.seng201.helpers.Helpers;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -13,29 +15,42 @@ import java.util.List;
  */
 public class CrewMember {
 
+    private String name;
+    private CrewType crewType;
     private int maxHealth;
     private int baseHealthRegen;
     private int repairAmount;
-    private int maxTiredness = 100;
-    private int tirednessRate = 25;
-    private int foodDecayRate = -20;
-    private String name;
-    private CrewType crewType;
+    private int maxTiredness;
+    private int tirednessRate;
+    private int foodDecayRate;
     private int health;
     private int currentHealthRegen;
     private int tiredness;
-    private int actionsLeftToday = 2;
-    private List<Modifications> modifications = new ArrayList<>();
+    private int actionsLeftToday;
+    private Collection<Modifications> modifications;
     private int foodLevel;
     private int maxFoodLevel;
 
-    public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount, int foodLevel) {
+
+    public CrewMember(String name, CrewType crewType) {
+        this(name, crewType, 100, 10, 1, 100, 25,
+                20, new HashSet<>(), 100);
+    }
+
+    public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount,
+                      int maxTiredness, int tirednessRate, int foodDecayRate, Collection<Modifications> modifications,
+                      int maxFoodLevel) {
         this.name = name;
         this.crewType = crewType;
-        this.maxHealth = this.health = maxHealth;
-        this.baseHealthRegen = this.currentHealthRegen = baseHealthRegen;
+        this.maxHealth = health = maxHealth;
+        this.baseHealthRegen = currentHealthRegen = baseHealthRegen;
         this.repairAmount = repairAmount;
-        this.foodLevel = this.maxFoodLevel = foodLevel;
+        this.maxTiredness = maxTiredness;
+        this.tirednessRate = tirednessRate;
+        this.foodDecayRate = foodDecayRate;
+        this.modifications = modifications;
+        this.maxFoodLevel = foodLevel = maxFoodLevel;
+        this.actionsLeftToday = 2;
     }
 
     @Override
@@ -109,7 +124,7 @@ public class CrewMember {
         return actionsLeftToday;
     }
 
-    public List<Modifications> getModifications() {
+    public Collection<Modifications> getModifications() {
         return modifications;
     }
 
@@ -130,18 +145,22 @@ public class CrewMember {
         this.foodDecayRate = foodDecayRate;
     }
 
+    public void setActionsLeftToday(int actionsLeftToday) {
+        this.actionsLeftToday = actionsLeftToday;
+    }
+
     public void setHealthRegen(int regenRate) {
         this.currentHealthRegen = regenRate;
     }
 
-    public void alterFood(int food) {
+    public int alterFood(int food) {
         int newLevel = this.foodLevel + food;
         if (newLevel >= this.maxFoodLevel) {
             newLevel = this.maxFoodLevel;
         } else if (newLevel <= 0) {
             newLevel = 0;
         }
-        this.foodLevel = newLevel;
+        return this.foodLevel = newLevel;
     }
 
     /**
@@ -150,25 +169,25 @@ public class CrewMember {
      *
      * @param health The amount of health to give the crew member.
      */
-    public void alterHealth(int health) {
+    public int alterHealth(int health) {
 
         int newHealth = this.health + health;
         if (newHealth > this.maxHealth) {
             newHealth = this.maxHealth;
         } else if (newHealth <= 0) {
-            this.health = 0;
+            newHealth = 0;
         }
-        this.health = newHealth;
+        return this.health = newHealth;
     }
 
-    public void alterTiredness(int tiredness) {
+    public int alterTiredness(int tiredness) {
         int newValue = this.tiredness + tiredness;
         if (newValue > this.maxTiredness) {
             newValue = this.maxTiredness;
         } else if (newValue < 0) {
             newValue = 0;
         }
-        this.tiredness = newValue;
+        return this.tiredness = newValue;
     }
 
     /**
@@ -177,11 +196,12 @@ public class CrewMember {
      *
      * @param modification Modification to add to crew member
      */
-    public void addModification(Modifications modification) {
-        if (!this.modifications.contains(modification)) {
-            this.modifications.add(modification);
+    public boolean addModification(Modifications modification) {
+        boolean isAdded = modifications.add(modification);
+        if (isAdded) {
             modification.getInstance().onAdd(this);
         }
+        return isAdded;
     }
 
     /**
@@ -190,35 +210,19 @@ public class CrewMember {
      *
      * @param modification The Illness to remove from the crew member.
      */
-    public void removeModification(Modifications modification) {
-        if (this.modifications.contains(modification)) {
-            this.modifications.remove(modification);
+    public boolean removeModification(Modifications modification) {
+        boolean isRemoved = modifications.remove(modification);
+        if (isRemoved) {
             modification.getInstance().onRemove(this);
         }
+        return isRemoved;
     }
 
     /**
      * Alters the current stats of the crew member by applying the given rates to them. Gives the
      * crew member actions for the day. Called at the start of every day for each crew member.
      */
-    public void nextDay() {
-        alterHealth(currentHealthRegen);
 
-        alterFood(foodDecayRate);
-        if (foodLevel == 0) {
-            setHealthRegen(-20);
-        }
-
-        alterTiredness(this.tirednessRate);
-        if (tiredness == maxTiredness) {
-            actionsLeftToday = 1;
-        } else {
-            actionsLeftToday = 2;
-        }
-
-        this.modifications.forEach(modification -> modification.getInstance().onTick(this));
-
-    }
 
     public boolean canPerformActions() {
         return this.actionsLeftToday > 0;
@@ -228,7 +232,7 @@ public class CrewMember {
         if (this.actionsLeftToday > 0) {
             this.actionsLeftToday -= 1;
         } else {
-            throw new ActionException();
+            throw new CrewMemberException();
         }
     }
 

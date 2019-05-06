@@ -3,7 +3,7 @@ package uc.seng201.destinations;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.helpers.Helpers;
-import uc.seng201.items.Items;
+import uc.seng201.items.SpaceItem;
 
 public class Planet {
 
@@ -44,8 +44,8 @@ public class Planet {
                 }
                 break;
             case 2:
-                int itemId = Helpers.randomGenerator.nextInt(Items.values().length);
-                Items itemFound = Items.values()[itemId];
+                int itemId = Helpers.randomGenerator.nextInt(SpaceItem.values().length);
+                SpaceItem itemFound = SpaceItem.values()[itemId];
                 spaceShip.add(itemFound);
                 message = String.format("%s found %s while exploring!", crewMember.getName(), itemFound);
                 break;

@@ -2,18 +2,19 @@ package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InsufficientBalance;
-import uc.seng201.helpers.Helpers;
-import uc.seng201.items.Items;
+import uc.seng201.errors.InvalidGameState;
+import uc.seng201.errors.SpaceShipException;
+import uc.seng201.items.SpaceItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SpaceShip {
 
     private String shipName;
     private List<CrewMember> shipCrew;
-    private List<Items> shipItems;
+    private Map<SpaceItem, Integer> shipItems;
     private int missingParts;
+    private final int missingPartsAtStart;
     private int spaceBucks = 0;
     private int shieldCount = 2;
 
@@ -22,61 +23,71 @@ public class SpaceShip {
      * number of missing parts.
      *
      * @param shipName     The name of the ship.
-     * @param missingParts The number of missing parts to findCrewMember.
+     * @param missingParts The number of missing parts to crewMemberFromName.
      */
     public SpaceShip(String shipName, int missingParts) {
         this.shipName = shipName;
         this.shipCrew = new ArrayList<>();
-        this.shipItems = new ArrayList<>();
-        this.missingParts = missingParts;
+        this.shipItems = new HashMap<>();
+        this.missingParts = this.missingPartsAtStart = missingParts;
     }
 
-    public String toString() {
-        return String.format("'%s' has %d shields and missing %d parts.\n",
-                this.shipName, this.shieldCount, this.missingParts) +
-                String.format("Crew: \n%s\n", Helpers.listToString(this.shipCrew, true)) +
-                String.format("Items:\n%s\n", Helpers.listToString(this.shipItems)) +
-                String.format("Money: $%d\n", this.spaceBucks);
+//    public String toString() {
+//        return String.format("'%s' has %d shields and missing %d parts.\n",
+//                this.shipName, this.shieldCount, this.missingParts) +
+//                String.format("Crew: \n%s\n", Helpers.listToString(this.shipCrew, true)) +
+//                String.format("SpaceItem:\n%s\n", Helpers.listToString(shipItems.values())) +
+//                String.format("Money: $%d\n", this.spaceBucks);
+//    }
+
+    public boolean add(Collection<CrewMember> crewMembers) {
+        return shipCrew.addAll(crewMembers);
     }
 
-    /**
-     * Add crew members to the the spaceship.
-     *
-     * @param crewMembers CrewMembers to add the the spaceship.
-     */
-    public void add(Object... crewMembers) {
-        for (Object crewMember : crewMembers) {
-                this.shipCrew.add((CrewMember) crewMember);
+    public void add(SpaceItem item) {
+        if (shipItems.containsKey(item)) {
+            shipItems.put(item, shipItems.get(item) + 1);
+        } else {
+            shipItems.put(item, 1);
         }
     }
 
-    public void add(List<CrewMember> crewMembers) {
-        this.shipCrew.addAll(crewMembers);
-    }
-
-    public void add(Items itemType) {
-        this.shipItems.add(itemType);
-    }
-
-    public CrewMember findCrewMember(String crewMemberName) {
+    public CrewMember crewMemberFromName(String crewMemberName) throws NullPointerException {
         for (CrewMember crewMember : this.shipCrew) {
             if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase())) {
                 return crewMember;
             }
         }
-        return null;
+        throw new NullPointerException("Spaceship does not contain crew member with name " + crewMemberName);
     }
 
-    public boolean contains(Items item) {
-        return this.shipItems.contains(item);
+    public boolean contains(SpaceItem item) {
+        return this.shipItems.containsKey(item);
     }
 
     public boolean contains(CrewMember crewMember) {
         return this.shipCrew.contains(crewMember);
     }
 
-    public void remove(Items itemType) {
-        this.shipItems.remove(itemType);
+    public int getMissingPartsAtStart() {
+        return missingPartsAtStart;
+    }
+
+    public void remove(SpaceItem item) throws InvalidGameState, NullPointerException {
+        if (contains(item)) {
+            int itemCount = shipItems.get(item);
+            if (itemCount <= 0) {
+                throw new InvalidGameState("GameState has ghost item " + item);
+            }
+            itemCount -= 1;
+            if (itemCount == 0) {
+                shipItems.remove(item);
+            } else {
+                shipItems.put(item, itemCount);
+            }
+        } else {
+            throw new NullPointerException("Spaceship does not contain that item " + item);
+        }
     }
 
     /**
@@ -109,7 +120,7 @@ public class SpaceShip {
     }
 
 
-    public List<Items> getShipItems() {
+    public Map<SpaceItem, Integer> getShipItems() {
         return shipItems;
     }
 
@@ -130,14 +141,18 @@ public class SpaceShip {
         return missingParts;
     }
 
-    public void partFound() {
-        this.missingParts -= 1;
+    public void partFound() throws InvalidGameState {
+        if (missingParts > 0) {
+            missingParts -= 1;
+        } else {
+            throw new InvalidGameState("Cannot reduce parts if no parts are missing");
+        }
     }
 
-    public void alterShield(int value) {
+    public void alterShield(int value) throws SpaceShipException {
         int newShieldValue = this.shieldCount + value;
-        if (newShieldValue < 0) {
-            newShieldValue = 0;
+        if (newShieldValue <= 0) {
+            throw new SpaceShipException("No spaceship shields remaining");
         }
         this.shieldCount = newShieldValue;
     }
@@ -145,25 +160,9 @@ public class SpaceShip {
     public void alterSpaceBucks(int value) throws InsufficientBalance {
         int newBalance = this.spaceBucks + value;
         if (newBalance < 0) {
-            throw new InsufficientBalance();
+            throw new SpaceShipException("Cannot remove " + value + " from Spaceship balance");
         }
         this.spaceBucks = newBalance;
-    }
-
-
-    public void nextDay() {
-        shipCrew.forEach(CrewMember::nextDay);
-        shipCrew.forEach(crewMember -> {
-            if (!crewMember.isAlive()) {
-                shipCrew.remove(crewMember);
-            }
-        });
-        if (shipCrew.size() == 0) {
-            SpaceExplorer.failedGame("Looks like you have run out of crew...");
-        }
-        if (shieldCount == 0) {
-            SpaceExplorer.failedGame("Looks like you have managed to destroy whats left of " + getShipName());
-        }
     }
 
     public boolean hasCrewActionsRemaining() {

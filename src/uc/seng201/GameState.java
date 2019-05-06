@@ -1,12 +1,16 @@
 package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.actions.CrewAction;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.destinations.Planet;
+import uc.seng201.events.EventTrigger;
+import uc.seng201.events.IRandomEvent;
+import uc.seng201.events.RandomEvent;
+import uc.seng201.helpers.Helpers;
 
+import javax.swing.*;
 import java.util.List;
 
 public class GameState {
@@ -19,6 +23,7 @@ public class GameState {
     private Planet currentPlanet;
     private int currentDay;
     private int duration;
+    private int score;
 
     public GameState(SpaceShip spaceShip, int duration, List<Planet> planets) {
         this(spaceShip, planets, planets.get(0), 1, duration);
@@ -30,6 +35,7 @@ public class GameState {
         this.currentPlanet = currentPlanet;
         this.currentDay = currentDay;
         this.duration = duration;
+        this.score = 0;
 
     }
 
@@ -74,17 +80,38 @@ public class GameState {
         this.traders = traders;
     }
 
-    public boolean hasNextDay() {
+    private boolean hasNextDay() {
         return currentDay + 1 <= duration;
     }
 
-    public void nextDay() throws InvalidGameState {
-        if (!hasNextDay()) {
-            throw new InvalidGameState();
-        }
-        currentDay += 1;
-        spaceShip.nextDay();
+    private void nextDayCrew() {
+        spaceShip.getShipCrew().forEach(crewMember -> {
 
+            crewMember.alterFood(crewMember.getFoodDecayRate());
+            if (crewMember.getFoodLevel() == 0) {
+                crewMember.setHealthRegen(-20);
+            }
+
+            crewMember.alterHealth(crewMember.getCurrentHealthRegen());
+
+            crewMember.alterTiredness(crewMember.getTirednessRate());
+            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
+                crewMember.setActionsLeftToday(1);
+            } else {
+                crewMember.setActionsLeftToday(2);
+            }
+
+            for (Modifications modification : crewMember.getModifications()) {
+                modification.getInstance().onTick(crewMember);
+            }
+
+            if (!crewMember.isAlive()) {
+                spaceShip.remove(crewMember);
+            }
+        });
+    }
+
+    private void nextDayTraders() {
         boolean isFriendly = false;
         for (CrewMember crewMember: spaceShip.getShipCrew()) {
             if (crewMember.getModifications().contains(Modifications.FRIENDLY)) {
@@ -94,8 +121,54 @@ public class GameState {
         traders.generateAvailableItemsToday(isFriendly);
     }
 
+    private String nextDayRandomEvent() {
+        if (Helpers.randomGenerator.nextBoolean()) {
+            RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
+            event.getInstance().onTrigger(spaceShip);
+            return event.getEventDescription();
+        }
+        return null;
+    }
+
+    public String nextDay() throws InvalidGameState {
+        if (!hasNextDay()) {
+            SpaceExplorer.endGame("On no! It seems you have failed to rebuild your ship in time! Err....",
+                    false);
+        }
+        if (spaceShip.getShipCrew().size() == 0) {
+            SpaceExplorer.endGame("Looks like you have run out of crew...", false);
+        }
+        if (spaceShip.getShieldCount() == 0) {
+            SpaceExplorer.endGame("Looks like you have managed to destroy whats left of " + spaceShip.getShipName(),
+                    false);
+        }
+
+        currentDay += 1;
+        nextDayCrew();
+        nextDayTraders();
+        String eventMessage = nextDayRandomEvent();
+        computeScore();
+
+        return eventMessage;
+
+    }
+
     public boolean isMissingShipParts() {
         return spaceShip.getMissingParts() > 0;
+    }
+
+    public void computeScore() {
+        score = 0;
+        spaceShip.getShipCrew().forEach(crewMember -> score += 100);
+        score += spaceShip.getShieldCount() * 500;
+        spaceShip.getShipItems().forEach((key, value) -> score += 50);
+        score += (spaceShip.getMissingPartsAtStart() - spaceShip.getMissingParts()) * 1000;
+        score += (duration - currentDay) * 1000;
+        score += spaceShip.getSpaceBucks() * 10;
+    }
+
+    public int getScore() {
+        return score;
     }
 
 }

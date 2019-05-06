@@ -3,7 +3,7 @@ package uc.seng201.items;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;
 
-public enum Items{
+public enum SpaceItem {
     STARDEW(ItemType.MEDICAL,10,"Removes space plague from a crew member.") {
         @Override
         public void onConsume(CrewMember crewMember) {
@@ -58,7 +58,7 @@ public enum Items{
     private int price;
     private String itemDescription;
 
-    Items(ItemType itemType, int price, String itemDescription) {
+    SpaceItem(ItemType itemType, int price, String itemDescription) {
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.price = price;

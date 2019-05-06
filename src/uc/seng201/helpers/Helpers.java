@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,11 +59,11 @@ public class Helpers {
         return listToString(Arrays.asList(objects));
     }
 
-    public static String listToString(List list) {
+    public static String listToString(Collection list) {
         return listToString(list, false);
     }
 
-    public static String listToString(List list, boolean newLine) {
+    public static String listToString(Collection list, boolean newLine) {
         if (list.size() == 0) {
             return "None";
         }
