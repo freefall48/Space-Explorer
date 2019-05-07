@@ -45,7 +45,7 @@ public class Traders extends JDialog {
     }
 
     private void updateBalanceDisplay() {
-        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getSpaceBucks()));
+        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
         repaint();
     }
 
@@ -63,7 +63,7 @@ public class Traders extends JDialog {
             btnBuy.setEnabled(false);
             TradersListing listing = this.gameState.getTrader().getAvailableItems()
                     .get(this.listAvailableItems.getSelectedIndex());
-            if (this.gameState.getSpaceShip().getSpaceBucks() >= listing.getItem().getPrice() && listing.isOneRemaining()) {
+            if (this.gameState.getSpaceShip().getBalance() >= listing.getItem().getPrice() && listing.isOneRemaining()) {
                 btnBuy.setText("Buy: $" + listing.getItem().getPrice());
                 btnBuy.setEnabled(true);
             }

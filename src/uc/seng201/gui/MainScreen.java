@@ -215,7 +215,7 @@ class MainScreen extends ScreenComponent {
                 this.spaceExplorer.getGameState().getDuration()));
         lblOrbiting.setText(this.spaceExplorer.getGameState().getCurrentPlanet().toString());
         lblMissingParts.setText(String.valueOf(this.spaceExplorer.getGameState().getSpaceShip().getMissingParts()));
-        lblBalance.setText("$" + this.spaceExplorer.getGameState().getSpaceShip().getSpaceBucks());
+        lblBalance.setText("$" + this.spaceExplorer.getGameState().getSpaceShip().getBalance());
         lblShipHealth.setText(String.format("%d", this.spaceExplorer.getGameState().getSpaceShip().getShieldCount()));
 
         spaceExplorer.getGameState().computeScore();

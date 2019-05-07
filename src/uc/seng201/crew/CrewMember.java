@@ -1,13 +1,11 @@
 package uc.seng201.crew;
 
 import uc.seng201.crew.modifers.Modifications;
-import uc.seng201.errors.ActionException;
 import uc.seng201.errors.CrewMemberException;
 import uc.seng201.helpers.Helpers;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * The base class for crew members. All crew members must

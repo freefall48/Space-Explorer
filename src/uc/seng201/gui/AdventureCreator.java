@@ -73,7 +73,6 @@ class AdventureCreator extends ScreenComponent {
         List<Planet> planets = Helpers.generatePlanets(gameDuration);
 
         this.spaceExplorer.setGameState(new GameState(spaceShip, gameDuration, planets));
-        this.spaceExplorer.getGameState().setTraders(new SpaceTraders());
         this.spaceExplorer.getGameState().getTrader().generateAvailableItemsToday(false);
         this.spaceExplorer.changeScreen(Screen.MAIN_SCREEN);
     }
