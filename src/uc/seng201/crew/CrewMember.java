@@ -2,10 +2,10 @@ package uc.seng201.crew;
 
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.CrewMemberException;
-import uc.seng201.helpers.Helpers;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The base class for crew members. All crew members must
@@ -25,7 +25,7 @@ public class CrewMember {
     private int currentHealthRegen;
     private int tiredness;
     private int actionsLeftToday;
-    private Collection<Modifications> modifications;
+    private Set<Modifications> modifications;
     private int foodLevel;
     private int maxFoodLevel;
 
@@ -36,7 +36,7 @@ public class CrewMember {
     }
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount,
-                      int maxTiredness, int tirednessRate, int foodDecayRate, Collection<Modifications> modifications,
+                      int maxTiredness, int tirednessRate, int foodDecayRate, Set<Modifications> modifications,
                       int maxFoodLevel) {
         this.name = name;
         this.crewType = crewType;
@@ -58,7 +58,7 @@ public class CrewMember {
                 String.format("[%d/%d %d/day] HP. [%d/%d %d/day] Food. [%d/%d %d/day] Tiredness. ",
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
                         this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
-                String.format("Modifiers [%s]", Helpers.listToString(this.modifications, false));
+                String.format("Modifiers %s", modifications.toString());
     }
 
     @Override
@@ -101,7 +101,6 @@ public class CrewMember {
         return maxTiredness;
     }
 
-
     public CrewType getCrewType() {
         return crewType;
     }
@@ -125,7 +124,6 @@ public class CrewMember {
     public Collection<Modifications> getModifications() {
         return modifications;
     }
-
 
     public int getFoodLevel() {
         return foodLevel;

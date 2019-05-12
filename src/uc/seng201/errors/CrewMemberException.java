@@ -7,7 +7,11 @@ import uc.seng201.crew.CrewMember;
  */
 public class CrewMemberException extends IllegalArgumentException {
 
-    public final CrewMember crewMember;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public final CrewMember crewMember;
 
     public CrewMemberException(CrewMember crewMember) {
         super();

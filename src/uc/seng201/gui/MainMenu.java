@@ -10,7 +10,11 @@ import java.awt.*;
 import java.io.IOException;
 
 class MainMenu extends ScreenComponent {
-    private JPanel Menu;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel Menu;
     private JButton btnNewGame;
     private JButton btnLoadGame;
 

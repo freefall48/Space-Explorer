@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class InspectCrewMember extends JDialog {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JButton buttonOK;
     private JLabel lblType;

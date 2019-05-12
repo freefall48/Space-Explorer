@@ -3,6 +3,11 @@ package uc.seng201.items;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;
 
+/**
+ * Contains the items that are available in the game.
+ * @author Matthew Johnson
+ *
+ */
 public enum SpaceItem {
     STARDEW(ItemType.MEDICAL,10,"Removes space plague from a crew member.") {
         @Override
@@ -54,24 +59,64 @@ public enum SpaceItem {
         }
     };
 
+	/**
+	 * The type of the item.
+	 */
     private ItemType itemType;
+    /**
+     * The price that the item costs. This normally influences the 
+     * strength of its onConsume method.
+     */
     private int price;
+    /**
+     * Message to be used to describe the item.
+     */
     private String itemDescription;
 
+    /**
+     * Creates a reference item that is available throughout the code.
+     * 
+     * @param itemType the type of item.
+     * @param price cost of the item.
+     * @param itemDescription message to describe the item.
+     */
     SpaceItem(ItemType itemType, int price, String itemDescription) {
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.price = price;
     }
 
+    /**
+     * Override this method to alter the behavior that occurs when the items 
+     * onConsume method is called. This method should be called whenever an 
+     * item is consumed by a crew member. The method has access to a mutable
+     * crewMember who the method should apply effects too.
+     * 
+     * @param crewMember
+     */
     public abstract void onConsume(CrewMember crewMember);
-
+    
+    /**
+     * Returns the item type of the item.
+     * 
+     * @return item type.
+     */
     public ItemType getItemType() {
         return itemType;
     }
 
+    /**
+     * Returns the price of the item.
+     * 
+     * @return price of the item.
+     */
     public int getPrice() {return price;}
 
+    /**
+     * Returns a description of the item.
+     * 
+     * @return item description.
+     */
     public String getItemDescription() {
         return this.itemDescription;
     }

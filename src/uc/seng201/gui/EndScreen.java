@@ -4,11 +4,13 @@ import uc.seng201.GameState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class EndScreen extends JDialog {
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
     private JButton buttonOK;
     private JLabel stateLabel;
     private JLabel labelMessage;

@@ -2,13 +2,8 @@
   <artifact type="jar" name="Space-Explorer:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Space_Explorer_jar</output-path>
     <root id="archive" name="Space-Explorer.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="Space-Explorer" />
-      <element id="directory" name="libs">
-        <element id="library" level="project" name="gson-2.8.5" />
-      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.5.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

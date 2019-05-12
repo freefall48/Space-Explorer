@@ -4,7 +4,6 @@ import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.helpers.Helpers;
 import uc.seng201.destinations.Planet;
 
@@ -16,6 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class AdventureCreator extends ScreenComponent {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JTextField textShipName;
     private JSlider sliderDuration;
     private JPanel panelCreator;

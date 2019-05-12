@@ -4,7 +4,12 @@ import javax.swing.*;
 
 public class ScreenComponent extends JComponent {
 
-    public JComponent getRootComponent() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public JComponent getRootComponent() {
         return null;
     }
 }

@@ -3,25 +3,23 @@ package uc.seng201.helpers;
 
 import uc.seng201.destinations.Planet;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Provides static helper methods.
+ * 
+ * @author Matthew Johnson
+ *
+ */
 public class Helpers {
-
+	
+	/**
+	 * Provides a single random generator to all classes.
+	 */
     public static SecureRandom randomGenerator = new SecureRandom();
-    /**
-     * Used to output to the console. IDEs dont use a standard console
-     * so this allows user input to be gathered reliably.
-     */
-    public static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
+    
     /**
      * Provides the ability to check if a String is safe to parse to an integer.
      *
@@ -37,12 +35,11 @@ public class Helpers {
         }
     }
 
-    public static void waitForEnter() throws IOException {
-        System.out.print("\n\nPress enter to continue...");
-        bufferedReader.readLine();
-        System.out.println();
-    }
-
+    /**
+     * Generates a random planet name based on the format "XXX-XXX".
+     * 
+     * @return name of a planet.
+     */
     public static String generatePlanetName() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 3; i++) {
@@ -55,28 +52,27 @@ public class Helpers {
         return builder.toString();
     }
 
-    public static String listToString(Object[] objects) {
-        return listToString(Arrays.asList(objects));
-    }
-
-    public static String listToString(Collection list) {
-        return listToString(list, false);
-    }
-
-    public static String listToString(Collection list, boolean newLine) {
-        if (list.size() == 0) {
-            return "None";
-        }
-        String deliminator = newLine ? ",\n" : ", ";
-        return list.stream().map(Object::toString).collect(Collectors.joining(deliminator)).toString();
-    }
-
+    /**
+     * Calculates the number of spaceship parts that should be found based
+     * on the number of days the game should run over.
+     * 
+     * @param duration number of days the game will run.
+     * @return number of parts that should be found.
+     */
     public static int calcPartsToFind(int duration) {
         return (int) (duration * 0.6666);
     }
-    public static List<Planet> generatePlanets(int numberOfPlanets) {
+    
+    /**
+     * Generates a list of planets based on the game duration. The number
+     * of planets is equal to the number of days in the game.
+     * 
+     * @param duration number of days the game will run.
+     * @return list of generated planets.
+     */
+    public static List<Planet> generatePlanets(int duration) {
         List<Planet> planets = new ArrayList<>();
-        for (int i = 0; i < numberOfPlanets; i++) {
+        for (int i = 0; i < duration; i++) {
             planets.add(new Planet());
         }
         return planets;

@@ -15,6 +15,10 @@ import java.util.Iterator;
 
 class MainScreen extends ScreenComponent {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel panelRoot;
     private JLabel lblSpaceShipName;
     private JTabbedPane tabbedContentMenu;

@@ -12,6 +12,10 @@ import java.awt.event.*;
 import java.util.Map;
 
 public class PerformAction extends JDialog {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -193,6 +197,8 @@ public class PerformAction extends JDialog {
                 comboAdditionalInfo1.setModel(itemModel);
                 comboAdditionalInfo1.setSelectedIndex(0);
                 setAdditionalInputVisible(1);
+                break;
+            default:
                 break;
         }
         actionDialog(actionToPerform);

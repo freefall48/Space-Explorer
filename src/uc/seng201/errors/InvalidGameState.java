@@ -2,7 +2,12 @@ package uc.seng201.errors;
 
 public class InvalidGameState extends IllegalStateException {
 
-    public InvalidGameState() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public InvalidGameState() {
         super();
     }
 

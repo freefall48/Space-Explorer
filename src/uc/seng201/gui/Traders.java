@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Traders extends JDialog {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JButton btnBuy;
     private JButton btnLeave;

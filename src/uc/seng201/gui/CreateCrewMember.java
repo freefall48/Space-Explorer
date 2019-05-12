@@ -1,6 +1,5 @@
 package uc.seng201.gui;
 
-import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.*;
 
 import javax.swing.*;
@@ -9,6 +8,10 @@ import java.awt.event.*;
 
 public class CreateCrewMember extends JDialog {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;

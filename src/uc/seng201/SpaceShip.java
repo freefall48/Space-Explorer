@@ -1,7 +1,6 @@
 package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
-import uc.seng201.errors.InsufficientBalance;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
@@ -80,7 +79,7 @@ public class SpaceShip {
      * @param crewMembers collection containing crew members to be added to the ship crew.
      * @return true if all crew members were added to the ship crew.
      */
-    public boolean add(Collection<CrewMember> crewMembers) {
+    public boolean add(List<CrewMember> crewMembers) {
         int newCrewSize = crewMembers.size() + shipCrew.size();
         if (newCrewSize >= minimumCrewCount && newCrewSize <= maximumCrewCount) {
             return shipCrew.addAll(crewMembers);
@@ -294,9 +293,9 @@ public class SpaceShip {
      *
      * @param value amount to adjust balance.
      * @return new balance of the spaceship.
-     * @throws InsufficientBalance if the balance would be below 0.
+     * @throws SpaceShipException if the balance would be below 0.
      */
-    public int alterSpaceBucks(int value) throws InsufficientBalance {
+    public int alterSpaceBucks(int value) throws SpaceShipException {
         int newBalance = balance + value;
         if (newBalance < 0) {
             throw new SpaceShipException("Cannot remove " + value + " from Spaceship balance");
