@@ -2,7 +2,7 @@ package uc.seng201.destinations;
 
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.helpers.Helpers;
+import uc.seng201.utils.Helpers;
 import uc.seng201.items.SpaceItem;
 
 public class Planet {

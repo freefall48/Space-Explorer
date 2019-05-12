@@ -1,10 +1,12 @@
 package uc.seng201.events;
 
-import uc.seng201.SpaceShip;
+import uc.seng201.GameState;
 
 public class EventAsteroidBelt implements IRandomEvent {
     @Override
-    public void onTrigger(SpaceShip spaceShip) {
-        spaceShip.alterShield(-1);
+    public String onTrigger(GameState gameState) {
+        gameState.getSpaceShip().alterShield(-1);
+        return String.format("%s flew through an asteroid belt and taken damage!",
+                gameState.getSpaceShip().getShipName());
     }
 }

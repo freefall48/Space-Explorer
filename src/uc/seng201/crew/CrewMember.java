@@ -1,7 +1,10 @@
 package uc.seng201.crew;
 
+import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.CrewMemberException;
+import uc.seng201.utils.observerable.Event;
+import uc.seng201.utils.observerable.Observer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,6 +33,10 @@ public class CrewMember {
     private int maxFoodLevel;
 
 
+    private CrewMember() {
+        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NextDay());
+    }
+
     public CrewMember(String name, CrewType crewType) {
         this(name, crewType, 100, 10, 1, 100, 25,
                 20, new HashSet<>(), 100);
@@ -38,6 +45,7 @@ public class CrewMember {
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount,
                       int maxTiredness, int tirednessRate, int foodDecayRate, Set<Modifications> modifications,
                       int maxFoodLevel) {
+        this();
         this.name = name;
         this.crewType = crewType;
         this.maxHealth = health = maxHealth;
@@ -49,6 +57,7 @@ public class CrewMember {
         this.modifications = modifications;
         this.maxFoodLevel = foodLevel = maxFoodLevel;
         this.actionsLeftToday = 2;
+
     }
 
     @Override
@@ -59,14 +68,6 @@ public class CrewMember {
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
                         this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
                 String.format("Modifiers %s", modifications.toString());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof CrewMember) {
-            return (((CrewMember) object).getName().toUpperCase().equals(this.name.toUpperCase()));
-        }
-        return false;
     }
 
     public int getTirednessRate() {
@@ -234,5 +235,33 @@ public class CrewMember {
 
     public boolean isAlive() {
         return this.health > 0;
+    }
+
+    class NextDay implements Observer {
+
+        @Override
+        public void onEvent(Object... args) {
+            alterFood(getFoodDecayRate());
+            if (getFoodLevel() == 0) {
+                setHealthRegen(-20);
+            }
+
+            alterHealth(getCurrentHealthRegen());
+
+            alterTiredness(getTirednessRate());
+            if (getTiredness() == getMaxTiredness()) {
+                setActionsLeftToday(1);
+            } else {
+                setActionsLeftToday(2);
+            }
+
+            for (Modifications modification : getModifications()) {
+                modification.getInstance().onTick(CrewMember.this);
+            }
+
+            if (!isAlive()) {
+                SpaceExplorer.eventHandler.notifyObservers(Event.CREW_MEMBER_DIED, CrewMember.this);
+            }
+        }
     }
 }

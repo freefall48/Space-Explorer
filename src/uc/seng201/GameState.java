@@ -3,12 +3,13 @@ package uc.seng201;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.destinations.traders.SpaceTraders;
-import uc.seng201.errors.InvalidGameState;
 import uc.seng201.destinations.Planet;
 import uc.seng201.events.EventTrigger;
 import uc.seng201.events.IRandomEvent;
-import uc.seng201.events.RandomEvent;
-import uc.seng201.helpers.Helpers;
+import uc.seng201.events.RandomEventType;
+import uc.seng201.utils.Helpers;
+import uc.seng201.utils.observerable.Event;
+import uc.seng201.utils.observerable.Observer;
 
 import java.util.List;
 
@@ -47,6 +48,34 @@ public class GameState {
      */
     private int score;
 
+    class NewDay implements Observer {
+
+        @Override
+        public void onEvent(Object... args) {
+            if (!hasNextDay()) {
+                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,
+                        "On no! It seems you have failed to rebuild your ship in time! Err....");
+            }
+            if (Helpers.randomGenerator.nextBoolean()) {
+                SpaceExplorer.eventHandler.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY);
+            }
+
+            currentDay += 1;
+//            nextDayTraders();
+            computeScore();
+        }
+
+        private void nextDayTraders() {
+            boolean isFriendly = false;
+            for (CrewMember crewMember : spaceShip.getShipCrew()) {
+                if (crewMember.getModifications().contains(Modifications.FRIENDLY)) {
+                    isFriendly = true;
+                }
+            }
+            traders.generateAvailableItemsToday(isFriendly);
+        }
+    }
+
     /**
      *
      * @param spaceShip players spaceship.
@@ -68,6 +97,7 @@ public class GameState {
      * @param duration number of days the game should run.
      */
     public GameState(SpaceShip spaceShip, List<Planet> planets, Planet currentPlanet, int currentDay, int duration) {
+        this();
         this.spaceShip = spaceShip;
         this.planets = planets;
         this.currentPlanet = currentPlanet;
@@ -77,6 +107,11 @@ public class GameState {
 
         traders = new SpaceTraders();
 
+
+    }
+
+    private GameState() {
+        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NewDay());
     }
 
     /**
@@ -170,75 +205,6 @@ public class GameState {
      */
     private boolean hasNextDay() {
         return currentDay + 1 <= duration;
-    }
-
-    private void nextDayCrew() {
-        spaceShip.getShipCrew().forEach(crewMember -> {
-
-            crewMember.alterFood(crewMember.getFoodDecayRate());
-            if (crewMember.getFoodLevel() == 0) {
-                crewMember.setHealthRegen(-20);
-            }
-
-            crewMember.alterHealth(crewMember.getCurrentHealthRegen());
-
-            crewMember.alterTiredness(crewMember.getTirednessRate());
-            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
-                crewMember.setActionsLeftToday(1);
-            } else {
-                crewMember.setActionsLeftToday(2);
-            }
-
-            for (Modifications modification : crewMember.getModifications()) {
-                modification.getInstance().onTick(crewMember);
-            }
-
-            if (!crewMember.isAlive()) {
-                spaceShip.remove(crewMember);
-            }
-        });
-    }
-
-    private void nextDayTraders() {
-        boolean isFriendly = false;
-        for (CrewMember crewMember : spaceShip.getShipCrew()) {
-            if (crewMember.getModifications().contains(Modifications.FRIENDLY)) {
-                isFriendly = true;
-            }
-        }
-        traders.generateAvailableItemsToday(isFriendly);
-    }
-
-    private String nextDayRandomEvent() {
-        if (Helpers.randomGenerator.nextBoolean()) {
-            RandomEvent event = IRandomEvent.eventToTrigger(EventTrigger.START_DAY);
-            event.getInstance().onTrigger(spaceShip);
-            return event.getEventDescription();
-        }
-        return null;
-    }
-
-    public String nextDay() throws InvalidGameState {
-        if (!hasNextDay()) {
-            SpaceExplorer.endGame("On no! It seems you have failed to rebuild your ship in time! Err....",
-                    false);
-        }
-        if (spaceShip.getShipCrew().size() == 0) {
-            SpaceExplorer.endGame("Looks like you have run out of crew...", false);
-        }
-        if (spaceShip.getShieldCount() == 0) {
-            SpaceExplorer.endGame("Looks like you have managed to destroy whats left of " + spaceShip.getShipName(),
-                    false);
-        }
-
-        currentDay += 1;
-        nextDayCrew();
-        nextDayTraders();
-        String eventMessage = nextDayRandomEvent();
-        computeScore();
-
-        return eventMessage;
-
     }
 
     public boolean isMissingShipParts() {

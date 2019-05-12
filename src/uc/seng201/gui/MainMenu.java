@@ -1,8 +1,11 @@
 package uc.seng201.gui;
 
+import uc.seng201.Display;
+import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
-import uc.seng201.helpers.SavedGameFileFilter;
-import uc.seng201.helpers.StateActions;
+import uc.seng201.utils.SavedGameFileFilter;
+import uc.seng201.utils.StateActions;
+import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -18,11 +21,11 @@ class MainMenu extends ScreenComponent {
     private JButton btnNewGame;
     private JButton btnLoadGame;
 
-    private SpaceExplorer spaceExplorer;
+    private GameState gameState;
 
-    MainMenu(SpaceExplorer spaceExplorer) {
+    MainMenu(GameState gameState) {
 
-        this.spaceExplorer = spaceExplorer;
+        this.gameState = gameState;
         btnLoadGame.addActionListener(e -> onLoadGame());
         btnNewGame.addActionListener(e -> onNewGame());
 
@@ -34,7 +37,7 @@ class MainMenu extends ScreenComponent {
     }
 
     private void onNewGame() {
-        this.spaceExplorer.changeScreen(Screen.ADVENTURE_CREATOR);
+        Display.changeScreen(Screen.ADVENTURE_CREATOR);
     }
 
     private void onLoadGame() {
@@ -44,14 +47,15 @@ class MainMenu extends ScreenComponent {
         int success = fileChooser.showOpenDialog(this);
         if (success == JFileChooser.APPROVE_OPTION) {
             try {
-                this.spaceExplorer.setGameState(StateActions.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
+                SpaceExplorer.eventHandler.notifyObservers(Event.NEW_GAMESTATE,
+                        StateActions.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to load file",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 return;
             }
-            this.spaceExplorer.changeScreen(Screen.MAIN_SCREEN);
+            Display.changeScreen(Screen.MAIN_SCREEN);
         }
     }
 

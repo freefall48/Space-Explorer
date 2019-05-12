@@ -1,80 +1,72 @@
 package uc.seng201;
 
+import uc.seng201.events.RandomEventHandler;
 import uc.seng201.gui.EndScreen;
-import uc.seng201.gui.Screen;
-import uc.seng201.gui.ScreenComponent;
+import uc.seng201.utils.observerable.Event;
+import uc.seng201.utils.observerable.ObservableHandler;
+import uc.seng201.utils.observerable.Observer;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SpaceExplorer {
 
-    private JFrame rootFrame;
-    private GameState gameState;
-    private Map<Screen, ScreenComponent> screens;
+    static GameState gameState;
 
-    private static SpaceExplorer spaceExplorer;
-
-
-    public void changeScreen(Screen screen, boolean isStale) {
-        ScreenComponent component = screens.get(screen);
-        if (component == null) {
-            component = screen.createInstance(this);
-            screens.replace(screen, component);
-        }
-        if (isStale) {
-            screens.forEach((key, value) -> screens.put(key, null));
-        }
-        rootFrame.setContentPane(component.getRootComponent());
-        rootFrame.pack();
-        rootFrame.repaint();
-    }
-    public void changeScreen(Screen screen) {
-        changeScreen(screen, false);
-    }
-
-    public JFrame getRootFrame() {
-        return this.rootFrame;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
+    public static ObservableHandler eventHandler = new EventHandler();
 
     public static void main(String[] args) {
-        spaceExplorer = new SpaceExplorer();
-        spaceExplorer.setupGUI();
+        // Add handlers for outcome conditions
+        eventHandler.addObserver(Event.VICTORY, new Victory());
+        eventHandler.addObserver(Event.DEFEAT, new Failed());
+
+        // Add handler for changing game-state instance
+        eventHandler.addObserver(Event.NEW_GAMESTATE, new NewGameState());
+
+        // Add handler for random game events
+        eventHandler.addObserver(Event.RANDOM_EVENT, new RandomEventHandler());
+
+        Display.setupGUI();
     }
 
-    private void setupGUI() {
-        rootFrame = new JFrame("Space Explorer");
-        rootFrame.setSize(800, 600);
-        rootFrame.setResizable(false);
-        rootFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        rootFrame.setLocationRelativeTo(null);
 
-        screens = new HashMap<>();
-        screens.put(Screen.MAIN_MENU, null);
-        screens.put(Screen.MAIN_SCREEN, null);
-        screens.put(Screen.ADVENTURE_CREATOR, null);
-
-        changeScreen(Screen.MAIN_MENU);
-        rootFrame.setVisible(true);
+    static class NewGameState implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            if (args.length == 1) {
+                if (args[0] instanceof GameState) {
+                    gameState = (GameState) args[0];
+                }
+            }
+        }
     }
 
-    /**
-     * @param message Message to be displayed.
-     */
-    public static void endGame(String message, boolean isVictory) {
-        JDialog endScreen = new EndScreen(spaceExplorer.gameState, isVictory, message);
-        endScreen.setLocationRelativeTo(spaceExplorer.getRootFrame());
+    static class Victory implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            displayEndScreen(true, args);
+        }
+    }
+
+    static class Failed implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            displayEndScreen(false, args);
+        }
+
+
+    }
+
+    private static void displayEndScreen(boolean isVictory, Object[] args) {
+        String message = null;
+        if (args.length == 1) {
+            if (args[0] instanceof String) {
+                message = (String) args[0];
+            }
+        }
+        JDialog endScreen = new EndScreen(gameState, isVictory, message);
+        endScreen.setLocationRelativeTo(null);
         endScreen.setSize(600, 350);
         endScreen.setVisible(true);
-        spaceExplorer.changeScreen(Screen.MAIN_MENU, true);
+        System.exit(0);
     }
 }

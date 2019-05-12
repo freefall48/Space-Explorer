@@ -3,7 +3,7 @@ package uc.seng201.events;
 /**
  * Possible random destinations that can occur during the game.
  */
-public enum RandomEvent {
+public enum RandomEventType {
     ALIEN_PIRATES(EventTrigger.START_DAY,"Oh no! Space pirates have boarded and stolen an item!") {
         @Override
         public IRandomEvent getInstance() {
@@ -26,7 +26,7 @@ public enum RandomEvent {
     private EventTrigger trigger;
     private String eventDescription;
 
-    RandomEvent(EventTrigger trigger, String eventDescription) {
+    RandomEventType(EventTrigger trigger, String eventDescription) {
         this.trigger = trigger;
         this.eventDescription = eventDescription;
     }

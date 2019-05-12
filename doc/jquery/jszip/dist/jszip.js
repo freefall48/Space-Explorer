@@ -2262,7 +2262,7 @@ function GenericWorker(name) {
     this.isFinished = false;
     // true if the stream is locked to prevent further structure updates (pipe), false otherwise
     this.isLocked = false;
-    // the event listeners
+    // the event observer
     this._listeners = {
         'data':[],
         'end':[],
@@ -2358,7 +2358,7 @@ GenericWorker.prototype = {
     },
     /**
      * Chain a worker with an other.
-     * @param {Worker} next the worker receiving events from the current one.
+     * @param {Worker} next the worker receiving observerable from the current one.
      * @return {worker} the next worker for chainability
      */
     pipe : function (next) {
@@ -2369,7 +2369,7 @@ GenericWorker.prototype = {
      * Using an API with `pipe(next)` is very easy.
      * Implementing the API with the point of view of the next one registering
      * a source is easier, see the ZipFileWorker.
-     * @param {Worker} previous the previous worker, sending events to this one
+     * @param {Worker} previous the previous worker, sending observerable to this one
      * @return {Worker} the current worker for chainability
      */
     registerPrevious : function (previous) {
@@ -2395,7 +2395,7 @@ GenericWorker.prototype = {
         return this;
     },
     /**
-     * Pause the stream so it doesn't send events anymore.
+     * Pause the stream so it doesn't send observerable anymore.
      * @return {Boolean} true if this call paused the worker, false otherwise.
      */
     pause : function () {
@@ -6031,7 +6031,7 @@ module.exports = {
   Z_TREES:            6,
 
   /* Return codes for the compression/decompression functions. Negative values
-  * are errors, positive values are used for special but normal events.
+  * are errors, positive values are used for special but normal observerable.
   */
   Z_OK:               0,
   Z_STREAM_END:       1,
@@ -6171,7 +6171,7 @@ var Z_BLOCK         = 5;
 
 
 /* Return codes for the compression/decompression functions. Negative values
- * are errors, positive values are used for special but normal events.
+ * are errors, positive values are used for special but normal observerable.
  */
 var Z_OK            = 0;
 var Z_STREAM_END    = 1;
@@ -6272,7 +6272,7 @@ function zero(buf) { var len = buf.length; while (--len >= 0) { buf[len] = 0; } 
  * (See also read_buf()).
  */
 function flush_pending(strm) {
-  var s = strm.state;
+  var s = uc.seng201.utils.state;
 
   //_tr_flush_bits(s);
   var len = s.pending;
@@ -6335,11 +6335,11 @@ function read_buf(strm, buf, start, size) {
 
   // zmemcpy(buf, strm->next_in, len);
   utils.arraySet(buf, strm.input, strm.next_in, len, start);
-  if (strm.state.wrap === 1) {
+  if (uc.seng201.utils.state.wrap === 1) {
     strm.adler = adler32(strm.adler, buf, len, start);
   }
 
-  else if (strm.state.wrap === 2) {
+  else if (uc.seng201.utils.state.wrap === 2) {
     strm.adler = crc32(strm.adler, buf, len, start);
   }
 
@@ -7412,14 +7412,14 @@ function DeflateState() {
 function deflateResetKeep(strm) {
   var s;
 
-  if (!strm || !strm.state) {
+  if (!strm || !uc.seng201.utils.state) {
     return err(strm, Z_STREAM_ERROR);
   }
 
   strm.total_in = strm.total_out = 0;
   strm.data_type = Z_UNKNOWN;
 
-  s = strm.state;
+  s = uc.seng201.utils.state;
   s.pending = 0;
   s.pending_out = 0;
 
@@ -7441,16 +7441,16 @@ function deflateResetKeep(strm) {
 function deflateReset(strm) {
   var ret = deflateResetKeep(strm);
   if (ret === Z_OK) {
-    lm_init(strm.state);
+    lm_init(uc.seng201.utils.state);
   }
   return ret;
 }
 
 
 function deflateSetHeader(strm, head) {
-  if (!strm || !strm.state) { return Z_STREAM_ERROR; }
-  if (strm.state.wrap !== 2) { return Z_STREAM_ERROR; }
-  strm.state.gzhead = head;
+  if (!strm || !uc.seng201.utils.state) { return Z_STREAM_ERROR; }
+  if (uc.seng201.utils.state.wrap !== 2) { return Z_STREAM_ERROR; }
+  uc.seng201.utils.state.gzhead = head;
   return Z_OK;
 }
 
@@ -7542,12 +7542,12 @@ function deflate(strm, flush) {
   var old_flush, s;
   var beg, val; // for gzip header write only
 
-  if (!strm || !strm.state ||
+  if (!strm || !uc.seng201.utils.state ||
     flush > Z_BLOCK || flush < 0) {
     return strm ? err(strm, Z_STREAM_ERROR) : Z_STREAM_ERROR;
   }
 
-  s = strm.state;
+  s = uc.seng201.utils.state;
 
   if (!strm.output ||
       (!strm.input && strm.avail_in !== 0) ||
@@ -7912,11 +7912,11 @@ function deflateSetDictionary(strm, dictionary) {
   var input;
   var tmpDict;
 
-  if (!strm/*== Z_NULL*/ || !strm.state/*== Z_NULL*/) {
+  if (!strm/*== Z_NULL*/ || !uc.seng201.utils.state/*== Z_NULL*/) {
     return Z_STREAM_ERROR;
   }
 
-  s = strm.state;
+  s = uc.seng201.utils.state;
   wrap = s.wrap;
 
   if (wrap === 2 || (wrap === 1 && s.status !== INIT_STATE) || s.lookahead) {
@@ -8158,7 +8158,7 @@ module.exports = function inflate_fast(strm, start) {
   var input, output; // JS specific, because we have no pointers
 
   /* copy state to local variables */
-  state = strm.state;
+  state = uc.seng201.utils.state;
   //here = state.here;
   _in = strm.next_in;
   input = strm.input;
@@ -8458,7 +8458,7 @@ var Z_TREES         = 6;
 
 
 /* Return codes for the compression/decompression functions. Negative values
- * are errors, positive values are used for special but normal events.
+ * are errors, positive values are used for special but normal observerable.
  */
 var Z_OK            = 0;
 var Z_STREAM_END    = 1;
@@ -8593,8 +8593,8 @@ function InflateState() {
 function inflateResetKeep(strm) {
   var state;
 
-  if (!strm || !strm.state) { return Z_STREAM_ERROR; }
-  state = strm.state;
+  if (!strm || !uc.seng201.utils.state) { return Z_STREAM_ERROR; }
+  state = uc.seng201.utils.state;
   strm.total_in = strm.total_out = state.total = 0;
   strm.msg = ''; /*Z_NULL*/
   if (state.wrap) {       /* to support ill-conceived Java test suite */
@@ -8620,8 +8620,8 @@ function inflateResetKeep(strm) {
 function inflateReset(strm) {
   var state;
 
-  if (!strm || !strm.state) { return Z_STREAM_ERROR; }
-  state = strm.state;
+  if (!strm || !uc.seng201.utils.state) { return Z_STREAM_ERROR; }
+  state = uc.seng201.utils.state;
   state.wsize = 0;
   state.whave = 0;
   state.wnext = 0;
@@ -8634,8 +8634,8 @@ function inflateReset2(strm, windowBits) {
   var state;
 
   /* get the state */
-  if (!strm || !strm.state) { return Z_STREAM_ERROR; }
-  state = strm.state;
+  if (!strm || !uc.seng201.utils.state) { return Z_STREAM_ERROR; }
+  state = uc.seng201.utils.state;
 
   /* extract wrap request from windowBits parameter */
   if (windowBits < 0) {
@@ -8752,7 +8752,7 @@ function fixedtables(state) {
  */
 function updatewindow(strm, src, end, copy) {
   var dist;
-  var state = strm.state;
+  var state = uc.seng201.utils.state;
 
   /* if it hasn't been done already, allocate space for the window */
   if (state.window === null) {
@@ -8819,12 +8819,12 @@ function inflate(strm, flush) {
     [ 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 ];
 
 
-  if (!strm || !strm.state || !strm.output ||
+  if (!strm || !uc.seng201.utils.state || !strm.output ||
       (!strm.input && strm.avail_in !== 0)) {
     return Z_STREAM_ERROR;
   }
 
-  state = strm.state;
+  state = uc.seng201.utils.state;
   if (state.mode === TYPE) { state.mode = TYPEDO; }    /* skip check */
 
 
@@ -9902,8 +9902,8 @@ function inflateGetHeader(strm, head) {
   var state;
 
   /* check state */
-  if (!strm || !strm.state) { return Z_STREAM_ERROR; }
-  state = strm.state;
+  if (!strm || !uc.seng201.utils.state) { return Z_STREAM_ERROR; }
+  state = uc.seng201.utils.state;
   if ((state.wrap & 2) === 0) { return Z_STREAM_ERROR; }
 
   /* save header structure */
@@ -9920,8 +9920,8 @@ function inflateSetDictionary(strm, dictionary) {
   var ret;
 
   /* check state */
-  if (!strm /* == Z_NULL */ || !strm.state /* == Z_NULL */) { return Z_STREAM_ERROR; }
-  state = strm.state;
+  if (!strm /* == Z_NULL */ || !uc.seng201.utils.state /* == Z_NULL */) { return Z_STREAM_ERROR; }
+  state = uc.seng201.utils.state;
 
   if (state.wrap !== 0 && state.mode !== DICT) {
     return Z_STREAM_ERROR;

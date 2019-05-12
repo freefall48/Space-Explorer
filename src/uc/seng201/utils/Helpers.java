@@ -1,4 +1,4 @@
-package uc.seng201.helpers;
+package uc.seng201.utils;
 
 
 import uc.seng201.destinations.Planet;

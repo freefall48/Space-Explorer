@@ -608,7 +608,7 @@ $.Widget.prototype = {
 				this.widgetFullName + "-disabled " +
 				"ui-state-disabled" );
 
-		// clean up events and states
+		// clean up observerable and states
 		this.bindings.unbind( this.eventNamespace );
 		this.hoverable.removeClass( "ui-state-hover" );
 		this.focusable.removeClass( "ui-state-focus" );
@@ -1451,7 +1451,7 @@ var menu = $.widget( "ui.menu", {
 				}
 			},
 			"mouseenter .ui-menu-item": function( event ) {
-				// Ignore mouse events while typeahead is active, see #10458.
+				// Ignore mouse observerable while typeahead is active, see #10458.
 				// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
 				// is over an item in the menu
 				if ( this.previousFilter ) {
@@ -2035,12 +2035,12 @@ $.widget( "ui.autocomplete", {
 	pending: 0,
 
 	_create: function() {
-		// Some browsers only repeat keydown events, not keypress events,
+		// Some browsers only repeat keydown observerable, not keypress observerable,
 		// so we use the suppressKeyPress flag to determine if we've already
 		// handled the keydown event. #7269
 		// Unfortunately the code for & in keypress is the same as the up arrow,
 		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
-		// events when we know the keydown event was used to modify the
+		// observerable when we know the keydown event was used to modify the
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput,
 			nodeName = this.element[ 0 ].nodeName.toLowerCase(),
@@ -2261,7 +2261,7 @@ $.widget( "ui.autocomplete", {
 				if ( this.element[ 0 ] !== this.document[ 0 ].activeElement ) {
 					this.element.focus();
 					this.previous = previous;
-					// #6109 - IE triggers two focus events and the second
+					// #6109 - IE triggers two focus observerable and the second
 					// is asynchronous, so we need to reset the previous
 					// term synchronously and asynchronously :-(
 					this._delay(function() {

@@ -1,4 +1,4 @@
-package uc.seng201.helpers;
+package uc.seng201.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

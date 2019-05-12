@@ -73,7 +73,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="uc.seng201.helpers.Helpers" project="Space-Explorer" 
+  <class id="9" language="java" name="uc.seng201.utils.Helpers" project="Space-Explorer"
     file="/Space-Explorer/src/uc/seng201/helpers/Helpers.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="-967" y="-29"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -262,7 +262,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="30" language="java" name="uc.seng201.helpers.SavedGameFileFilter" project="Space-Explorer" 
+  <class id="30" language="java" name="uc.seng201.utils.SavedGameFileFilter" project="Space-Explorer"
     file="/Space-Explorer/src/uc/seng201/helpers/SavedGameFileFilter.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="-734" y="449"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -316,7 +316,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="36" language="java" name="uc.seng201.events.RandomEvent" project="Space-Explorer" 
+  <enumeration id="36" language="java" name="uc.seng201.events.RandomEventType" project="Space-Explorer"
     file="/Space-Explorer/src/uc/seng201/events/RandomEvent.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="3810" y="472"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -415,7 +415,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="47" language="java" name="uc.seng201.helpers.StateActions" project="Space-Explorer" 
+  <class id="47" language="java" name="uc.seng201.utils.StateActions" project="Space-Explorer"
     file="/Space-Explorer/src/uc/seng201/helpers/StateActions.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1070" y="25"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

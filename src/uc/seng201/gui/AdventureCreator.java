@@ -1,11 +1,13 @@
 package uc.seng201.gui;
 
+import uc.seng201.Display;
 import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.helpers.Helpers;
+import uc.seng201.utils.Helpers;
 import uc.seng201.destinations.Planet;
+import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,13 +32,13 @@ class AdventureCreator extends ScreenComponent {
     private JButton btnUpdateCrewMember;
     private JButton btnRemoveCrewMember;
 
-    private SpaceExplorer spaceExplorer;
+    private GameState gameState;
 
     private List<CrewMember> crewMembers;
     private DefaultListModel<String> listCrewModal;
 
-    AdventureCreator(SpaceExplorer spaceExplorer) {
-        this.spaceExplorer = spaceExplorer;
+    AdventureCreator(GameState gameState) {
+        this.gameState = gameState;
         crewMembers = new ArrayList<>();
         listCrewModal = new DefaultListModel<>();
 
@@ -55,7 +57,7 @@ class AdventureCreator extends ScreenComponent {
             btnUpdateCrewMember.setEnabled(true);
         });
 
-        btnBack.addActionListener(e -> this.spaceExplorer.changeScreen(Screen.MAIN_MENU));
+        btnBack.addActionListener(e -> Display.changeScreen(Screen.MAIN_MENU));
         btnAddCrewMember.addActionListener(e -> onAddCrewMember());
         btnContinue.addActionListener(e -> onContinue());
         btnUpdateCrewMember.addActionListener(e -> onUpdateCrewMember());
@@ -74,10 +76,10 @@ class AdventureCreator extends ScreenComponent {
         spaceShip.add(crewMembers);
 
         List<Planet> planets = Helpers.generatePlanets(gameDuration);
+        gameState = new GameState(spaceShip, gameDuration, planets);
 
-        this.spaceExplorer.setGameState(new GameState(spaceShip, gameDuration, planets));
-        this.spaceExplorer.getGameState().getTrader().generateAvailableItemsToday(false);
-        this.spaceExplorer.changeScreen(Screen.MAIN_SCREEN);
+        SpaceExplorer.eventHandler.notifyObservers(Event.NEW_GAMESTATE, gameState);
+        Display.changeScreen(Screen.MAIN_SCREEN);
     }
 
     private void onAddCrewMember() {

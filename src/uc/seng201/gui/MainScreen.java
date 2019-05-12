@@ -1,10 +1,13 @@
 package uc.seng201.gui;
 
+import uc.seng201.EventHandler;
+import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.actions.ActionSleep;
-import uc.seng201.helpers.SavedGameFileFilter;
-import uc.seng201.helpers.StateActions;
+import uc.seng201.utils.SavedGameFileFilter;
+import uc.seng201.utils.StateActions;
+import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -44,10 +47,10 @@ class MainScreen extends ScreenComponent {
     private DefaultListModel<String> listFoodItemsModel = new DefaultListModel<>();
     private DefaultListModel<String> listPlanetsModel = new DefaultListModel<>();
 
-    private SpaceExplorer spaceExplorer;
+    private GameState gameState;
 
-    MainScreen(SpaceExplorer spaceExplorer) {
-        this.spaceExplorer = spaceExplorer;
+    MainScreen(GameState gameState) {
+        this.gameState = gameState;
 
         btnNextDay.addActionListener(e -> onNextDay());
         listCrew.addListSelectionListener(this::onCrewMemberSelection);
@@ -55,10 +58,6 @@ class MainScreen extends ScreenComponent {
         btnSpaceTraders.addActionListener(e -> onTrade());
         btnSave.addActionListener(e -> onSave());
         btnInspect.addActionListener(e -> onInspect());
-//        btnHelp.addActionListener(e -> {
-//            // TODO: Generate the help message
-//            JOptionPane.showMessageDialog(this, Helpers.listToString(Modifications.values()));
-//        });
 
         initialiseTables();
         updateInfoPane();
@@ -70,14 +69,14 @@ class MainScreen extends ScreenComponent {
         JDialog inspectCrewMember = new InspectCrewMember(listCrew.getSelectedValue());
         inspectCrewMember.setSize(700, 500);
         inspectCrewMember.setResizable(false);
-        inspectCrewMember.setLocationRelativeTo(spaceExplorer.getRootFrame());
+        inspectCrewMember.setLocationRelativeTo(this);
         inspectCrewMember.setVisible(true);
     }
 
     private void onTrade() {
-        JDialog traders = new Traders(this.spaceExplorer.getGameState());
+        JDialog traders = new Traders(gameState);
         traders.setSize(600, 400);
-        traders.setLocationRelativeTo(this.spaceExplorer.getRootFrame());
+        traders.setLocationRelativeTo(this);
         traders.setVisible(true);
         updateTablesModels();
         updateInfoPane();
@@ -97,7 +96,7 @@ class MainScreen extends ScreenComponent {
         if (success == JFileChooser.APPROVE_OPTION) {
             String fileLocation = fileChooser.getSelectedFile().getAbsolutePath();
             try {
-                StateActions.saveState(this.spaceExplorer.getGameState(), fileLocation);
+                StateActions.saveState(gameState, fileLocation);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to save!",
                         "Failed", JOptionPane.ERROR_MESSAGE);
@@ -106,22 +105,36 @@ class MainScreen extends ScreenComponent {
         }
     }
 
+    /**
+     * Handler for the onClick event of the next day button. Checks if the
+     * user does want to move to the next day. If moving to the next day
+     * then all the observers of the event "START_DAY" are notified. The UI
+     * is then repainted to reflect any changes that have been made.
+     */
     private void onNextDay() {
         if (!isNextDayNeeded()) {
             return;
         }
-        String eventMessage = spaceExplorer.getGameState().nextDay();
-        if (eventMessage != null) {
-            JOptionPane.showMessageDialog(this, eventMessage);
-        }
+        // Notify observers that we are moving to the next day.
+        SpaceExplorer.eventHandler.notifyObservers(Event.START_DAY);
+
         forceRequiredActions();
+        // Update the UI to reflect any changes.
         updateTablesModels();
+        updateInfoPane();
         defaultSelectedCrewMember();
         repaint();
     }
 
+    /**
+     * Checks if there are still actions remaining today for the crew, If there are
+     * remaining actions, provides a popup confirming if the user does want to
+     * move to the next day. If there are no available actions then no popup is shown.
+     *
+     * @return true if the user does want to move to the next day.
+     */
     private boolean isNextDayNeeded() {
-        if (this.spaceExplorer.getGameState().getSpaceShip().hasCrewActionsRemaining()) {
+        if (gameState.getSpaceShip().hasCrewActionsRemaining()) {
             int confirmed = JOptionPane.showConfirmDialog(this,
                     "Do you really want to move to the next day? Some crew members can still perform actions!",
                     "Actions Left Today", JOptionPane.YES_NO_OPTION);
@@ -130,10 +143,13 @@ class MainScreen extends ScreenComponent {
         return true;
     }
 
+    /**
+     * TODO: Move to the crew member.
+     */
     private void forceRequiredActions() {
-        spaceExplorer.getGameState().getSpaceShip().getShipCrew().forEach(crewMember -> {
+        gameState.getSpaceShip().getShipCrew().forEach(crewMember -> {
             if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
-                new ActionSleep().perform(spaceExplorer.getGameState(), null, crewMember);
+                new ActionSleep().perform(gameState, null, crewMember);
                 JOptionPane.showMessageDialog(this, crewMember.getName() +
                         " was overcome with tiredness and forced to spend the day sleeping.");
             }
@@ -141,14 +157,15 @@ class MainScreen extends ScreenComponent {
     }
 
     private void onPerformAction() {
-        JDialog performAction = new PerformAction(this.spaceExplorer.getGameState(),
+        JDialog performAction = new PerformAction(gameState,
                 listCrewModal.get(listCrew.getSelectedIndex()));
         performAction.setSize(450, 350);
-        performAction.setLocationRelativeTo(spaceExplorer.getRootFrame());
+        performAction.setLocationRelativeTo(this);
         performAction.setVisible(true);
 
-        if (!this.spaceExplorer.getGameState().isMissingShipParts()) {
-            SpaceExplorer.endGame("Found all parts!", true);
+        if (!gameState.isMissingShipParts()) {
+            SpaceExplorer.eventHandler.notifyObservers(Event.VICTORY);
+            return;
         }
 
         updateInfoPane();
@@ -181,7 +198,7 @@ class MainScreen extends ScreenComponent {
     }
 
     private void initialiseTables() {
-        listCrewModal.addAll(this.spaceExplorer.getGameState().getSpaceShip().getShipCrew());
+        listCrewModal.addAll(gameState.getSpaceShip().getShipCrew());
         listCrew.setModel(listCrewModal);
         defaultSelectedCrewMember();
 
@@ -195,10 +212,10 @@ class MainScreen extends ScreenComponent {
         listMedicalSuppliesModel.clear();
         listPlanetsModel.clear();
 
-        this.spaceExplorer.getGameState().getPlanets().forEach(planet -> listPlanetsModel.addElement(
+        gameState.getPlanets().forEach(planet -> listPlanetsModel.addElement(
                 planet.description()));
 
-        this.spaceExplorer.getGameState().getSpaceShip().getShipItems().forEach((item, qty) -> {
+        gameState.getSpaceShip().getShipItems().forEach((item, qty) -> {
             switch (item.getItemType()) {
                 case FOOD:
                     listFoodItemsModel.addElement(String.format("%d x %s - %s", qty, item.toString(),
@@ -214,16 +231,16 @@ class MainScreen extends ScreenComponent {
 
     private void updateInfoPane() {
         updateTablesModels();
-        lblSpaceShipName.setText(this.spaceExplorer.getGameState().getSpaceShip().getShipName());
-        lblDay.setText(String.format("%d of %d", this.spaceExplorer.getGameState().getCurrentDay(),
-                this.spaceExplorer.getGameState().getDuration()));
-        lblOrbiting.setText(this.spaceExplorer.getGameState().getCurrentPlanet().toString());
-        lblMissingParts.setText(String.valueOf(this.spaceExplorer.getGameState().getSpaceShip().getMissingParts()));
-        lblBalance.setText("$" + this.spaceExplorer.getGameState().getSpaceShip().getBalance());
-        lblShipHealth.setText(String.format("%d", this.spaceExplorer.getGameState().getSpaceShip().getShieldCount()));
+        lblSpaceShipName.setText(gameState.getSpaceShip().getShipName());
+        lblDay.setText(String.format("%d of %d", gameState.getCurrentDay(),
+                gameState.getDuration()));
+        lblOrbiting.setText(gameState.getCurrentPlanet().toString());
+        lblMissingParts.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
+        lblBalance.setText("$" + gameState.getSpaceShip().getBalance());
+        lblShipHealth.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
 
-        spaceExplorer.getGameState().computeScore();
-        currentScoreLabel.setText(String.valueOf(spaceExplorer.getGameState().getScore()));
+        gameState.computeScore();
+        currentScoreLabel.setText(String.valueOf(gameState.getScore()));
     }
 
 

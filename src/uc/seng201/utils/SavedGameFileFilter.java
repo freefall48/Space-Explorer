@@ -1,4 +1,4 @@
-package uc.seng201.helpers;
+package uc.seng201.utils;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

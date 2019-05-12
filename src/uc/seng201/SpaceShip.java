@@ -4,6 +4,8 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
+import uc.seng201.utils.observerable.Event;
+import uc.seng201.utils.observerable.Observer;
 
 import java.util.*;
 
@@ -54,6 +56,7 @@ public class SpaceShip {
      * @param missingParts The number of missing parts to crewMemberFromName.
      */
     public SpaceShip(String shipName, int missingParts) {
+        this();
         this.shipName = shipName;
         this.missingParts = missingPartsAtStart = missingParts;
         shipCrew = new ArrayList<>();
@@ -62,6 +65,13 @@ public class SpaceShip {
         shieldCount = 2;
         maximumCrewCount = 4;
         minimumCrewCount = 2;
+
+
+    }
+
+    private SpaceShip() {
+        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NextDay());
+        SpaceExplorer.eventHandler.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDied());
     }
 
 //    public String toString() {
@@ -315,5 +325,29 @@ public class SpaceShip {
             }
         }
         return false;
+    }
+
+    class NextDay implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            if (shipCrew.size() == 0) {
+                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+            }
+            if (shieldCount == 0) {
+                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,
+                        "Looks like you have managed to destroy whats left of " + shipCrew);
+            }
+        }
+    }
+
+    class CrewMemberDied implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            if (args.length == 1) {
+                if (args[0] instanceof CrewMember) {
+                    shipCrew.remove(args[0]);
+                }
+            }
+        }
     }
 }

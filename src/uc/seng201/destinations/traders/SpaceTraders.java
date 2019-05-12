@@ -1,6 +1,6 @@
 package uc.seng201.destinations.traders;
 
-import uc.seng201.helpers.Helpers;
+import uc.seng201.utils.Helpers;
 import uc.seng201.items.SpaceItem;
 
 import java.util.ArrayList;
