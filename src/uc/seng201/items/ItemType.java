@@ -6,6 +6,12 @@ package uc.seng201.items;
  *
  */
 public enum ItemType {
+    /**
+     * Shows in the Food tabs.
+     */
     FOOD,
+    /**
+     * Shows in the medical tabs.
+     */
     MEDICAL
 }

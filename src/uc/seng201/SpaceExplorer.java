@@ -3,7 +3,7 @@ package uc.seng201;
 import uc.seng201.events.RandomEventHandler;
 import uc.seng201.gui.EndScreen;
 import uc.seng201.utils.observerable.Event;
-import uc.seng201.utils.observerable.ObservableHandler;
+import uc.seng201.utils.observerable.ObservableManager;
 import uc.seng201.utils.observerable.Observer;
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class SpaceExplorer {
      * The global event manager. Observers can be registered to respond to
      * known events, as well as trigger events.
      */
-    public static ObservableHandler eventManager = new EventHandler();
+    public static ObservableManager eventManager = new ObservableManager();
 
     /**
      * Main entry point for the application. Adds the victory, defeat and

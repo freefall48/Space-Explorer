@@ -7,11 +7,31 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controls the root component that is displayed to the screen. Provides
+ * the ability to change the main component.
+ */
 public class Display {
 
+    /**
+     * The root frame.
+     */
     private static JFrame rootFrame;
+
+    /**
+     * Map of the known screes to instances of them. Using
+     * a map only one instance of a screen is needed no matter
+     * how many times it is displayed.
+     */
     private static Map<Screen, ScreenComponent> screens;
 
+    /**
+     * Changes the main screen component that is being displayed. Replaces
+     * the instance of the screen if needed.
+     *
+     * @param screen the new Screen to show.
+     * @param isStale true if the screen needs to be replaced.
+     */
     public static void changeScreen(Screen screen, boolean isStale) {
         ScreenComponent component = screens.get(screen);
         if (component == null) {
@@ -27,18 +47,29 @@ public class Display {
 
     }
 
+    /**
+     * Changes the main screen component that is being displayed.
+     *
+     * @param screen the new Screen to show.
+     */
     public static void changeScreen(Screen screen) {
         changeScreen(screen, false);
     }
 
-    public static JFrame getRootFrame() {
-        return rootFrame;
-    }
-
+    /**
+     * Provides the ability to display a popup centered on the
+     * screen that is currently being displayed.
+     *
+     * @param message to be displayed within the window.
+     */
     public static void popup(String message) {
         JOptionPane.showMessageDialog(rootFrame, message);
     }
 
+    /**
+     * Initialises the root frame and adds all known screens to the
+     * screen map. The main menu screen is then displayed.
+     */
     static void setupGUI() {
         rootFrame = new JFrame("Space Explorer");
         rootFrame.setSize(800, 600);

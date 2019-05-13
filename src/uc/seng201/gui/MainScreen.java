@@ -5,7 +5,6 @@ import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.actions.ActionSleep;
 import uc.seng201.utils.SavedGameFileFilter;
-import uc.seng201.utils.StateActions;
 import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
@@ -106,7 +105,7 @@ class MainScreen extends ScreenComponent {
         if (success == JFileChooser.APPROVE_OPTION) {
             String fileLocation = fileChooser.getSelectedFile().getAbsolutePath();
             try {
-                StateActions.saveState(gameState, fileLocation);
+                GameState.saveState(gameState, fileLocation);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to save!",
                         "Failed", JOptionPane.ERROR_MESSAGE);

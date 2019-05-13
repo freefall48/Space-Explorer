@@ -10,6 +10,9 @@ import uc.seng201.utils.observerable.Observer;
 
 import java.util.*;
 
+/**
+ * Implementation of a space ship.
+ */
 public class SpaceShip {
 
     /**
@@ -66,9 +69,13 @@ public class SpaceShip {
         shieldCount = 2;
     }
 
+    /**
+     * Adds the event listeners for this class to the event manager. Also provided
+     * to help Gson when creating object instances.
+     */
     private SpaceShip() {
-        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDay());
-        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDied());
+        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDayHandler());
+        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDiedHandler());
         SpaceExplorer.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
     }
 
@@ -304,7 +311,11 @@ public class SpaceShip {
         return false;
     }
 
-    class NextDay implements Observer {
+    /**
+     * Space ships handler for the event "NEXT_DAY". Checks if the spaceship still has
+     * health and crew members otherwise triggers the "DEFEAT" event.
+     */
+    final class NextDayHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             if (shipCrew.size() == 0) {
@@ -317,19 +328,30 @@ public class SpaceShip {
         }
     }
 
-    class CrewMemberDied implements Observer {
+    /**
+     * Space ships handler for the event "CREW_MEMBER_DIED". Removes the
+     * dead crew member from the ship. Checks if the ship still has crew members
+     * otherwise triggers the "DEFEAT" event.
+     */
+    final class CrewMemberDiedHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             if (args.length == 1) {
                 if (args[0] instanceof CrewMember) {
                     shipCrew.remove(args[0]);
                 }
+                if (shipCrew.size() == 0) {
+                    SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                }
             }
         }
     }
 
-    class BuyFromTradersHandler implements Observer {
-
+    /**
+     * Space ships handler for the event "BUY_FROM_TRADER". Adds the item that was
+     * brought to the ships items then alters the balance.
+     */
+    final class BuyFromTradersHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             if (args.length == 1) {
