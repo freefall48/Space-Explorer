@@ -18,7 +18,7 @@ public class ActionPilot implements IAction {
         if (args[0] instanceof Planet) {
             gameState.setCurrentPlanet((Planet) args[0]);
             if (Helpers.randomGenerator.nextBoolean()) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL);
+                SpaceExplorer.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL);
             }
         } else {
             throw new ActionException("Invalid arg passed");

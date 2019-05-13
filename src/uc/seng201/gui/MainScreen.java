@@ -1,6 +1,5 @@
 package uc.seng201.gui;
 
-import uc.seng201.EventHandler;
 import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
@@ -25,7 +24,7 @@ class MainScreen extends ScreenComponent {
     private JPanel panelRoot;
     private JLabel lblSpaceShipName;
     private JTabbedPane tabbedContentMenu;
-    private JList<CrewMember> listCrew;
+    private JList<CrewMemberModelEntry> listCrew;
     private JLabel lblDay;
     private JLabel lblOrbiting;
     private JLabel lblMissingParts;
@@ -42,7 +41,7 @@ class MainScreen extends ScreenComponent {
     private JButton btnInspect;
     private JLabel currentScoreLabel;
 
-    private DefaultListModel<CrewMember> listCrewModal = new DefaultListModel<>();
+    private DefaultListModel<CrewMemberModelEntry> crewMemberDefaultListModel = new DefaultListModel<>();
     private DefaultListModel<String> listMedicalSuppliesModel = new DefaultListModel<>();
     private DefaultListModel<String> listFoodItemsModel = new DefaultListModel<>();
     private DefaultListModel<String> listPlanetsModel = new DefaultListModel<>();
@@ -59,14 +58,18 @@ class MainScreen extends ScreenComponent {
         btnSave.addActionListener(e -> onSave());
         btnInspect.addActionListener(e -> onInspect());
 
-        initialiseTables();
+        listCrew.setModel(crewMemberDefaultListModel);
+
+        listFoodItems.setModel(listFoodItemsModel);
+        listMedicalSupplies.setModel(listMedicalSuppliesModel);
+        listPlanets.setModel(listPlanetsModel);
+
         updateInfoPane();
-        defaultSelectedCrewMember();
 
     }
 
     private void onInspect() {
-        JDialog inspectCrewMember = new InspectCrewMember(listCrew.getSelectedValue());
+        JDialog inspectCrewMember = new InspectCrewMember(listCrew.getSelectedValue().crewMember);
         inspectCrewMember.setSize(700, 500);
         inspectCrewMember.setResizable(false);
         inspectCrewMember.setLocationRelativeTo(this);
@@ -74,7 +77,7 @@ class MainScreen extends ScreenComponent {
     }
 
     private void onTrade() {
-        JDialog traders = new Traders(gameState);
+        JDialog traders = new Traders(gameState.getTrader().getAvailableItems(), gameState.getSpaceShip().getBalance());
         traders.setSize(600, 400);
         traders.setLocationRelativeTo(this);
         traders.setVisible(true);
@@ -88,6 +91,13 @@ class MainScreen extends ScreenComponent {
         return panelRoot;
     }
 
+    /**
+     * Handler for the save button. When the user tries to save the game a popup
+     * is displayed asking for a location to save the game file. If the user provides
+     * a file location then the current game state is saved to that file location. The
+     * user may exit or cancel the popup and no file will be saved. If the game-state
+     * cannot be saved the user is notified.
+     */
     private void onSave() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         fileChooser.setFileFilter(new SavedGameFileFilter());
@@ -116,13 +126,12 @@ class MainScreen extends ScreenComponent {
             return;
         }
         // Notify observers that we are moving to the next day.
-        SpaceExplorer.eventHandler.notifyObservers(Event.START_DAY);
+        SpaceExplorer.eventManager.notifyObservers(Event.START_DAY, gameState);
 
         forceRequiredActions();
         // Update the UI to reflect any changes.
         updateTablesModels();
         updateInfoPane();
-        defaultSelectedCrewMember();
         repaint();
     }
 
@@ -143,9 +152,6 @@ class MainScreen extends ScreenComponent {
         return true;
     }
 
-    /**
-     * TODO: Move to the crew member.
-     */
     private void forceRequiredActions() {
         gameState.getSpaceShip().getShipCrew().forEach(crewMember -> {
             if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
@@ -157,60 +163,50 @@ class MainScreen extends ScreenComponent {
     }
 
     private void onPerformAction() {
-        JDialog performAction = new PerformAction(gameState,
-                listCrewModal.get(listCrew.getSelectedIndex()));
+        JDialog performAction = new PerformAction(gameState, listCrew.getSelectedValue().crewMember);
         performAction.setSize(450, 350);
         performAction.setLocationRelativeTo(this);
         performAction.setVisible(true);
 
-        if (!gameState.isMissingShipParts()) {
-            SpaceExplorer.eventHandler.notifyObservers(Event.VICTORY);
-            return;
-        }
+        SpaceExplorer.eventManager.notifyObservers(Event.CREW_MEMBER_ACTION);
 
         updateInfoPane();
-        defaultSelectedCrewMember();
         panelRoot.repaint();
     }
 
+    /**
+     * Sets the selected crew member to the first crew member who has an available action for the
+     * current day. The action button is then activated. If no crew members have actions the first
+     * crew member in the list is selected but the action button is not activated.
+     */
     private void defaultSelectedCrewMember() {
-        for (Iterator<CrewMember> iterator = listCrewModal.elements().asIterator(); iterator.hasNext(); ) {
-            CrewMember crewMember = iterator.next();
+        for (Iterator<CrewMemberModelEntry> iterator = crewMemberDefaultListModel.elements().asIterator(); iterator.hasNext(); ) {
+            CrewMember crewMember = iterator.next().crewMember;
             if (crewMember.getActionsLeftToday() > 0) {
-                listCrew.setSelectedValue(crewMember, true);
+                listCrew.setSelectedValue(crewMember.description(), true);
                 btnPerformAction.setEnabled(true);
                 return;
             }
         }
+        // No crew actions left but select one for the inspect button
         listCrew.setSelectedIndex(0);
         btnPerformAction.setEnabled(false);
     }
 
-
     private void onCrewMemberSelection(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting() && listCrew.getSelectedIndex() != -1) {
-            if (listCrewModal.get(listCrew.getSelectedIndex()).canPerformActions()) {
-                btnPerformAction.setEnabled(true);
-            } else {
-                btnPerformAction.setEnabled(false);
-            }
+            btnPerformAction.setEnabled(listCrew.getSelectedValue().crewMember.canPerformActions());
         }
-    }
-
-    private void initialiseTables() {
-        listCrewModal.addAll(gameState.getSpaceShip().getShipCrew());
-        listCrew.setModel(listCrewModal);
-        defaultSelectedCrewMember();
-
-        listFoodItems.setModel(listFoodItemsModel);
-        listMedicalSupplies.setModel(listMedicalSuppliesModel);
-        listPlanets.setModel(listPlanetsModel);
     }
 
     private void updateTablesModels() {
         listFoodItemsModel.clear();
         listMedicalSuppliesModel.clear();
         listPlanetsModel.clear();
+        crewMemberDefaultListModel.clear();
+
+        gameState.getSpaceShip().getShipCrew().forEach(crewMember -> crewMemberDefaultListModel.addElement(
+                new CrewMemberModelEntry(crewMember)));
 
         gameState.getPlanets().forEach(planet -> listPlanetsModel.addElement(
                 planet.description()));
@@ -227,6 +223,8 @@ class MainScreen extends ScreenComponent {
                     break;
             }
         });
+
+        defaultSelectedCrewMember();
     }
 
     private void updateInfoPane() {
@@ -241,6 +239,19 @@ class MainScreen extends ScreenComponent {
 
         gameState.computeScore();
         currentScoreLabel.setText(String.valueOf(gameState.getScore()));
+    }
+
+    final class CrewMemberModelEntry {
+        final CrewMember crewMember;
+
+        CrewMemberModelEntry(CrewMember crewMember) {
+            this.crewMember = crewMember;
+        }
+
+        @Override
+        public String toString() {
+            return crewMember.description();
+        }
     }
 
 

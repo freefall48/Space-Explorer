@@ -109,39 +109,6 @@ class CrewMemberTest {
         assertEquals(result, crewMember.getTiredness());
     }
 
-    @DisplayName("Can perform actions")
-    @ParameterizedTest
-    @ValueSource(ints = {1,2})
-    void canPerformActions() {
-        crewMember.setActionsLeftToday(1);
-        assertTrue(crewMember.canPerformActions());
-    }
-
-    @DisplayName("Cannot perform actions")
-    @ParameterizedTest
-    @ValueSource(ints = {-1,0})
-    void canPerformActions1() {
-        crewMember.setActionsLeftToday(0);
-        assertFalse(crewMember.canPerformActions());
-    }
-
-    @DisplayName("Altering a valid action count")
-    @ParameterizedTest
-    @ValueSource(ints = {2, 1})
-    void performAction(int crewActions) {
-        crewMember.setActionsLeftToday(crewActions);
-        crewMember.performAction();
-        assertEquals(crewActions - 1, crewMember.getActionsLeftToday());
-    }
-
-    @DisplayName("Altering an invalid action count")
-    @ParameterizedTest
-    @ValueSource(ints = {0, -1})
-    void performAction1(int crewActions) {
-        crewMember.setActionsLeftToday(crewActions);
-        assertThrows(CrewMemberException.class, crewMember::performAction);
-    }
-
 
     @DisplayName("Crew member not alive")
     @Test

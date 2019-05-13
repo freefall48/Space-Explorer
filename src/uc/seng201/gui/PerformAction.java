@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
+import java.util.Objects;
+import java.util.List;
 
 public class PerformAction extends JDialog {
     /**
@@ -83,7 +85,7 @@ public class PerformAction extends JDialog {
 
         this.gameState.getSpaceShip().getShipCrew().forEach(additionalCrewMember -> {
             if (!additionalCrewMember.equals(primaryCrewMember) && additionalCrewMember.canPerformActions()) {
-                additionalCrewModal.addElement(additionalCrewMember.getName());
+                additionalCrewModal.addElement(additionalCrewMember.toString());
             }
         });
 
@@ -135,8 +137,9 @@ public class PerformAction extends JDialog {
     private void onOK() {
         CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
         if (actionToPerform.getCrewRequired() == 2) {
-            this.extraCrewMember = this.gameState.getSpaceShip().crewMemberFromName(
-                    (String) additionalCrewModal.getSelectedItem());
+            String[] crewMemberDetails = additionalCrewModal.getSelectedItem().toString().split(" - ");
+            this.extraCrewMember = this.gameState.getSpaceShip().crewMemberFromNameAndType(
+                    crewMemberDetails[0], crewMemberDetails[1]);
         }
         if (actionToPerform.getCostsActionPoint()) {
             this.primaryCrewMember.performAction();
@@ -152,11 +155,11 @@ public class PerformAction extends JDialog {
         dispose();
     }
 
-    private void setAdditionalInputVisible(boolean visible) {
-        comboAdditionalInfo1.setVisible(visible);
-        lblAdditionalInfo1.setVisible(visible);
-        lblAdditionalInfo2.setVisible(visible);
-        comboAdditionalInfo2.setVisible(visible);
+    private void hideAdditionalInput() {
+        comboAdditionalInfo1.setVisible(false);
+        lblAdditionalInfo1.setVisible(false);
+        lblAdditionalInfo2.setVisible(false);
+        comboAdditionalInfo2.setVisible(false);
     }
 
     private void setAdditionalInputVisible(int additionalInputs) {
@@ -172,7 +175,7 @@ public class PerformAction extends JDialog {
     }
 
     private void onActionSelected() {
-        setAdditionalInputVisible(false);
+        hideAdditionalInput();
         CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
         switch (actionToPerform) {
             case PILOT:
@@ -216,9 +219,12 @@ public class PerformAction extends JDialog {
     private void actionDialog(CrewAction action) {
         switch (action) {
             case PILOT:
-                lblActionText.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
+                if (comboAdditionalInfo2.getSelectedItem() != null) {
+                    lblActionText.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
                         comboAdditionalInfo1.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
-                        comboAdditionalInfo2.getSelectedItem()));
+                        comboAdditionalInfo2.getSelectedItem()).replaceFirst(" - [a-zA-Z]*", ""));
+                }
+
                 break;
 
             case SEARCH:
@@ -232,12 +238,14 @@ public class PerformAction extends JDialog {
 
             case EAT:
                 lblActionText.setText(String.format(CrewAction.EAT.getActionText(), primaryCrewMember.getName(),
-                        comboAdditionalInfo1.getSelectedItem().toString().replaceFirst("([0-9]+ x )", "")));
+                        Objects.requireNonNull(comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst(
+                                "([0-9]+ x )", "")));
                 break;
 
             case MEDICAL:
                 lblActionText.setText(String.format(CrewAction.MEDICAL.getActionText(), primaryCrewMember.getName(),
-                        comboAdditionalInfo1.getSelectedItem().toString().replaceFirst("([0-9]+ x )", "")));
+                        Objects.requireNonNull(comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst(
+                                "([0-9]+ x )", "")));
                 break;
 
             case REPAIR:
@@ -264,8 +272,8 @@ public class PerformAction extends JDialog {
                 break;
             case EAT:
             case MEDICAL:
-                SpaceItem item = SpaceItem.valueOf(comboAdditionalInfo1.getSelectedItem().toString()
-                        .replaceFirst("([0-9]+ x )", ""));
+                SpaceItem item = SpaceItem.valueOf(Objects.requireNonNull(
+                        comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst("([0-9]+ x )", ""));
                 message = new ActionConsumeItem().perform(gameState, new Object[]{item}, primaryCrewMember);
                 break;
             case REPAIR:

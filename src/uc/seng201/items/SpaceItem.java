@@ -9,62 +9,61 @@ import uc.seng201.crew.modifers.Modifications;
  *
  */
 public enum SpaceItem {
-    STARDEW(ItemType.MEDICAL,10,"Removes space plague from a crew member.") {
+    CARROT(ItemType.FOOD, 5, "At least its healthy...") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.removeModification(Modifications.SPACE_PLAGUE);
+            crewMember.alterFood(getPrice() * 2);
         }
     },
-    CONTACTS(ItemType.MEDICAL,10,"Removes blindness from a crew member") {
+    CHICKEN(ItemType.FOOD, 15, "Time for roast.") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.alterFood(getPrice() * 2);
+        }
+    },
+    CONTACTS(ItemType.MEDICAL, 10, "Removes blindness from a crew member") {
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.alterHealth(getPrice());
         }
     },
-    PORK(ItemType.FOOD, 15,"Yummy yummy pork.") {
+    CRACKERS(ItemType.FOOD, 15, "now what flavor?") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
+            crewMember.alterFood(getPrice() * 2);
         }
     },
-    CRICKETS(ItemType.FOOD, 15,"Bear would do it.") {
+    CRICKETS(ItemType.FOOD, 15, "Bear would do it.") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
+            crewMember.alterFood(getPrice() * 2);
         }
     },
-    CRACKERS(ItemType.FOOD, 15,"now what flavor?") {
+    PORK(ItemType.FOOD, 15, "Yummy yummy pork.") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
+            crewMember.alterFood(getPrice() * 2);
         }
     },
-    CARROT(ItemType.FOOD, 5,"At least its healthy...") {
+    SPACESNACK(ItemType.FOOD, 15, "Not sure what this is?") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
+            crewMember.alterFood(getPrice() * 2);
         }
     },
-    CHICKEN(ItemType.FOOD, 15,"Time for roast.") {
+    STARDEW(ItemType.MEDICAL, 10, "Removes space plague from a crew member.") {
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
-        }
-    },
-    SPACESNACK(ItemType.FOOD, 15,"Not sure what this is?") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice()*2);
-            crewMember.setHealthRegen(crewMember.getBaseHealthRegen());
+            crewMember.removeModification(Modifications.SPACE_PLAGUE);
         }
     };
 
-	/**
-	 * The type of the item.
-	 */
+    /**
+     * The type of the item.
+     */
     private ItemType itemType;
     /**
-     * The price that the item costs. This normally influences the 
+     * The price that the item costs. This normally influences the
      * strength of its onConsume method.
      */
     private int price;
@@ -75,7 +74,7 @@ public enum SpaceItem {
 
     /**
      * Creates a reference item that is available throughout the code.
-     * 
+     *
      * @param itemType the type of item.
      * @param price cost of the item.
      * @param itemDescription message to describe the item.
@@ -87,18 +86,18 @@ public enum SpaceItem {
     }
 
     /**
-     * Override this method to alter the behavior that occurs when the items 
-     * onConsume method is called. This method should be called whenever an 
+     * Override this method to alter the behavior that occurs when the items
+     * onConsume method is called. This method should be called whenever an
      * item is consumed by a crew member. The method has access to a mutable
      * crewMember who the method should apply effects too.
-     * 
+     *
      * @param crewMember
      */
     public abstract void onConsume(CrewMember crewMember);
-    
+
     /**
      * Returns the item type of the item.
-     * 
+     *
      * @return item type.
      */
     public ItemType getItemType() {
@@ -107,14 +106,16 @@ public enum SpaceItem {
 
     /**
      * Returns the price of the item.
-     * 
+     *
      * @return price of the item.
      */
-    public int getPrice() {return price;}
+    public int getPrice() {
+        return price;
+    }
 
     /**
      * Returns a description of the item.
-     * 
+     *
      * @return item description.
      */
     public String getItemDescription() {

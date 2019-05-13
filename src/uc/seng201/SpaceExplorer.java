@@ -8,28 +8,54 @@ import uc.seng201.utils.observerable.Observer;
 
 import javax.swing.*;
 
+/**
+ * Main class that contains the entry point for the application. Contains the
+ * end game logic and global variables related to the game state and event
+ * management.
+ */
 public class SpaceExplorer {
 
+    /**
+     * The game state to pass between objects. It is immutable and can
+     * only been changed by an event handled by "GameStateChangeHandler".
+     */
     static GameState gameState;
 
-    public static ObservableHandler eventHandler = new EventHandler();
+    /**
+     * The global event manager. Observers can be registered to respond to
+     * known events, as well as trigger events.
+     */
+    public static ObservableHandler eventManager = new EventHandler();
 
+    /**
+     * Main entry point for the application. Adds the victory, defeat and
+     * game state handlers to the event manager. The display is then
+     * initialized.
+     *
+     * @param args passed from console.
+     */
     public static void main(String[] args) {
         // Add handlers for outcome conditions
-        eventHandler.addObserver(Event.VICTORY, new Victory());
-        eventHandler.addObserver(Event.DEFEAT, new Failed());
+        eventManager.addObserver(Event.VICTORY, new VictoryHandler());
+        eventManager.addObserver(Event.DEFEAT, new FailedHandler());
 
         // Add handler for changing game-state instance
-        eventHandler.addObserver(Event.NEW_GAMESTATE, new NewGameState());
+        GameStateChangeHandler changeHandler = new GameStateChangeHandler();
+        eventManager.addObserver(Event.NEW_GAME_STATE, changeHandler);
+        eventManager.addObserver(Event.LOADED_GAME_STATE, changeHandler);
 
         // Add handler for random game events
-        eventHandler.addObserver(Event.RANDOM_EVENT, new RandomEventHandler());
+        eventManager.addObserver(Event.RANDOM_EVENT, new RandomEventHandler());
 
         Display.setupGUI();
     }
 
 
-    static class NewGameState implements Observer {
+    /**
+     * Handles "Loaded_GAME_STATE" and "NEW_GAME_STATE" events. The global game state
+     * is updated to reflect this new state, and distributed to all dependants.
+     */
+    static class GameStateChangeHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             if (args.length == 1) {
@@ -40,14 +66,22 @@ public class SpaceExplorer {
         }
     }
 
-    static class Victory implements Observer {
+    /**
+     * Handles "VICTORY" event. When called displays the end screen that
+     * displays how the user won the game.
+     */
+    static class VictoryHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             displayEndScreen(true, args);
         }
     }
 
-    static class Failed implements Observer {
+    /**
+     * Handles "Defeat" event. When called displays the end screen that
+     * displays how the user lost the game.
+     */
+    static class FailedHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             displayEndScreen(false, args);
@@ -56,6 +90,13 @@ public class SpaceExplorer {
 
     }
 
+    /**
+     * Creates an end screen instance that is either a victory or defeat. The
+     * end condition message is then passed to the instance.
+     *
+     * @param isVictory did the user win the game.
+     * @param args possible message that was passed by the event handlers.
+     */
     private static void displayEndScreen(boolean isVictory, Object[] args) {
         String message = null;
         if (args.length == 1) {

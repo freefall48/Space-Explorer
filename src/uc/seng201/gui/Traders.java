@@ -1,11 +1,13 @@
 package uc.seng201.gui;
 
-import uc.seng201.GameState;
-import uc.seng201.destinations.traders.TradersListing;
+import uc.seng201.SpaceExplorer;
+import uc.seng201.items.SpaceItem;
+import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Map;
 
 public class Traders extends JDialog {
     /**
@@ -15,22 +17,27 @@ public class Traders extends JDialog {
     private JPanel contentPane;
     private JButton btnBuy;
     private JButton btnLeave;
-    private JList<String> listAvailableItems;
+    private JList<ItemModelEntry> listAvailableItems;
     private JLabel lblBalance;
 
-    private GameState gameState;
-    private DefaultListModel<String> availableItems;
+    private Map<SpaceItem, Integer> tradersItems;
+    private int balance;
 
-    public Traders(GameState gameState) {
-        this.gameState = gameState;
+    private DefaultListModel<ItemModelEntry> availableItems;
+
+    public Traders(Map<SpaceItem, Integer> tradersItems, int balance) {
+        this.tradersItems = tradersItems;
+        this.balance = balance;
+
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(btnBuy);
+
         this.availableItems = new DefaultListModel<>();
         this.listAvailableItems.setModel(this.availableItems);
 
         this.listAvailableItems.addListSelectionListener(e -> onBuyMenuSelection());
-        updateAvailableItemsModel();
+        updateScreen();
 
         btnBuy.addActionListener(e -> onBuy());
         btnLeave.addActionListener(e -> onLeave());
@@ -48,46 +55,62 @@ public class Traders extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void updateBalanceDisplay() {
-        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
+    private void updateScreen() {
+        lblBalance.setText(String.format("$%s", balance));
+        int currentlySelected = listAvailableItems.getSelectedIndex();
+        availableItems.clear();
+        tradersItems.forEach((item, quantity) -> availableItems.addElement(new ItemModelEntry(item, quantity)));
+        if (currentlySelected == -1 || currentlySelected >= availableItems.size()) {
+            listAvailableItems.setSelectedIndex(0);
+        } else {
+            listAvailableItems.setSelectedIndex(currentlySelected);
+        }
         repaint();
     }
 
-    private void updateAvailableItemsModel() {
-        updateBalanceDisplay();
-        availableItems.clear();
-        this.gameState.getTrader().getAvailableItems().forEach(item -> {
-            this.availableItems.addElement(String.format("%dx %s  - %s", item.getQuantity(), item.getItem().toString(),
-                    item.getItem().getItemDescription()));
-        });
-    }
 
     private void onBuyMenuSelection() {
-        if (this.listAvailableItems.getSelectedIndex() >= 0) {
+        if (listAvailableItems.getSelectedIndex() >= 0) {
             btnBuy.setEnabled(false);
-            TradersListing listing = this.gameState.getTrader().getAvailableItems()
-                    .get(this.listAvailableItems.getSelectedIndex());
-            if (this.gameState.getSpaceShip().getBalance() >= listing.getItem().getPrice() && listing.isOneRemaining()) {
-                btnBuy.setText("Buy: $" + listing.getItem().getPrice());
+            SpaceItem item = listAvailableItems.getSelectedValue().spaceItem;
+            btnBuy.setText("Buy: $" + item.getPrice());
+            btnBuy.repaint();
+            if (item.getPrice() <= balance) {
                 btnBuy.setEnabled(true);
             }
         }
     }
 
     private void onBuy() {
-        TradersListing listing = this.gameState.getTrader().getAvailableItems()
-                .get(this.listAvailableItems.getSelectedIndex());
-        if (listing.isOneRemaining()) {
-            listing.removeOne();
-            this.gameState.getSpaceShip().alterSpaceBucks(0 - listing.getItem().getPrice());
-            this.gameState.getSpaceShip().add(listing.getItem());
-            updateAvailableItemsModel();
+        ItemModelEntry itemModelEntry = listAvailableItems.getSelectedValue();
+        if (itemModelEntry.quantity > 0) {
+            SpaceExplorer.eventManager.notifyObservers(Event.BUY_FROM_TRADERS, itemModelEntry.spaceItem);
         }
-        btnBuy.setEnabled(false);
+
+        updateScreen();
+        if (availableItems.size() == 0) {
+            btnBuy.setEnabled(false);
+        }
+        repaint();
     }
 
     private void onLeave() {
         dispose();
+    }
+
+    final class ItemModelEntry {
+        final int quantity;
+        final SpaceItem spaceItem;
+
+        ItemModelEntry(SpaceItem spaceItem, int quantity) {
+            this.spaceItem = spaceItem;
+            this.quantity = quantity;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d x %s - %s", quantity, spaceItem, spaceItem.getItemDescription());
+        }
     }
 
     {
@@ -226,33 +249,19 @@ public class Traders extends JDialog {
         gbc.ipadx = 10;
         gbc.ipady = 10;
         panel3.add(panel5, gbc);
-        final JTabbedPane tabbedPane1 = new JTabbedPane();
-        Font tabbedPane1Font = this.$$$getFont$$$(null, -1, 16, tabbedPane1.getFont());
-        if (tabbedPane1Font != null) tabbedPane1.setFont(tabbedPane1Font);
+        final JScrollPane scrollPane1 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 10.0;
         gbc.weighty = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel5.add(tabbedPane1, gbc);
-        final JPanel panel6 = new JPanel();
-        panel6.setLayout(new GridBagLayout());
-        tabbedPane1.addTab("Buy Items", panel6);
+        panel5.add(scrollPane1, gbc);
         listAvailableItems = new JList();
         Font listAvailableItemsFont = this.$$$getFont$$$(null, -1, 14, listAvailableItems.getFont());
         if (listAvailableItemsFont != null) listAvailableItems.setFont(listAvailableItemsFont);
         listAvailableItems.setSelectionMode(0);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 5.0;
-        gbc.weighty = 10.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel6.add(listAvailableItems, gbc);
-        final JPanel panel7 = new JPanel();
-        panel7.setLayout(new GridBagLayout());
-        tabbedPane1.addTab("Sell Items", panel7);
+        scrollPane1.setViewportView(listAvailableItems);
     }
 
     /**

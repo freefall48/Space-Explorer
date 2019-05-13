@@ -1,12 +1,8 @@
 package uc.seng201;
 
-import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.destinations.Planet;
 import uc.seng201.events.EventTrigger;
-import uc.seng201.events.IRandomEvent;
-import uc.seng201.events.RandomEventType;
 import uc.seng201.utils.Helpers;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
@@ -53,26 +49,30 @@ public class GameState {
         @Override
         public void onEvent(Object... args) {
             if (!hasNextDay()) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,
+                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
                         "On no! It seems you have failed to rebuild your ship in time! Err....");
             }
             if (Helpers.randomGenerator.nextBoolean()) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY);
+                SpaceExplorer.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY,
+                        GameState.this);
             }
 
             currentDay += 1;
-//            nextDayTraders();
+            computeScore();
             computeScore();
         }
+    }
 
-        private void nextDayTraders() {
-            boolean isFriendly = false;
-            for (CrewMember crewMember : spaceShip.getShipCrew()) {
-                if (crewMember.getModifications().contains(Modifications.FRIENDLY)) {
-                    isFriendly = true;
-                }
+    class CrewAction implements Observer {
+        @Override
+        public void onEvent(Object... args) {
+            if (spaceShip.getShieldCount() == 0) {
+                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
+                        "Looks like you have managed to destroy whats left of " + spaceShip.getShipCrew());
             }
-            traders.generateAvailableItemsToday(isFriendly);
+            if (!isMissingShipParts()) {
+                SpaceExplorer.eventManager.notifyObservers(Event.VICTORY, "All parts found!");
+            }
         }
     }
 
@@ -111,7 +111,8 @@ public class GameState {
     }
 
     private GameState() {
-        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NewDay());
+        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NewDay());
+        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewAction());
     }
 
     /**
@@ -216,7 +217,7 @@ public class GameState {
         spaceShip.getShipCrew().forEach(crewMember -> score += 100);
         score += spaceShip.getShieldCount() * 500;
         spaceShip.getShipItems().forEach((key, value) -> score += 50);
-        score += (spaceShip.getMissingPartsAtStart() - spaceShip.getMissingParts()) * 1000;
+        score += (spaceShip.getOriginalMissingParts() - spaceShip.getMissingParts()) * 1000;
         score += (duration - currentDay) * 1000;
         score += spaceShip.getBalance() * 10;
     }

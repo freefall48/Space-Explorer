@@ -47,7 +47,7 @@ class MainMenu extends ScreenComponent {
         int success = fileChooser.showOpenDialog(this);
         if (success == JFileChooser.APPROVE_OPTION) {
             try {
-                SpaceExplorer.eventHandler.notifyObservers(Event.NEW_GAMESTATE,
+                SpaceExplorer.eventManager.notifyObservers(Event.LOADED_GAME_STATE,
                         StateActions.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to load file",

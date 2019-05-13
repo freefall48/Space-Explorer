@@ -32,8 +32,8 @@ public class RandomEventHandler implements Observer {
                         }
                         break;
                 }
-                String message = possibleEvents.get(Helpers.randomGenerator.nextInt(possibleEvents.size())).getInstance().onTrigger(
-                        (GameState) args[1]);
+                String message = possibleEvents.get(Helpers.randomGenerator.nextInt(possibleEvents.size()))
+                        .getInstance().onTrigger((GameState) args[1]);
                 Display.popup(message);
             }
         }

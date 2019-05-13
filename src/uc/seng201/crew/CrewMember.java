@@ -7,6 +7,7 @@ import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,12 +35,12 @@ public class CrewMember {
 
 
     private CrewMember() {
-        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NextDay());
+        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDay());
     }
 
     public CrewMember(String name, CrewType crewType) {
         this(name, crewType, 100, 10, 1, 100, 25,
-                20, new HashSet<>(), 100);
+                -20, new HashSet<>(), 100);
     }
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount,
@@ -62,12 +63,29 @@ public class CrewMember {
 
     @Override
     public String toString() {
+        return String.format("%s - %s", name, crewType);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CrewMember) {
+            CrewMember crewMember = (CrewMember) obj;
+            return crewMember.getName().equals(name) && crewMember.getCrewType().equals(crewType);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (name + crewType).hashCode();
+    }
+
+    public String description() {
         return String.format("%s the %s has %d actions. ",
                 this.name, this.crewType, this.actionsLeftToday) +
                 String.format("[%d/%d %d/day] HP. [%d/%d %d/day] Food. [%d/%d %d/day] Tiredness. ",
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
-                        this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate) +
-                String.format("Modifiers %s", modifications.toString());
+                        this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate);
     }
 
     public int getTirednessRate() {
@@ -88,10 +106,6 @@ public class CrewMember {
 
     public int getMaxHealth() {
         return maxHealth;
-    }
-
-    public int getBaseHealthRegen() {
-        return baseHealthRegen;
     }
 
     public int getRepairAmount() {
@@ -123,7 +137,7 @@ public class CrewMember {
     }
 
     public Collection<Modifications> getModifications() {
-        return modifications;
+        return Collections.unmodifiableSet(modifications);
     }
 
     public int getFoodLevel() {
@@ -134,30 +148,26 @@ public class CrewMember {
         this.repairAmount = repairAmount;
     }
 
-    public void setMaxFoodLevel(int maxFoodLevel) {
-        this.maxFoodLevel = maxFoodLevel;
-    }
-
-    public void setFoodDecayRate(int foodDecayRate) {
-        this.foodDecayRate = foodDecayRate;
-    }
-
-    public void setActionsLeftToday(int actionsLeftToday) {
-        this.actionsLeftToday = actionsLeftToday;
-    }
-
     public void setHealthRegen(int regenRate) {
         this.currentHealthRegen = regenRate;
     }
 
-    public int alterFood(int food) {
+    public void restoreHealthRegen() {
+        currentHealthRegen = baseHealthRegen;
+    }
+
+    public void alterHealthRegen(int value) {
+        currentHealthRegen += value;
+    }
+
+    public void alterFood(int food) {
         int newLevel = this.foodLevel + food;
         if (newLevel >= this.maxFoodLevel) {
             newLevel = this.maxFoodLevel;
         } else if (newLevel <= 0) {
             newLevel = 0;
         }
-        return this.foodLevel = newLevel;
+        foodLevel = newLevel;
     }
 
     /**
@@ -166,7 +176,7 @@ public class CrewMember {
      *
      * @param health The amount of health to give the crew member.
      */
-    public int alterHealth(int health) {
+    public void alterHealth(int health) {
 
         int newHealth = this.health + health;
         if (newHealth > this.maxHealth) {
@@ -174,17 +184,17 @@ public class CrewMember {
         } else if (newHealth <= 0) {
             newHealth = 0;
         }
-        return this.health = newHealth;
+        this.health = newHealth;
     }
 
-    public int alterTiredness(int tiredness) {
+    public void alterTiredness(int tiredness) {
         int newValue = this.tiredness + tiredness;
         if (newValue > this.maxTiredness) {
             newValue = this.maxTiredness;
         } else if (newValue < 0) {
             newValue = 0;
         }
-        return this.tiredness = newValue;
+        this.tiredness = newValue;
     }
 
     /**
@@ -193,12 +203,10 @@ public class CrewMember {
      *
      * @param modification Modification to add to crew member
      */
-    public boolean addModification(Modifications modification) {
-        boolean isAdded = modifications.add(modification);
-        if (isAdded) {
+    public void addModification(Modifications modification) {
+        if (modifications.add(modification)) {
             modification.getInstance().onAdd(this);
         }
-        return isAdded;
     }
 
     /**
@@ -207,19 +215,11 @@ public class CrewMember {
      *
      * @param modification The Illness to remove from the crew member.
      */
-    public boolean removeModification(Modifications modification) {
-        boolean isRemoved = modifications.remove(modification);
-        if (isRemoved) {
+    public void removeModification(Modifications modification) {
+        if (modifications.remove(modification)) {
             modification.getInstance().onRemove(this);
         }
-        return isRemoved;
     }
-
-    /**
-     * Alters the current stats of the crew member by applying the given rates to them. Gives the
-     * crew member actions for the day. Called at the start of every day for each crew member.
-     */
-
 
     public boolean canPerformActions() {
         return this.actionsLeftToday > 0;
@@ -233,7 +233,7 @@ public class CrewMember {
         }
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return this.health > 0;
     }
 
@@ -243,16 +243,18 @@ public class CrewMember {
         public void onEvent(Object... args) {
             alterFood(getFoodDecayRate());
             if (getFoodLevel() == 0) {
-                setHealthRegen(-20);
+                addModification(Modifications.HUNGRY);
+            } else if (modifications.contains(Modifications.HUNGRY)) {
+                removeModification(Modifications.HUNGRY);
             }
 
             alterHealth(getCurrentHealthRegen());
 
             alterTiredness(getTirednessRate());
             if (getTiredness() == getMaxTiredness()) {
-                setActionsLeftToday(1);
+                actionsLeftToday = 1;
             } else {
-                setActionsLeftToday(2);
+                actionsLeftToday = 2;
             }
 
             for (Modifications modification : getModifications()) {
@@ -260,7 +262,7 @@ public class CrewMember {
             }
 
             if (!isAlive()) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.CREW_MEMBER_DIED, CrewMember.this);
+                SpaceExplorer.eventManager.notifyObservers(Event.CREW_MEMBER_DIED, CrewMember.this);
             }
         }
     }

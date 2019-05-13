@@ -2,10 +2,11 @@ package uc.seng201.crew.modifers;
 
 import uc.seng201.crew.CrewMember;
 
-public class ModSpacePlague extends ModificationAdapter {
+public class ModHungry extends ModificationAdapter {
+
     @Override
     public void onAdd(CrewMember crewMember) {
-        crewMember.setHealthRegen(-15);
+        crewMember.setHealthRegen(-10);
     }
 
     @Override

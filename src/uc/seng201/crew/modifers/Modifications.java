@@ -27,6 +27,12 @@ public enum Modifications {
         public IModification getInstance() {
             return new ModFriendly();
         }
+    },
+    HUNGRY("Hungry", "Hasn't eaten and slowly starving.") {
+        @Override
+        public IModification getInstance() {
+            return new ModHungry();
+        }
     };
 
     private String name;

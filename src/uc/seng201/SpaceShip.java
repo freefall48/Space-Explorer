@@ -1,6 +1,7 @@
 package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.CrewType;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
@@ -18,7 +19,7 @@ public class SpaceShip {
     /**
      * List of crew members on the spaceship.
      */
-    private List<CrewMember> shipCrew;
+    private Set<CrewMember> shipCrew;
     /**
      * Collection of the ships items.
      */
@@ -30,7 +31,7 @@ public class SpaceShip {
     /**
      * Initial amount of missing parts of the ship when it was created.
      */
-    private int missingPartsAtStart;
+    private int originalMissingParts;
     /**
      * Balance in dollars that the spaceship has.
      */
@@ -40,13 +41,13 @@ public class SpaceShip {
      */
     private int shieldCount;
     /**
-     * Maximum number of crew members that are allowed on the spaceship.
+     * Maximum number of crew members that are allowed on the spaceship. Global to all spaceships.
      */
-    private int maximumCrewCount;
+    public static final int MAXIMUM_CREW_COUNT = 4;
     /**
-     * Minimum number of crew members needed for this spaceship.
+     * Minimum number of crew members needed for this spaceship.Global to all spaceships.
      */
-    private int minimumCrewCount;
+    public static final int MINIMUM_CREW_COUNT = 2;
 
     /**
      * Creates a spaceship with a name and missing part count and defaults
@@ -58,20 +59,17 @@ public class SpaceShip {
     public SpaceShip(String shipName, int missingParts) {
         this();
         this.shipName = shipName;
-        this.missingParts = missingPartsAtStart = missingParts;
-        shipCrew = new ArrayList<>();
+        this.missingParts = originalMissingParts = missingParts;
+        shipCrew = new HashSet<>();
         shipItems = new HashMap<>();
         balance = 0;
         shieldCount = 2;
-        maximumCrewCount = 4;
-        minimumCrewCount = 2;
-
-
     }
 
     private SpaceShip() {
-        SpaceExplorer.eventHandler.addObserver(Event.START_DAY, new NextDay());
-        SpaceExplorer.eventHandler.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDied());
+        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDay());
+        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDied());
+        SpaceExplorer.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
     }
 
 //    public String toString() {
@@ -89,9 +87,9 @@ public class SpaceShip {
      * @param crewMembers collection containing crew members to be added to the ship crew.
      * @return true if all crew members were added to the ship crew.
      */
-    public boolean add(List<CrewMember> crewMembers) {
+    public boolean add(Set<CrewMember> crewMembers) {
         int newCrewSize = crewMembers.size() + shipCrew.size();
-        if (newCrewSize >= minimumCrewCount && newCrewSize <= maximumCrewCount) {
+        if (newCrewSize >= MINIMUM_CREW_COUNT && newCrewSize <= MAXIMUM_CREW_COUNT) {
             return shipCrew.addAll(crewMembers);
         }
         return false;
@@ -113,32 +111,15 @@ public class SpaceShip {
     }
 
     /**
-     * Gets the maximum number of crew members for this spaceship.
-     *
-     * @return maximum crew members
-     */
-    public int getMaximumCrewCount() {
-        return maximumCrewCount;
-    }
-
-    /**
-     * Gets the minimum number of crew members for this spaceship.
-     *
-     * @return minimum crew members.
-     */
-    public int getMinimumCrewCount() {
-        return minimumCrewCount;
-    }
-
-    /**
      * Returns the first crew member occurrence that has that name, otherwise null.
      *
      * @param crewMemberName name of the crew member to look up
      * @return crew member if present, null if not.
      */
-    public CrewMember crewMemberFromName(String crewMemberName) {
+    public CrewMember crewMemberFromNameAndType(String crewMemberName, String type) {
         for (CrewMember crewMember : this.shipCrew) {
-            if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase())) {
+            if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase()) &&
+            crewMember.getCrewType().equals(CrewType.valueOf(type.toUpperCase()))) {
                 return crewMember;
             }
         }
@@ -170,8 +151,8 @@ public class SpaceShip {
      *
      * @return number of missing parts at spaceship creation.
      */
-    public int getMissingPartsAtStart() {
-        return missingPartsAtStart;
+    public int getOriginalMissingParts() {
+        return originalMissingParts;
     }
 
     /**
@@ -225,9 +206,9 @@ public class SpaceShip {
      *
      * @return List of all crew members.
      */
-    public List<CrewMember> getShipCrew() {
+    public Set<CrewMember> getShipCrew() {
 
-        return shipCrew;
+        return Collections.unmodifiableSet(shipCrew);
 
     }
 
@@ -238,7 +219,7 @@ public class SpaceShip {
      * @return map of space items and quantities.
      */
     public Map<SpaceItem, Integer> getShipItems() {
-        return shipItems;
+        return Collections.unmodifiableMap(shipItems);
     }
 
     /**
@@ -287,30 +268,26 @@ public class SpaceShip {
      * below 0.
      *
      * @param value amount to adjust shields.
-     * @return new spaceship shield count.
      * @throws SpaceShipException if the spaceship shields reach 0.
      */
-    public int alterShield(int value) throws SpaceShipException {
+    public void alterShield(int value) throws SpaceShipException {
         int newShieldValue = shieldCount + value;
         if (newShieldValue <= 0) {
             throw new SpaceShipException("No spaceship shields remaining");
         }
-        return shieldCount = newShieldValue;
     }
 
     /**
      * Modifies the balance of the spaceship. The new balance cannot be below 0.
      *
      * @param value amount to adjust balance.
-     * @return new balance of the spaceship.
      * @throws SpaceShipException if the balance would be below 0.
      */
-    public int alterSpaceBucks(int value) throws SpaceShipException {
+    public void alterSpaceBucks(int value) throws SpaceShipException {
         int newBalance = balance + value;
         if (newBalance < 0) {
             throw new SpaceShipException("Cannot remove " + value + " from Spaceship balance");
         }
-        return balance = newBalance;
     }
 
     /**
@@ -331,10 +308,10 @@ public class SpaceShip {
         @Override
         public void onEvent(Object... args) {
             if (shipCrew.size() == 0) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
             }
             if (shieldCount == 0) {
-                SpaceExplorer.eventHandler.notifyObservers(Event.DEFEAT,
+                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
                         "Looks like you have managed to destroy whats left of " + shipCrew);
             }
         }
@@ -348,6 +325,27 @@ public class SpaceShip {
                     shipCrew.remove(args[0]);
                 }
             }
+        }
+    }
+
+    class BuyFromTradersHandler implements Observer {
+
+        @Override
+        public void onEvent(Object... args) {
+            if (args.length == 1) {
+                if (args[0] instanceof SpaceItem) {
+
+                    // Cannot use primitive int here as we are dealing with nulls.
+                    Integer currentItemQuantity = shipItems.putIfAbsent((SpaceItem) args[0], 1);
+                    if (currentItemQuantity != null) {
+                        shipItems.replace((SpaceItem) args[0], currentItemQuantity + 1);
+                    }
+
+                    // Update the ships balance
+                    alterSpaceBucks(((SpaceItem) args[0]).getPrice());
+                }
+            }
+
         }
     }
 }

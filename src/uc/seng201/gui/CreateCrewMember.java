@@ -5,6 +5,8 @@ import uc.seng201.crew.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
+import java.util.Set;
 
 public class CreateCrewMember extends JDialog {
 
@@ -22,7 +24,6 @@ public class CreateCrewMember extends JDialog {
     private CrewMember crewMember;
 
     CreateCrewMember(CrewMember crewMember) {
-        this();
         this.crewMember = crewMember;
         txtName.setText(crewMember.getName());
         comboType.setSelectedItem(crewMember.getCrewType());
@@ -68,13 +69,14 @@ public class CreateCrewMember extends JDialog {
     }
 
     private boolean isValidState() {
-        if (this.crewMember != null) {
-            return !txtName.getText().equals(crewMember.getName())
-                    || !comboType.getSelectedItem().equals(crewMember.getCrewType());
-        } else {
-            return (!txtName.getText().equals("")
-                    && txtName.getText().matches("^([a-zA-Z]){1,12}$"));
+        if (crewMember != null) {
+            if (txtName.getText().equals(crewMember.getName())
+                    || Objects.equals(comboType.getSelectedItem(), crewMember.getCrewType())) {
+                return false;
+            }
         }
+        return (!txtName.getText().equals("")
+                && txtName.getText().matches("^([a-zA-Z]){3,12}$"));
     }
 
 

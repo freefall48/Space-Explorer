@@ -13,8 +13,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 class AdventureCreator extends ScreenComponent {
     /**
@@ -32,14 +33,11 @@ class AdventureCreator extends ScreenComponent {
     private JButton btnUpdateCrewMember;
     private JButton btnRemoveCrewMember;
 
-    private GameState gameState;
-
-    private List<CrewMember> crewMembers;
+    private Set<CrewMember> crewMembers;
     private DefaultListModel<String> listCrewModal;
 
     AdventureCreator(GameState gameState) {
-        this.gameState = gameState;
-        crewMembers = new ArrayList<>();
+        crewMembers = new HashSet<>();
         listCrewModal = new DefaultListModel<>();
 
         textShipName.addKeyListener(new KeyAdapter() {
@@ -76,9 +74,9 @@ class AdventureCreator extends ScreenComponent {
         spaceShip.add(crewMembers);
 
         List<Planet> planets = Helpers.generatePlanets(gameDuration);
-        gameState = new GameState(spaceShip, gameDuration, planets);
+        GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
-        SpaceExplorer.eventHandler.notifyObservers(Event.NEW_GAMESTATE, gameState);
+        SpaceExplorer.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
         Display.changeScreen(Screen.MAIN_SCREEN);
     }
 
@@ -86,10 +84,19 @@ class AdventureCreator extends ScreenComponent {
         CreateCrewMember createDialog = new CreateCrewMember();
         createDialog.setLocationRelativeTo(this);
         createDialog.setResizable(false);
-        crewMembers.add(createDialog.showDialog());
-        updateModels();
-        resetCrewButtons();
-        validateState();
+        CrewMember newCrewMember = createDialog.showDialog();
+        if (newCrewMember == null) {
+            return;
+        }
+        if (crewMembers.contains(newCrewMember)) {
+            Display.popup(String.format("Cannot add %s a %s as they are already part of the crew!",
+                    newCrewMember.getName(), newCrewMember.getCrewType()));
+        } else {
+            crewMembers.add(newCrewMember);
+            updateModels();
+            resetCrewButtons();
+            validateState();
+        }
 
     }
 
@@ -100,10 +107,23 @@ class AdventureCreator extends ScreenComponent {
     }
 
     private void onUpdateCrewMember() {
-        CrewMember currentCrewMember = crewMembers.get(listCrew.getSelectedIndex());
+        String crewMemberName = listCrew.getSelectedValue();
+        CrewMember currentCrewMember = null;
+        for (CrewMember crewMember : crewMembers) {
+            if (crewMember.getName().equals(crewMemberName)) {
+                currentCrewMember = crewMember;
+            }
+        }
+        if (currentCrewMember == null) {
+            updateModels();
+            return;
+        }
         CrewMember alteredCrewMember = new CreateCrewMember(currentCrewMember).showDialog();
         if (alteredCrewMember != null) {
-            crewMembers.set(listCrew.getSelectedIndex(), alteredCrewMember);
+            if (!crewMembers.add(alteredCrewMember)) {
+                crewMembers.remove(currentCrewMember);
+                crewMembers.add(alteredCrewMember);
+            }
             updateModels();
             resetCrewButtons();
             validateState();
@@ -124,7 +144,8 @@ class AdventureCreator extends ScreenComponent {
     }
 
     private void validateState() {
-        btnContinue.setEnabled(this.listCrewModal.size() >= 2 && this.listCrewModal.size() <= 4 && !textShipName.getText().equals("")
+        btnContinue.setEnabled(this.listCrewModal.size() >= SpaceShip.MINIMUM_CREW_COUNT
+                && this.listCrewModal.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !textShipName.getText().equals("")
                 && textShipName.getText().matches("^([a-zA-Z0-9_]( [a-zA-Z0-9_]+)*){3,24}$"));
     }
 

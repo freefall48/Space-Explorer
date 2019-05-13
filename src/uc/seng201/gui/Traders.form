@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="uc.seng201.gui.Traders">
   <grid id="cbd77" binding="contentPane" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="48" y="54" width="595" height="408"/>
+      <xy x="48" y="54" width="595" height="667"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -118,49 +118,23 @@
             <properties/>
             <border type="none"/>
             <children>
-              <tabbedpane id="f7250" default-binding="true">
+              <scrollpane id="c2def">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="200" height="200"/>
-                  </grid>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="10.0" weighty="10.0"/>
                 </constraints>
-                <properties>
-                  <font size="16"/>
-                </properties>
+                <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="3d354" layout-manager="GridBagLayout">
-                    <constraints>
-                      <tabbedpane title="Buy Items"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="dade8" class="javax.swing.JList" binding="listAvailableItems">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="50"/>
-                          </grid>
-                          <gridbag weightx="5.0" weighty="10.0"/>
-                        </constraints>
-                        <properties>
-                          <font size="14"/>
-                          <selectionMode value="0"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </grid>
-                  <grid id="98c8d" layout-manager="GridBagLayout">
-                    <constraints>
-                      <tabbedpane title="Sell Items"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
+                  <component id="dade8" class="javax.swing.JList" binding="listAvailableItems">
+                    <constraints/>
+                    <properties>
+                      <font size="14"/>
+                      <selectionMode value="0"/>
+                    </properties>
+                  </component>
                 </children>
-              </tabbedpane>
+              </scrollpane>
             </children>
           </grid>
         </children>

@@ -8,6 +8,7 @@ public abstract class ObservableHandler {
 
     public ObservableHandler() {
         observers = new Hashtable<>();
+
         for (Event event : Event.values()) {
             observers.put(event, new HashSet<>());
         }
@@ -16,7 +17,7 @@ public abstract class ObservableHandler {
     public void addObserver(Event event, Observer observer) {
         Set<Observer> eventObservers = observers.get(event);
         eventObservers.add(observer);
-        observers.replace(event, eventObservers);
+//        observers.replace(event, eventObservers);
     }
 
     public void removeObserver(Event event, Observer observer) {
