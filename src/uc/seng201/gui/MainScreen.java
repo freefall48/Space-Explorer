@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -52,6 +54,28 @@ class MainScreen extends ScreenComponent {
 
         btnNextDay.addActionListener(e -> onNextDay());
         listCrew.addListSelectionListener(this::onCrewMemberSelection);
+
+        // Add easy of life features. Double-click for action dialog and Right-click for inspect dialog.
+        listCrew.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    listCrew.setSelectedIndex(listCrew.locationToIndex(e.getPoint()));
+                    onInspect();
+                } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                    onPerformAction();
+                }
+            }
+
+            /* Prevent the need to double right-click by setting the focused component as the list when
+               mouse is over the list.*/
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                listCrew.requestFocus();
+            }
+        });
         btnPerformAction.addActionListener(e -> onPerformAction());
         btnSpaceTraders.addActionListener(e -> onTrade());
         btnSave.addActionListener(e -> onSave());
@@ -180,9 +204,9 @@ class MainScreen extends ScreenComponent {
      */
     private void defaultSelectedCrewMember() {
         for (Iterator<CrewMemberModelEntry> iterator = crewMemberDefaultListModel.elements().asIterator(); iterator.hasNext(); ) {
-            CrewMember crewMember = iterator.next().crewMember;
-            if (crewMember.getActionsLeftToday() > 0) {
-                listCrew.setSelectedValue(crewMember.description(), true);
+            CrewMemberModelEntry crewMemberModelEntry = iterator.next();
+            if (crewMemberModelEntry.crewMember.getActionsLeftToday() > 0) {
+                listCrew.setSelectedValue(crewMemberModelEntry, true);
                 btnPerformAction.setEnabled(true);
                 return;
             }
@@ -310,6 +334,7 @@ class MainScreen extends ScreenComponent {
         Font listCrewFont = this.$$$getFont$$$("Droid Sans Mono", -1, 14, listCrew.getFont());
         if (listCrewFont != null) listCrew.setFont(listCrewFont);
         listCrew.setMaximumSize(new Dimension(0, 0));
+        listCrew.setSelectionMode(0);
         listCrew.setVisibleRowCount(4);
         scrollPane1.setViewportView(listCrew);
         final JPanel panel3 = new JPanel();

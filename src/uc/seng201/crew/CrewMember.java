@@ -1,5 +1,6 @@
 package uc.seng201.crew;
 
+import uc.seng201.Display;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.CrewMemberException;
@@ -23,8 +24,10 @@ public class CrewMember {
     private int baseHealthRegen;
     private int repairAmount;
     private int maxTiredness;
-    private int tirednessRate;
-    private int foodDecayRate;
+    private int currentTirednessRate;
+    private int baseTirednessRate;
+    private int currentFoodDecayRate;
+    private int baseFoodDecayRate;
     private int health;
     private int currentHealthRegen;
     private int tiredness;
@@ -43,18 +46,18 @@ public class CrewMember {
                 -20, new HashSet<>(), 100);
     }
 
-    public CrewMember(String name, CrewType crewType, int maxHealth, int baseHealthRegen, int repairAmount,
+    public CrewMember(String name, CrewType crewType, int maxHealth, int healthRegen, int repairAmount,
                       int maxTiredness, int tirednessRate, int foodDecayRate, Set<Modifications> modifications,
                       int maxFoodLevel) {
         this();
         this.name = name;
         this.crewType = crewType;
         this.maxHealth = health = maxHealth;
-        this.baseHealthRegen = currentHealthRegen = baseHealthRegen;
+        this.baseHealthRegen = currentHealthRegen = healthRegen;
         this.repairAmount = repairAmount;
         this.maxTiredness = maxTiredness;
-        this.tirednessRate = tirednessRate;
-        this.foodDecayRate = foodDecayRate;
+        this.currentTirednessRate = baseTirednessRate = tirednessRate;
+        this.currentFoodDecayRate = baseFoodDecayRate = foodDecayRate;
         this.modifications = modifications;
         this.maxFoodLevel = foodLevel = maxFoodLevel;
         this.actionsLeftToday = 2;
@@ -85,11 +88,11 @@ public class CrewMember {
                 this.name, this.crewType, this.actionsLeftToday) +
                 String.format("[%d/%d %d/day] HP. [%d/%d %d/day] Food. [%d/%d %d/day] Tiredness. ",
                         this.health, this.maxHealth, this.currentHealthRegen, this.foodLevel,
-                        this.maxFoodLevel, this.foodDecayRate, this.tiredness, this.maxTiredness, this.tirednessRate);
+                        this.maxFoodLevel, this.currentFoodDecayRate, this.tiredness, this.maxTiredness, this.currentTirednessRate);
     }
 
     public int getTirednessRate() {
-        return tirednessRate;
+        return currentTirednessRate;
     }
 
     public int getMaxFoodLevel() {
@@ -97,7 +100,7 @@ public class CrewMember {
     }
 
     public int getFoodDecayRate() {
-        return foodDecayRate;
+        return currentFoodDecayRate;
     }
 
     public String getName() {
@@ -124,7 +127,7 @@ public class CrewMember {
         return health;
     }
 
-    public int getCurrentHealthRegen() {
+    public int getHealthRegen() {
         return currentHealthRegen;
     }
 
@@ -156,6 +159,13 @@ public class CrewMember {
         currentHealthRegen = baseHealthRegen;
     }
 
+    public void alterActionsLeft(int value) {
+        int newActionsLeft = actionsLeftToday + value;
+        if (value < 0) {
+            newActionsLeft = 0;
+        }
+        actionsLeftToday = newActionsLeft;
+    }
     public void alterHealthRegen(int value) {
         currentHealthRegen += value;
     }
@@ -168,6 +178,29 @@ public class CrewMember {
             newLevel = 0;
         }
         foodLevel = newLevel;
+    }
+
+    public void restoreFoodDecayRate() {
+        currentFoodDecayRate = baseFoodDecayRate;
+    }
+    public void alterFoodDecayRate(int value) {
+        int newFoodDecayRate = currentFoodDecayRate + value;
+        if (newFoodDecayRate < 0) {
+            newFoodDecayRate = 0;
+        }
+        currentFoodDecayRate = newFoodDecayRate;
+    }
+
+    public void restoreTirednessRate() {
+        currentTirednessRate = baseTirednessRate;
+    }
+
+    public void alterTirednessRate(int value) {
+        int newTirednessRate = currentTirednessRate + value;
+        if (newTirednessRate < 0) {
+            newTirednessRate = 0;
+        }
+        currentTirednessRate = newTirednessRate;
     }
 
     /**
@@ -185,6 +218,10 @@ public class CrewMember {
             newHealth = 0;
         }
         this.health = newHealth;
+    }
+
+    public void restoreTiredness() {
+        tiredness = 0;
     }
 
     public void alterTiredness(int tiredness) {
@@ -241,26 +278,31 @@ public class CrewMember {
 
         @Override
         public void onEvent(Object... args) {
-            alterFood(getFoodDecayRate());
             if (getFoodLevel() == 0) {
                 addModification(Modifications.HUNGRY);
             } else if (modifications.contains(Modifications.HUNGRY)) {
                 removeModification(Modifications.HUNGRY);
             }
 
-            alterHealth(getCurrentHealthRegen());
-
-            alterTiredness(getTirednessRate());
+            // Check if the crew member is tired. If they are add Modification TIRED else remove it.
             if (getTiredness() == getMaxTiredness()) {
-                actionsLeftToday = 1;
-            } else {
-                actionsLeftToday = 2;
+                addModification(Modifications.TIRED);
+            } else if (modifications.contains(Modifications.TIRED)){
+                removeModification(Modifications.TIRED);
             }
 
+            // Alter crew member values after all possible modifications have been added.
+            alterFood(getFoodDecayRate());
+            alterHealth(getHealthRegen());
+            alterTiredness(getTirednessRate());
+            actionsLeftToday = 2;
+
+            // Run through all the onTick() for each modification.
             for (Modifications modification : getModifications()) {
                 modification.getInstance().onTick(CrewMember.this);
             }
 
+            // Last thing to do is check the crew member is still alive.
             if (!isAlive()) {
                 SpaceExplorer.eventManager.notifyObservers(Event.CREW_MEMBER_DIED, CrewMember.this);
             }

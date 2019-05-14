@@ -5,7 +5,6 @@ import uc.seng201.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.utils.Helpers;
 import uc.seng201.destinations.Planet;
 import uc.seng201.utils.observerable.Event;
 
@@ -13,9 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 class AdventureCreator extends ScreenComponent {
     /**
@@ -27,17 +25,14 @@ class AdventureCreator extends ScreenComponent {
     private JPanel panelCreator;
     private JButton btnContinue;
     private JButton btnAddCrewMember;
-    private JList<String> listCrew;
-    private JCheckBox checkboxCustomShipFile;
+    private JList<CrewMember> listCrew;
     private JButton btnBack;
     private JButton btnUpdateCrewMember;
     private JButton btnRemoveCrewMember;
 
-    private Set<CrewMember> crewMembers;
-    private DefaultListModel<String> listCrewModal;
+    private DefaultListModel<CrewMember> listCrewModal;
 
     AdventureCreator(GameState gameState) {
-        crewMembers = new HashSet<>();
         listCrewModal = new DefaultListModel<>();
 
         textShipName.addKeyListener(new KeyAdapter() {
@@ -60,7 +55,21 @@ class AdventureCreator extends ScreenComponent {
         btnContinue.addActionListener(e -> onContinue());
         btnUpdateCrewMember.addActionListener(e -> onUpdateCrewMember());
         btnRemoveCrewMember.addActionListener(e -> onRemoveCrewMember());
-        checkboxCustomShipFile.addActionListener(e -> onAddCustomShipFile());
+    }
+
+    /**
+     * Generates a list of planets based on the game duration. The number
+     * of planets is equal to the number of days in the game.
+     *
+     * @param duration number of days the game will run.
+     * @return list of generated planets.
+     */
+    private List<Planet> generatePlanets(int duration) {
+        List<Planet> planets = new ArrayList<>();
+        for (int i = 0; i < duration; i++) {
+            planets.add(new Planet());
+        }
+        return planets;
     }
 
     @Override
@@ -70,10 +79,10 @@ class AdventureCreator extends ScreenComponent {
 
     private void onContinue() {
         int gameDuration = sliderDuration.getValue();
-        SpaceShip spaceShip = new SpaceShip(textShipName.getText(), Helpers.calcPartsToFind(gameDuration));
-        spaceShip.add(crewMembers);
+        SpaceShip spaceShip = new SpaceShip(textShipName.getText(), SpaceShip.calcPartsToFind(gameDuration));
+        spaceShip.add(new HashSet<>(Collections.list(listCrewModal.elements())));
 
-        List<Planet> planets = Helpers.generatePlanets(gameDuration);
+        List<Planet> planets = generatePlanets(gameDuration);
         GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
         SpaceExplorer.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
@@ -82,18 +91,17 @@ class AdventureCreator extends ScreenComponent {
 
     private void onAddCrewMember() {
         CreateCrewMember createDialog = new CreateCrewMember();
-        createDialog.setLocationRelativeTo(this);
+        createDialog.setLocationRelativeTo(panelCreator);
         createDialog.setResizable(false);
         CrewMember newCrewMember = createDialog.showDialog();
         if (newCrewMember == null) {
             return;
         }
-        if (crewMembers.contains(newCrewMember)) {
+        if (listCrewModal.contains(newCrewMember)) {
             Display.popup(String.format("Cannot add %s a %s as they are already part of the crew!",
                     newCrewMember.getName(), newCrewMember.getCrewType()));
         } else {
-            crewMembers.add(newCrewMember);
-            updateModels();
+            listCrewModal.addElement(newCrewMember);
             resetCrewButtons();
             validateState();
         }
@@ -101,39 +109,35 @@ class AdventureCreator extends ScreenComponent {
     }
 
     private void onRemoveCrewMember() {
-        this.listCrewModal.removeElementAt(listCrew.getSelectedIndex());
-        resetCrewButtons();
-        validateState();
+        int confirmed = JOptionPane.showConfirmDialog(panelCreator,
+                String.format("Do you really want to remove %s?", listCrew.getSelectedValue()), "Remove Crew Member",
+                JOptionPane.YES_NO_OPTION);
+        if (confirmed == 0) {
+            this.listCrewModal.removeElementAt(listCrew.getSelectedIndex());
+            resetCrewButtons();
+            validateState();
+        }
     }
 
     private void onUpdateCrewMember() {
-        String crewMemberName = listCrew.getSelectedValue();
-        CrewMember currentCrewMember = null;
-        for (CrewMember crewMember : crewMembers) {
-            if (crewMember.getName().equals(crewMemberName)) {
-                currentCrewMember = crewMember;
-            }
-        }
-        if (currentCrewMember == null) {
-            updateModels();
-            return;
-        }
-        CrewMember alteredCrewMember = new CreateCrewMember(currentCrewMember).showDialog();
+        CrewMember currentCrewMember = listCrew.getSelectedValue();
+        CreateCrewMember createCrewMemberDialog = new CreateCrewMember(currentCrewMember);
+        createCrewMemberDialog.setResizable(false);
+        createCrewMemberDialog.setLocationRelativeTo(panelCreator);
+        CrewMember alteredCrewMember = createCrewMemberDialog.showDialog();
         if (alteredCrewMember != null) {
-            if (!crewMembers.add(alteredCrewMember)) {
-                crewMembers.remove(currentCrewMember);
-                crewMembers.add(alteredCrewMember);
+            if (!listCrewModal.contains(alteredCrewMember)) {
+                int insertIndex = listCrewModal.indexOf(currentCrewMember);
+                listCrewModal.removeElement(currentCrewMember);
+                listCrewModal.add(insertIndex, alteredCrewMember);
+            } else {
+                Display.popup(String.format("Cannot add %s a %s as they are already part of the crew!",
+                        alteredCrewMember.getName(), alteredCrewMember.getCrewType()));
             }
-            updateModels();
             resetCrewButtons();
             validateState();
         }
 
-    }
-
-    private void updateModels() {
-        listCrewModal.removeAllElements();
-        crewMembers.forEach(crewMember -> listCrewModal.addElement(crewMember.toString()));
     }
 
     private void resetCrewButtons() {
@@ -144,32 +148,10 @@ class AdventureCreator extends ScreenComponent {
     }
 
     private void validateState() {
+        btnAddCrewMember.setEnabled(SpaceShip.MAXIMUM_CREW_COUNT > listCrewModal.size());
         btnContinue.setEnabled(this.listCrewModal.size() >= SpaceShip.MINIMUM_CREW_COUNT
                 && this.listCrewModal.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !textShipName.getText().equals("")
                 && textShipName.getText().matches("^([a-zA-Z0-9_]( [a-zA-Z0-9_]+)*){3,24}$"));
-    }
-
-    private void onAddCustomShipFile() {
-
-//        if (checkboxCustomShipFile.isSelected()) {
-//            FileDialog fd = new FileDialog(SpaceExplorer.getRootFrame(), "Choose a file", FileDialog.LOAD);
-//            fd.setFile("*.png");
-//            fd.setMultipleMode(false);
-//            fd.setVisible(true);
-//            if (fd.getFile() != null) {
-//                try {
-//                    SpaceExplorer.shipImage = ImageIO.read(fd.getFiles()[0]);
-//                    SpaceExplorer.shipImageLocation = fd.getDirectory() + fd.getFile();
-//                } catch (IOException error) {
-//                    JOptionPane.showMessageDialog(SpaceExplorer.getControlFrame(),
-//                            "Failed to load the selected image!", "Error", JOptionPane.ERROR_MESSAGE);
-//                    checkboxCustomShipFile.setSelected(false);
-//                }
-//            } else {
-//                checkboxCustomShipFile.setSelected(false);
-//            }
-//            fd.dispose();
-//        }
     }
 
     {
@@ -252,13 +234,14 @@ class AdventureCreator extends ScreenComponent {
         panel2.add(scrollPane1, gbc);
         listCrew = new JList();
         listCrew.setAutoscrolls(true);
-        listCrew.setFixedCellHeight(-1);
+        listCrew.setEnabled(true);
+        listCrew.setFixedCellHeight(40);
         listCrew.setFixedCellWidth(-1);
-        Font listCrewFont = this.$$$getFont$$$("Droid Sans Mono", -1, 12, listCrew.getFont());
+        Font listCrewFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, listCrew.getFont());
         if (listCrewFont != null) listCrew.setFont(listCrewFont);
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         listCrew.setModel(defaultListModel1);
-        listCrew.setSelectionMode(2);
+        listCrew.setSelectionMode(0);
         listCrew.setVisibleRowCount(4);
         scrollPane1.setViewportView(listCrew);
         final JPanel panel3 = new JPanel();
@@ -271,7 +254,7 @@ class AdventureCreator extends ScreenComponent {
         btnRemoveCrewMember = new JButton();
         btnRemoveCrewMember.setEnabled(false);
         btnRemoveCrewMember.setText("Remove");
-        btnRemoveCrewMember.setToolTipText("Add a crew member to our force");
+        btnRemoveCrewMember.setToolTipText("Remove selected crew member from our force.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -281,8 +264,8 @@ class AdventureCreator extends ScreenComponent {
         panel3.add(btnRemoveCrewMember, gbc);
         btnUpdateCrewMember = new JButton();
         btnUpdateCrewMember.setEnabled(false);
-        btnUpdateCrewMember.setText("Update");
-        btnUpdateCrewMember.setToolTipText("Add a crew member to our force");
+        btnUpdateCrewMember.setText("Change");
+        btnUpdateCrewMember.setToolTipText("Change the selected crew memeber.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -317,12 +300,13 @@ class AdventureCreator extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         panel2.add(panel4, gbc);
         textShipName = new JTextField();
+        textShipName.setToolTipText("Ship name must be between 3-24 characters long");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.ipadx = 100;
+        gbc.ipadx = 200;
         panel4.add(textShipName, gbc);
         sliderDuration = new JSlider();
         sliderDuration.setMajorTickSpacing(1);
@@ -331,6 +315,7 @@ class AdventureCreator extends ScreenComponent {
         sliderDuration.setPaintLabels(true);
         sliderDuration.setPaintTicks(false);
         sliderDuration.setSnapToTicks(true);
+        sliderDuration.setToolTipText("Duration of the game");
         sliderDuration.setValue(5);
         sliderDuration.setValueIsAdjusting(false);
         gbc = new GridBagConstraints();
@@ -357,19 +342,11 @@ class AdventureCreator extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 15, 0, 5);
         panel4.add(label4, gbc);
-        checkboxCustomShipFile = new JCheckBox();
-        checkboxCustomShipFile.setText("Custom Ship");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 4;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 15, 0, 0);
-        panel4.add(checkboxCustomShipFile, gbc);
         final JSeparator separator2 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 5;
+        gbc.gridwidth = 4;
         gbc.weightx = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);

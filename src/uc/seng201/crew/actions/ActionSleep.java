@@ -10,7 +10,7 @@ public class ActionSleep implements IAction {
         if (crewMembers.length != 1) {
             throw new ActionException("Invalid args given");
         }
-        crewMembers[0].alterTiredness(-crewMembers[0].getMaxTiredness());
+        crewMembers[0].restoreTiredness();
         return null;
     }
 }

@@ -79,6 +79,17 @@ public class SpaceShip {
         SpaceExplorer.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
     }
 
+    /**
+     * Calculates the number of spaceship parts that should be found based
+     * on the number of days the game should run over.
+     *
+     * @param duration number of days the game will run.
+     * @return number of parts that should be found.
+     */
+    public static int calcPartsToFind(int duration) {
+        return (duration * 2/3);
+    }
+
 //    public String toString() {
 //        return String.format("'%s' has %d shields and missing %d parts.\n",
 //                this.shipName, this.shieldCount, this.missingParts) +
@@ -295,6 +306,7 @@ public class SpaceShip {
         if (newBalance < 0) {
             throw new SpaceShipException("Cannot remove " + value + " from Spaceship balance");
         }
+        balance = newBalance;
     }
 
     /**

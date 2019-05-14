@@ -64,7 +64,9 @@
               </grid>
               <gridbag top="0" left="0" bottom="5" right="0" weightx="0.0" weighty="0.0" ipadx="200"/>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="Name must only contain letters and be 3-12 characters long."/>
+            </properties>
           </component>
           <component id="3ca51" class="javax.swing.JLabel">
             <constraints>

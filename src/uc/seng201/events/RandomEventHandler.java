@@ -2,7 +2,7 @@ package uc.seng201.events;
 
 import uc.seng201.Display;
 import uc.seng201.GameState;
-import uc.seng201.utils.Helpers;
+import uc.seng201.SpaceExplorer;
 import uc.seng201.utils.observerable.Observer;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class RandomEventHandler implements Observer {
                         }
                         break;
                 }
-                String message = possibleEvents.get(Helpers.randomGenerator.nextInt(possibleEvents.size()))
+                String message = possibleEvents.get(SpaceExplorer.randomGenerator.nextInt(possibleEvents.size()))
                         .getInstance().onTrigger((GameState) args[1]);
                 Display.popup(message);
             }

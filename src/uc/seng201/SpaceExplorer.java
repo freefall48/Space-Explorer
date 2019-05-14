@@ -7,6 +7,8 @@ import uc.seng201.utils.observerable.ObservableManager;
 import uc.seng201.utils.observerable.Observer;
 
 import javax.swing.*;
+import java.security.SecureRandom;
+import java.util.Random;
 
 /**
  * Main class that contains the entry point for the application. Contains the
@@ -15,6 +17,11 @@ import javax.swing.*;
  */
 public class SpaceExplorer {
 
+    /**
+     * Provides a single random generator to all classes. Using SecureRandom
+     * to provide stronger randomness.
+     */
+    public static Random randomGenerator = new SecureRandom();
     /**
      * The game state to pass between objects. It is immutable and can
      * only been changed by an event handled by "GameStateChangeHandler".
@@ -25,7 +32,7 @@ public class SpaceExplorer {
      * The global event manager. Observers can be registered to respond to
      * known events, as well as trigger events.
      */
-    public static ObservableManager eventManager = new ObservableManager();
+    public static ObservableManager eventManager;
 
     /**
      * Main entry point for the application. Adds the victory, defeat and
@@ -35,6 +42,8 @@ public class SpaceExplorer {
      * @param args passed from console.
      */
     public static void main(String[] args) {
+        //Create an event manager
+        eventManager = new ObservableManager();
         // Add handlers for outcome conditions
         eventManager.addObserver(Event.VICTORY, new VictoryHandler());
         eventManager.addObserver(Event.DEFEAT, new FailedHandler());

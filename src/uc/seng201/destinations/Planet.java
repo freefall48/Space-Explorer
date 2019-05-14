@@ -1,8 +1,8 @@
 package uc.seng201.destinations;
 
+import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.utils.Helpers;
 import uc.seng201.items.SpaceItem;
 
 public class Planet {
@@ -11,7 +11,24 @@ public class Planet {
     private boolean partFound = false;
 
     public Planet() {
-        this.planetName = Helpers.generatePlanetName();
+        this.planetName = generatePlanetName();
+    }
+
+    /**
+     * Generates a random planet name based on the format "XXX-XXX".
+     *
+     * @return name of a planet.
+     */
+    public static String generatePlanetName() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            builder.append((char) (SpaceExplorer.randomGenerator.nextInt(26) + 'a'));
+        }
+        builder.append('-');
+        for (int i = 0; i < 3; i++) {
+            builder.append(SpaceExplorer.randomGenerator.nextInt(9));
+        }
+        return builder.toString();
     }
 
     @Override
@@ -28,11 +45,11 @@ public class Planet {
     }
 
     public String onSearch(CrewMember crewMember, SpaceShip spaceShip) {
-        int action = Helpers.randomGenerator.nextInt(5);
+        int action = SpaceExplorer.randomGenerator.nextInt(5);
         String message = String.format("Unfortunately %s did not find anything this time.", crewMember.getName());
         switch (action) {
             case 0:
-                int bucks = Helpers.randomGenerator.nextInt(16) + 10;
+                int bucks = SpaceExplorer.randomGenerator.nextInt(16) + 10;
                 spaceShip.alterSpaceBucks(bucks);
                 message = String.format("%s found $%d while searching!", crewMember.getName(), bucks);
                 break;
@@ -44,7 +61,7 @@ public class Planet {
                 }
                 break;
             case 2:
-                int itemId = Helpers.randomGenerator.nextInt(SpaceItem.values().length);
+                int itemId = SpaceExplorer.randomGenerator.nextInt(SpaceItem.values().length);
                 SpaceItem itemFound = SpaceItem.values()[itemId];
                 spaceShip.add(itemFound);
                 message = String.format("%s found %s while exploring!", crewMember.getName(), itemFound);

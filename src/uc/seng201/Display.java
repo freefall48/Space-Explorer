@@ -48,6 +48,15 @@ public class Display {
     }
 
     /**
+     * Returns the root JFrame.
+     *
+     * @return the root JFrame.
+     */
+    public static JFrame getRootFrame() {
+        return rootFrame;
+    }
+
+    /**
      * Changes the main screen component that is being displayed.
      *
      * @param screen the new Screen to show.

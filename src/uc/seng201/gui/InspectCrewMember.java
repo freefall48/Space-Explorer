@@ -44,7 +44,7 @@ public class InspectCrewMember extends JDialog {
         lblActions.setText(String.valueOf(crewMember.getActionsLeftToday()));
 
         lblHealth.setText(String.format("%d/%d", crewMember.getHealth(), crewMember.getMaxHealth()));
-        lblHealthRegen.setText(String.format("%d per day", crewMember.getCurrentHealthRegen()));
+        lblHealthRegen.setText(String.format("%d per day", crewMember.getHealthRegen()));
 
         lblFood.setText(String.format("%d/%d", crewMember.getFoodLevel(), crewMember.getMaxFoodLevel()));
         lblFoodDecay.setText(String.format("%d per day", crewMember.getFoodDecayRate()));

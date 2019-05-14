@@ -74,11 +74,12 @@
                 <constraints/>
                 <properties>
                   <autoscrolls value="true"/>
-                  <fixedCellHeight value="-1"/>
+                  <enabled value="true"/>
+                  <fixedCellHeight value="40"/>
                   <fixedCellWidth value="-1"/>
-                  <font name="Droid Sans Mono" size="12"/>
+                  <font name="Droid Sans Mono" size="16"/>
                   <model/>
-                  <selectionMode value="2"/>
+                  <selectionMode value="0"/>
                   <visibleRowCount value="4"/>
                 </properties>
               </component>
@@ -100,7 +101,7 @@
                 <properties>
                   <enabled value="false"/>
                   <text value="Remove"/>
-                  <toolTipText value="Add a crew member to our force"/>
+                  <toolTipText value="Remove selected crew member from our force."/>
                 </properties>
               </component>
               <component id="19425" class="javax.swing.JButton" binding="btnUpdateCrewMember">
@@ -110,8 +111,8 @@
                 </constraints>
                 <properties>
                   <enabled value="false"/>
-                  <text value="Update"/>
-                  <toolTipText value="Add a crew member to our force"/>
+                  <text value="Change"/>
+                  <toolTipText value="Change the selected crew memeber."/>
                 </properties>
               </component>
               <component id="bb3d0" class="javax.swing.JButton" binding="btnAddCrewMember">
@@ -146,9 +147,11 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
-                  <gridbag weightx="0.0" weighty="0.0" ipadx="100"/>
+                  <gridbag weightx="0.0" weighty="0.0" ipadx="200"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <toolTipText value="Ship name must be between 3-24 characters long"/>
+                </properties>
               </component>
               <component id="4bf2f" class="javax.swing.JSlider" binding="sliderDuration">
                 <constraints>
@@ -162,6 +165,7 @@
                   <paintLabels value="true"/>
                   <paintTicks value="false"/>
                   <snapToTicks value="true"/>
+                  <toolTipText value="Duration of the game"/>
                   <value value="5"/>
                   <valueIsAdjusting value="false"/>
                 </properties>
@@ -185,18 +189,9 @@
                   <text value="Duration:"/>
                 </properties>
               </component>
-              <component id="6ec3b" class="javax.swing.JCheckBox" binding="checkboxCustomShipFile">
-                <constraints>
-                  <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag top="0" left="15" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <text value="Custom Ship"/>
-                </properties>
-              </component>
               <component id="ea1ae" class="javax.swing.JSeparator">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag top="10" left="0" bottom="10" right="0" weightx="10.0" weighty="0.0"/>
                 </constraints>
                 <properties/>

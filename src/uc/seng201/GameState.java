@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import uc.seng201.destinations.traders.SpaceTraders;
 import uc.seng201.destinations.Planet;
 import uc.seng201.events.EventTrigger;
-import uc.seng201.utils.Helpers;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
 
@@ -81,8 +80,6 @@ public class GameState {
         this.score = 0;
 
         traders = new SpaceTraders();
-
-
     }
 
     /**
@@ -91,7 +88,7 @@ public class GameState {
      */
     private GameState() {
         SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NewDayHandler());
-        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewAction());
+        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
     }
 
     /**
@@ -263,7 +260,7 @@ public class GameState {
                 SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
                         "On no! It seems you have failed to rebuild your ship in time! Err....");
             }
-            if (Helpers.randomGenerator.nextBoolean()) {
+            if (SpaceExplorer.randomGenerator.nextBoolean()) {
                 SpaceExplorer.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY,
                         GameState.this);
             }
@@ -280,7 +277,7 @@ public class GameState {
      * ship part was found so that is checked too. If no parts remain missing
      * the "VICTORY" event is triggered.
      */
-    final class CrewAction implements Observer {
+    final class CrewActionHandler implements Observer {
         @Override
         public void onEvent(Object... args) {
             if (spaceShip.getShieldCount() == 0) {

@@ -24,6 +24,7 @@ public class CreateCrewMember extends JDialog {
     private CrewMember crewMember;
 
     CreateCrewMember(CrewMember crewMember) {
+        this();
         this.crewMember = crewMember;
         txtName.setText(crewMember.getName());
         comboType.setSelectedItem(crewMember.getCrewType());
@@ -71,7 +72,7 @@ public class CreateCrewMember extends JDialog {
     private boolean isValidState() {
         if (crewMember != null) {
             if (txtName.getText().equals(crewMember.getName())
-                    || Objects.equals(comboType.getSelectedItem(), crewMember.getCrewType())) {
+                    && Objects.equals(comboType.getSelectedItem(), crewMember.getCrewType())) {
                 return false;
             }
         }
@@ -97,7 +98,7 @@ public class CreateCrewMember extends JDialog {
     CrewMember showDialog() {
         setSize(450, 250);
         setVisible(true);
-        return this.crewMember;
+        return crewMember;
     }
 
     {
@@ -166,6 +167,7 @@ public class CreateCrewMember extends JDialog {
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel3, gbc);
         txtName = new JTextField();
+        txtName.setToolTipText("Name must only contain letters and be 3-12 characters long.");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;

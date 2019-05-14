@@ -6,7 +6,6 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.destinations.Planet;
 import uc.seng201.errors.ActionException;
 import uc.seng201.events.EventTrigger;
-import uc.seng201.utils.Helpers;
 import uc.seng201.utils.observerable.Event;
 
 public class ActionPilot implements IAction {
@@ -17,7 +16,7 @@ public class ActionPilot implements IAction {
         }
         if (args[0] instanceof Planet) {
             gameState.setCurrentPlanet((Planet) args[0]);
-            if (Helpers.randomGenerator.nextBoolean()) {
+            if (SpaceExplorer.randomGenerator.nextBoolean()) {
                 SpaceExplorer.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL);
             }
         } else {

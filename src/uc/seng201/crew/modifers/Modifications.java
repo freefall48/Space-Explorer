@@ -33,6 +33,12 @@ public enum Modifications {
         public IModification getInstance() {
             return new ModHungry();
         }
+    },
+    TIRED("Tired", "Hasn't sleep so has decreased actions and increased food decay rate.") {
+        @Override
+        public IModification getInstance() {
+            return new ModHungry();
+        }
     };
 
     private String name;

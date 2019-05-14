@@ -52,6 +52,7 @@
                           <fixedCellHeight value="30"/>
                           <font name="Droid Sans Mono" size="14"/>
                           <maximumSize width="0" height="0"/>
+                          <selectionMode value="0"/>
                           <visibleRowCount value="4"/>
                         </properties>
                       </component>
