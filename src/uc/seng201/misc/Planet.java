@@ -1,4 +1,4 @@
-package uc.seng201.destinations;
+package uc.seng201.misc;
 
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;

@@ -2,12 +2,36 @@ package uc.seng201.crew.actions;
 
 public enum CrewAction {
 
-    PILOT("<html>%s and %s will fly %s to %s!", 2, true),
-    SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1, true),
-    SLEEP("<html>%s will sleep to remove tiredness.", 1, true),
-    EAT("<html>%s will eat %s", 1, true),
-    MEDICAL("<html>%s will use %s", 1, true),
-    REPAIR("<html>%s will repair %s", 1, true);
+    PILOT("<html>%s and %s will fly %s to %s!", 2, true) {
+        @Override
+        public IAction getInstance() {
+            return new ActionPilot();
+        }
+    },
+    SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1, true) {
+        @Override
+        public IAction getInstance() {
+            return new ActionSearch();
+        }
+    },
+    SLEEP("<html>%s will sleep to remove tiredness.", 1, true) {
+        @Override
+        public IAction getInstance() {
+            return new ActionSleep();
+        }
+    },
+    CONSUME("<html>%s will consume the %s", 1, true) {
+        @Override
+        public IAction getInstance() {
+            return new ActionConsumeItem();
+        }
+    },
+    REPAIR("<html>%s will repair %s", 1, true) {
+        @Override
+        public IAction getInstance() {
+            return new ActionRepair();
+        }
+    };
 
     private String actionText;
     private int crewRequired;
@@ -29,4 +53,11 @@ public enum CrewAction {
     public boolean getCostsActionPoint() {
         return this.costsActionPoint;
     }
+
+    /**
+     * Returns an instance of the action that the enum value represents.\
+     *
+     * @return instance of an IAction.
+     */
+    public abstract IAction getInstance();
 }

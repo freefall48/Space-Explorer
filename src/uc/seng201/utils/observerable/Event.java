@@ -26,8 +26,8 @@ public enum  Event {
     CREW_MEMBER_DIED,
     /**
      * Event is called when a crew member has performed an action. The
-     * event must have the "CrewMember" who performed the action as its
-     * first and only argument.
+     * event must have the action being performed, the crew who are performing
+     * the action and the action specific arguments.
      */
     CREW_MEMBER_ACTION,
     /**
@@ -57,5 +57,6 @@ public enum  Event {
      * Event is called when a game state is loaded from file. The event
      * must contain the loaded game state as its one and only argument.
      */
-    LOADED_GAME_STATE
+    LOADED_GAME_STATE,
+    ACTION
 }

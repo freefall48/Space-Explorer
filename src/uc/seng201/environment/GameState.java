@@ -1,10 +1,12 @@
-package uc.seng201;
+package uc.seng201.environment;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import uc.seng201.destinations.traders.SpaceTraders;
-import uc.seng201.destinations.Planet;
-import uc.seng201.events.EventTrigger;
+import uc.seng201.SpaceExplorer;
+import uc.seng201.SpaceShip;
+import uc.seng201.misc.traders.SpaceTraders;
+import uc.seng201.misc.Planet;
+import uc.seng201.misc.events.EventTrigger;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
 
@@ -87,8 +89,8 @@ public class GameState {
      * form to support Gson when creating object instances.
      */
     private GameState() {
-        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NewDayHandler());
-        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
+        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NewDayHandler());
+        GameEnvironment.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
     }
 
     /**
@@ -257,11 +259,11 @@ public class GameState {
         @Override
         public void onEvent(Object... args) {
             if (!hasNextDay()) {
-                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
+                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
                         "On no! It seems you have failed to rebuild your ship in time! Err....");
             }
             if (SpaceExplorer.randomGenerator.nextBoolean()) {
-                SpaceExplorer.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY,
+                GameEnvironment.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY,
                         GameState.this);
             }
 
@@ -281,11 +283,11 @@ public class GameState {
         @Override
         public void onEvent(Object... args) {
             if (spaceShip.getShieldCount() == 0) {
-                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
+                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
                         "Looks like you have managed to destroy whats left of " + spaceShip.getShipCrew());
             }
             if (!isMissingShipParts()) {
-                SpaceExplorer.eventManager.notifyObservers(Event.VICTORY, "All parts found!");
+                GameEnvironment.eventManager.notifyObservers(Event.VICTORY, "All parts found!");
             }
         }
     }

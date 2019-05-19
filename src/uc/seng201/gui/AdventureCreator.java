@@ -1,11 +1,11 @@
 package uc.seng201.gui;
 
-import uc.seng201.Display;
-import uc.seng201.GameState;
-import uc.seng201.SpaceExplorer;
-import uc.seng201.SpaceShip;
+import uc.seng201.*;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.destinations.Planet;
+import uc.seng201.environment.Display;
+import uc.seng201.misc.Planet;
+import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
@@ -85,7 +85,7 @@ class AdventureCreator extends ScreenComponent {
         List<Planet> planets = generatePlanets(gameDuration);
         GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
-        SpaceExplorer.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
+        GameEnvironment.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
         Display.changeScreen(Screen.MAIN_SCREEN);
     }
 

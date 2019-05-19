@@ -1,4 +1,4 @@
-package uc.seng201;
+package uc.seng201.environment;
 
 import uc.seng201.gui.Screen;
 import uc.seng201.gui.ScreenComponent;
@@ -27,19 +27,19 @@ public class Display {
 
     /**
      * Changes the main screen component that is being displayed. Replaces
-     * the instance of the screen if needed.
+     * the instance of the screens if needed.
      *
      * @param screen the new Screen to show.
-     * @param isStale true if the screen needs to be replaced.
+     * @param reinitialise true if the screen needs to be replaced.
      */
-    public static void changeScreen(Screen screen, boolean isStale) {
+    public static void changeScreen(Screen screen, boolean reinitialise) {
         ScreenComponent component = screens.get(screen);
-        if (component == null) {
-            component = screen.createInstance(SpaceExplorer.gameState);
-            screens.replace(screen, component);
+        if (reinitialise) {
+            screens.forEach((key, value) -> screens.put(key, key.createInstance(GameEnvironment.gameState)));
         }
-        if (isStale) {
-            screens.forEach((key, value) -> screens.put(key, null));
+        if (component == null) {
+            component = screen.createInstance(GameEnvironment.gameState);
+            screens.replace(screen, component);
         }
         rootFrame.setContentPane(component.getRootComponent());
         rootFrame.pack();
@@ -79,7 +79,7 @@ public class Display {
      * Initialises the root frame and adds all known screens to the
      * screen map. The main menu screen is then displayed.
      */
-    static void setupGUI() {
+    public static void setupGUI() {
         rootFrame = new JFrame("Space Explorer");
         rootFrame.setSize(800, 600);
         rootFrame.setResizable(false);

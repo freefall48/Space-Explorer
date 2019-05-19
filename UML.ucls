@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="uc.seng201.misc.traders.SpaceTraders.BuyFromTradersHandler"
+    project="Space-Explorer" file="/Space-Explorer/src/uc/seng201/destinations/traders/SpaceTraders.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="162" x="4080" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="uc.seng201.SpaceShip.CrewMemberDiedHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceShip.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="170" x="3474" y="2605"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="uc.seng201.crew.Lanius" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Lanius.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="94" x="1742" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="uc.seng201.crew.actions.ActionSleep" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/ActionSleep.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="270" x="2550" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="uc.seng201.crew.modifers.ModificationAdapter" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModificationAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="173" x="2035" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="uc.seng201.crew.modifers.ModHungry" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModHungry.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="173" x="1415" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="uc.seng201.gui.PerformAction" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/PerformAction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="603" width="293" x="2541" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="uc.seng201.SpaceExplorer.GameStateChangeHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceExplorer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="174" x="3061" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="uc.seng201.crew.Crystal" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Crystal.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="96" x="1876" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="10" language="java" name="uc.seng201.utils.observerable.Event" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/utils/observerable/Event.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="181" x="295" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="11" language="java" name="uc.seng201.crew.CrewMember" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/CrewMember.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1035" width="372" x="2562" y="2605"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="uc.seng201.gui.InspectCrewMember" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/InspectCrewMember.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="423" width="223" x="2297" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="uc.seng201.crew.modifers.ModTiredness" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModTiredness.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="173" x="1628" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="uc.seng201.environment.RandomEventHandler" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/RandomEventHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="146" x="3206" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="uc.seng201.SpaceShip.NextDayHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceShip.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="133" x="3684" y="2605"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="uc.seng201.gui.AdventureCreator" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/AdventureCreator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="477" width="256" x="4342" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="uc.seng201.misc.Planet" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/destinations/Planet.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="231" x="3607" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="18" language="java" name="uc.seng201.crew.actions.IAction" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/IAction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="270" x="3170" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="19" language="java" name="uc.seng201.environment.GameState.NewDayHandler" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/GameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="133" x="3434" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="uc.seng201.gui.MainScreen.CrewMemberModelEntry" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/MainScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="217" x="3621" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="uc.seng201.crew.actions.ActionSearch" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/ActionSearch.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="270" x="2860" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="22" language="java" name="uc.seng201.crew.modifers.Modifications" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/Modifications.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="279" width="210" x="2012" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="23" language="java" name="uc.seng201.gui.Traders" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/Traders.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="369" width="262" x="2248" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="uc.seng201.crew.modifers.ModMechanicsToolbox" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModMechanicsToolbox.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="154" x="1841" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="uc.seng201.crew.CrewMember.NextDay" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/CrewMember.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="133" x="2262" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="uc.seng201.errors.SpaceShipException" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/errors/SpaceShipException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="161" x="516" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="27" language="java" name="uc.seng201.utils.observerable.Observer" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/utils/observerable/Observer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="135" x="3474" y="3999"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <enumeration id="28" language="java" name="uc.seng201.misc.events.EventTrigger" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/EventTrigger.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="153" x="4956" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="29" language="java" name="uc.seng201.misc.traders.SpaceTraders.NewItemsHandler"
+    project="Space-Explorer" file="/Space-Explorer/src/uc/seng201/destinations/traders/SpaceTraders.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="143" x="4282" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="uc.seng201.errors.InvalidGameState" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/errors/InvalidGameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="145" x="717" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="uc.seng201.crew.actions.ActionPilot" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/ActionPilot.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="270" x="3170" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="32" language="java" name="uc.seng201.items.ItemType" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/items/ItemType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="119" x="2644" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="33" language="java" name="uc.seng201.SpaceShip" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceShip.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="585" width="319" x="3878" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="uc.seng201.SpaceExplorer.VictoryHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceExplorer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="133" x="3275" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="uc.seng201.SpaceExplorer.FailedHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceExplorer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="133" x="3448" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="uc.seng201.errors.CrewMemberException" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/errors/CrewMemberException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="211" x="2602" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="37" language="java" name="uc.seng201.crew.actions.CrewAction" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/CrewAction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="297" width="175" x="902" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="38" language="java" name="uc.seng201.errors.ActionException" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/errors/ActionException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="140" x="1117" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="uc.seng201.gui.MainMenu" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/MainMenu.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="223" x="4079" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="uc.seng201.SpaceExplorer" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceExplorer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="222" x="3275" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="uc.seng201.gui.EndScreen" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/EndScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="223" x="1297" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="42" language="java" name="uc.seng201.misc.events.EventAlienPirates" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/EventAlienPirates.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="164" x="4344" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="43" language="java" name="uc.seng201.crew.modifers.IModification" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/IModification.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="173" x="2035" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="44" language="java" name="uc.seng201.crew.modifers.ModFriendly" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModFriendly.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="154" x="2248" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="45" language="java" name="uc.seng201.utils.SavedGameFileFilter" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/utils/SavedGameFileFilter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="139" x="1560" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="46" language="java" name="uc.seng201.crew.Slug" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Slug.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="87" x="2435" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="47" language="java" name="uc.seng201.items.SpaceItem" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/items/SpaceItem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="333" width="182" x="2874" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="48" language="java" name="uc.seng201.crew.modifers.ModHealingHands" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModHealingHands.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="154" x="2442" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="49" language="java" name="uc.seng201.misc.events.EventAsteroidBelt" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/EventAsteroidBelt.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="164" x="4548" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="50" language="java" name="uc.seng201.misc.events.RandomEventType" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/RandomEventType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="214" x="4956" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="51" language="java" name="uc.seng201.crew.actions.ActionConsumeItem" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/ActionConsumeItem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="270" x="3480" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="52" language="java" name="uc.seng201.utils.observerable.ObservableManager" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/utils/observerable/ObservableManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="218" x="2803" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="53" language="java" name="uc.seng201.crew.Human" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Human.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="95" x="2562" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="54" language="java" name="uc.seng201.misc.events.IRandomEvent" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/IRandomEvent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="164" x="4548" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="55" language="java" name="uc.seng201.environment.GameState.CrewActionHandler" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/GameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="134" x="4237" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="56" language="java" name="uc.seng201.SpaceShip.BuyFromTradersHandler" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/SpaceShip.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="162" x="3857" y="2605"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="57" language="java" name="uc.seng201.crew.modifers.ModSpacePlague" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/modifers/ModSpacePlague.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="173" x="2636" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="58" language="java" name="uc.seng201.misc.traders.SpaceTraders" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/destinations/traders/SpaceTraders.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="239" x="4287" y="2605"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="59" language="java" name="uc.seng201.gui.MainScreen" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/MainScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="783" width="384" x="3655" y="694"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="60" language="java" name="uc.seng201.crew.CrewType" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/CrewType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="189" x="2697" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="61" language="java" name="uc.seng201.crew.Zoltan" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Zoltan.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="92" x="2926" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="62" language="java" name="uc.seng201.gui.Screen" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/Screen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="256" x="1739" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="63" language="java" name="uc.seng201.gui.ScreenComponent" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/ScreenComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="187" x="4079" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="64" language="java" name="uc.seng201.gui.Traders.ItemModelEntry" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/Traders.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="170" x="2849" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="65" language="java" name="uc.seng201.environment.Display" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/Display.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="204" x="4100" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="66" language="java" name="uc.seng201.crew.actions.ActionRepair" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/crew/actions/ActionRepair.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="270" x="3790" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="67" language="java" name="uc.seng201.environment.GameState" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/GameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="423" width="260" x="3878" y="1517"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="68" language="java" name="uc.seng201.crew.Engi" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/crew/Engi.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="87" x="3058" y="3680"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="69" language="java" name="uc.seng201.gui.CreateCrewMember" project="Space-Explorer" 
+    file="/Space-Explorer/src/uc/seng201/gui/CreateCrewMember.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="223" x="2853" y="1980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="70" language="java" name="uc.seng201.misc.events.EventSpacePlague" project="Space-Explorer"
+    file="/Space-Explorer/src/uc/seng201/events/EventSpacePlague.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="164" x="4752" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="71">    
+    <end type="SOURCE" refId="46"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="72">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="43"/>  
+  </realization>  
+  <association id="73">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="74" name="gameState"/>      
+      <multiplicity id="75" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="67" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="76">    
+    <end type="SOURCE" refId="65" navigable="false">      
+      <attribute id="77" name="screens"/>      
+      <multiplicity id="78" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="63" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="79">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="80">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="81" name="shipCrew"/>      
+      <multiplicity id="82" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="83">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
+  <realization id="84">    
+    <bendpoint x="3483" y="3680"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <generalization id="85">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <realization id="86">    
+    <bendpoint x="3175" y="1980"/>    
+    <bendpoint x="3175" y="2605"/>    
+    <bendpoint x="3175" y="3680"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <nesting id="87">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <association id="88">    
+    <end type="SOURCE" refId="67" navigable="false">      
+      <attribute id="89" name="currentPlanet"/>      
+      <multiplicity id="90" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="91">    
+    <bendpoint x="4049" y="2605"/>    
+    <bendpoint x="4049" y="3680"/>    
+    <end type="SOURCE" refId="55"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <realization id="92">    
+    <bendpoint x="3403" y="1980"/>    
+    <bendpoint x="3403" y="2605"/>    
+    <bendpoint x="3403" y="3680"/>    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <association id="93">    
+    <bendpoint x="3196" y="1980"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="94" name="crewMember"/>      
+      <multiplicity id="95" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="96">    
+    <bendpoint x="3588" y="3680"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <nesting id="97">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="35"/>  
+  </nesting>  
+  <realization id="98">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="54"/>  
+  </realization>  
+  <generalization id="99">    
+    <end type="SOURCE" refId="53"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="100">    
+    <end type="SOURCE" refId="66"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <realization id="101">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <nesting id="102">    
+    <end type="SOURCE" refId="67"/>    
+    <end type="TARGET" refId="55"/>  
+  </nesting>  
+  <realization id="103">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <generalization id="104">    
+    <end type="SOURCE" refId="57"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="105">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <association id="106">    
+    <end type="SOURCE" refId="67" navigable="false">      
+      <attribute id="107" name="planets"/>      
+      <multiplicity id="108" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="109">    
+    <bendpoint x="3382" y="1980"/>    
+    <bendpoint x="3382" y="2605"/>    
+    <bendpoint x="3382" y="3680"/>    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <association id="110">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="111" name="modifications"/>      
+      <multiplicity id="112" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="113">    
+    <end type="SOURCE" refId="64" navigable="false">      
+      <attribute id="114" name="spaceItem"/>      
+      <multiplicity id="115" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="116">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="25"/>  
+  </nesting>  
+  <realization id="117">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <realization id="118">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <generalization id="119">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="120">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="121">    
+    <end type="SOURCE" refId="68"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="122">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <association id="123">    
+    <bendpoint x="4401" y="1980"/>    
+    <end type="SOURCE" refId="67" navigable="false">      
+      <attribute id="124" name="traders"/>      
+      <multiplicity id="125" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="58" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="126">    
+    <end type="SOURCE" refId="59" navigable="false">      
+      <attribute id="127" name="gameState"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="67" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="129">    
+    <bendpoint x="2571" y="1517"/>    
+    <bendpoint x="2571" y="1980"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="130" name="primaryCrewMember"/>      
+      <multiplicity id="131" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="132">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="133" name="trigger"/>      
+      <multiplicity id="134" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="135">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="29"/>  
+  </nesting>  
+  <generalization id="136">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="63"/>  
+  </generalization>  
+  <association id="137">    
+    <end type="SOURCE" refId="67" navigable="false">      
+      <attribute id="138" name="spaceShip"/>      
+      <multiplicity id="139" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="140">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="141" name="crewMember"/>      
+      <multiplicity id="142" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="143">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <generalization id="144">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="63"/>  
+  </generalization>  
+  <generalization id="145">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="146">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <nesting id="147">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="20"/>  
+  </nesting>  
+  <nesting id="148">    
+    <end type="SOURCE" refId="67"/>    
+    <end type="TARGET" refId="19"/>  
+  </nesting>  
+  <generalization id="149">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="63"/>  
+  </generalization>  
+  <association id="150">    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="151" name="eventManager"/>      
+      <multiplicity id="152" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="52" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="153">    
+    <end type="SOURCE" refId="70"/>    
+    <end type="TARGET" refId="54"/>  
+  </realization>  
+  <association id="154">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="155" name="crewType"/>      
+      <multiplicity id="156" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="60" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="157">    
+    <bendpoint x="3443" y="2605"/>    
+    <bendpoint x="3443" y="3680"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <association id="158">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="159" name="crewMember"/>      
+      <multiplicity id="160" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="161">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <generalization id="162">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <realization id="163">    
+    <bendpoint x="3674" y="3680"/>    
+    <end type="SOURCE" refId="56"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <nesting id="164">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="34"/>  
+  </nesting>  
+  <association id="165">    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="166" name="gameState"/>      
+      <multiplicity id="167" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="67" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="168">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="169" name="gameState"/>      
+      <multiplicity id="170" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="67" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="171">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="56"/>  
+  </nesting>  
+  <association id="172">    
+    <bendpoint x="2550" y="1517"/>    
+    <bendpoint x="2550" y="1980"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="173" name="extraCrewMember"/>      
+      <multiplicity id="174" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="175">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="54"/>  
+  </realization>  
+  <nesting id="176">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="64"/>  
+  </nesting>  
+  <nesting id="177">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <realization id="178">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="27"/>  
+  </realization>  
+  <association id="179">    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="180" name="itemType"/>      
+      <multiplicity id="181" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="32" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="182">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="183">    
+    <end type="SOURCE" refId="69" navigable="false">      
+      <attribute id="184" name="crewMember"/>      
+      <multiplicity id="185" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

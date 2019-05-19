@@ -1,9 +1,9 @@
-package uc.seng201.events;
+package uc.seng201.misc.events;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uc.seng201.GameState;
+import uc.seng201.environment.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.items.SpaceItem;
 

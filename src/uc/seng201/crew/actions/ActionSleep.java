@@ -1,7 +1,7 @@
 package uc.seng201.crew.actions;
 
-import uc.seng201.GameState;
 import uc.seng201.crew.CrewMember;
+import uc.seng201.environment.GameState;
 import uc.seng201.errors.ActionException;
 
 public class ActionSleep implements IAction {

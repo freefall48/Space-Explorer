@@ -2,6 +2,7 @@ package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.CrewType;
+import uc.seng201.environment.GameEnvironment;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
@@ -74,9 +75,9 @@ public class SpaceShip {
      * to help Gson when creating object instances.
      */
     private SpaceShip() {
-        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDayHandler());
-        SpaceExplorer.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDiedHandler());
-        SpaceExplorer.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
+        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NextDayHandler());
+        GameEnvironment.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDiedHandler());
+        GameEnvironment.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
     }
 
     /**
@@ -291,8 +292,9 @@ public class SpaceShip {
     public void alterShield(int value) throws SpaceShipException {
         int newShieldValue = shieldCount + value;
         if (newShieldValue <= 0) {
-            throw new SpaceShipException("No spaceship shields remaining");
+            GameEnvironment.eventManager.notifyObservers(Event.DEFEAT, "Ship fell apart.");
         }
+        shieldCount = newShieldValue;
     }
 
     /**
@@ -331,10 +333,10 @@ public class SpaceShip {
         @Override
         public void onEvent(Object... args) {
             if (shipCrew.size() == 0) {
-                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
             }
             if (shieldCount == 0) {
-                SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,
+                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
                         "Looks like you have managed to destroy whats left of " + shipCrew);
             }
         }
@@ -353,7 +355,7 @@ public class SpaceShip {
                     shipCrew.remove(args[0]);
                 }
                 if (shipCrew.size() == 0) {
-                    SpaceExplorer.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                    GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
                 }
             }
         }

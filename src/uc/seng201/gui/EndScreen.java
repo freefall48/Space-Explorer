@@ -1,6 +1,6 @@
 package uc.seng201.gui;
 
-import uc.seng201.GameState;
+import uc.seng201.environment.GameState;
 
 import javax.swing.*;
 import java.awt.*;

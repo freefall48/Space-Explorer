@@ -1,6 +1,6 @@
-package uc.seng201.events;
+package uc.seng201.misc.events;
 
-import uc.seng201.GameState;
+import uc.seng201.environment.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;

@@ -1,6 +1,7 @@
-package uc.seng201.destinations.traders;
+package uc.seng201.misc.traders;
 
-import uc.seng201.GameState;
+import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;
@@ -29,9 +30,9 @@ public class SpaceTraders {
      */
     public SpaceTraders() {
         NewItemsHandler newItemsHandler = new NewItemsHandler();
-        SpaceExplorer.eventManager.addObserver(Event.START_DAY, newItemsHandler);
-        SpaceExplorer.eventManager.addObserver(Event.NEW_GAME_STATE, newItemsHandler);
-        SpaceExplorer.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
+        GameEnvironment.eventManager.addObserver(Event.START_DAY, newItemsHandler);
+        GameEnvironment.eventManager.addObserver(Event.NEW_GAME_STATE, newItemsHandler);
+        GameEnvironment.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
 
         availableItems = new Hashtable<>();
     }

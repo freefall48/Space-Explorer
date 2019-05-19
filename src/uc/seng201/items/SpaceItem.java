@@ -21,7 +21,7 @@ public enum SpaceItem {
             crewMember.alterFood(getPrice() * 2);
         }
     },
-    CONTACTS(ItemType.MEDICAL, 10, "Removes blindness from a crew member") {
+    BANDAGE(ItemType.MEDICAL, 20, "Increases a crew members health by 50") {
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.alterHealth(getPrice());
@@ -52,6 +52,12 @@ public enum SpaceItem {
         }
     },
     STARDEW(ItemType.MEDICAL, 10, "Removes space plague from a crew member.") {
+        @Override
+        public void onConsume(CrewMember crewMember) {
+            crewMember.removeModification(Modifications.SPACE_PLAGUE);
+        }
+    },
+    OINKMENT(ItemType.MEDICAL, 10, "Increases a crew members health by 25") {
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.removeModification(Modifications.SPACE_PLAGUE);
@@ -91,7 +97,7 @@ public enum SpaceItem {
      * item is consumed by a crew member. The method has access to a mutable
      * crewMember who the method should apply effects too.
      *
-     * @param crewMember
+     * @param crewMember to affect
      */
     public abstract void onConsume(CrewMember crewMember);
 

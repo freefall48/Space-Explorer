@@ -1,4 +1,4 @@
-package uc.seng201.events;
+package uc.seng201.misc.events;
 
 /**
  * Enum of possible ways that observerable can be triggered.

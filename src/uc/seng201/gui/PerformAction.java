@@ -1,17 +1,16 @@
 package uc.seng201.gui;
 
-import uc.seng201.GameState;
+import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.actions.*;
-import uc.seng201.items.ItemType;
 import uc.seng201.items.SpaceItem;
+import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
 import java.util.Objects;
-import java.util.List;
 
 public class PerformAction extends JDialog {
     /**
@@ -68,8 +67,10 @@ public class PerformAction extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        updateModels();
-        generateAvailableActions();
+
+        // Generate the models and actions. Sets the default action to searching.
+        computeListModels();
+        computeAvailableActions();
         comboActions.setSelectedItem(CrewAction.SEARCH.toString());
     }
 
@@ -78,34 +79,51 @@ public class PerformAction extends JDialog {
         actionDialog(action);
     }
 
-    private void updateModels() {
+    /**
+     * Generates the models used to back the additional options for certain arguments. These only
+     * need to be generated once per instance of this window.
+     */
+    private void computeListModels() {
+
+        // Clean out any existing items. Prevents any possible duping of entries.
         additionalCrewModal.removeAllElements();
         availableActionsModel.removeAllElements();
         targetPlanetsModel.removeAllElements();
+        itemModel.removeAllElements();
 
-        this.gameState.getSpaceShip().getShipCrew().forEach(additionalCrewMember -> {
+        // Add all crew members who are not the primary acting crew member.
+        gameState.getSpaceShip().getShipCrew().forEach(additionalCrewMember -> {
             if (!additionalCrewMember.equals(primaryCrewMember) && additionalCrewMember.canPerformActions()) {
                 additionalCrewModal.addElement(additionalCrewMember.toString());
             }
         });
 
-        this.gameState.getPlanets().forEach(planet -> {
+        // Add all the planets that are not the current planet.
+        gameState.getPlanets().forEach(planet -> {
             if (!planet.equals(this.gameState.getCurrentPlanet())) {
                 targetPlanetsModel.addElement(planet.getPlanetName());
             }
         });
-        this.revalidate();
-        this.repaint();
 
+        // Add all the items that the ship has.
+        gameState.getSpaceShip().getShipItems().forEach((item, qty) ->
+                itemModel.addElement(String.format("%d x %s", qty, item.toString())));
     }
 
-    private void generateAvailableActions() {
+    /**
+     * Generates the available actions that the user may do with the selected crew member. The
+     * options are then added to the action model for selection.
+     */
+    private void computeAvailableActions() {
         CrewAction[] actionCache = CrewAction.values();
+
+        // If the crew member is at their maximum tiredness they only action they can perform is sleep.
         if (primaryCrewMember.getTiredness() == primaryCrewMember.getMaxTiredness()) {
             availableActionsModel.addElement(CrewAction.SLEEP.toString());
             return;
         }
 
+        // Add all actions. If the action requires 2 crew check to make sure that is possible.
         for (CrewAction action : actionCache) {
             if (action.getCrewRequired() == 1) {
                 availableActionsModel.addElement(action.toString());
@@ -114,47 +132,43 @@ public class PerformAction extends JDialog {
             }
         }
 
-        boolean foodPresent = false;
-        boolean medicalPresent = false;
-        for (Map.Entry<SpaceItem, Integer> entry : gameState.getSpaceShip().getShipItems().entrySet()) {
-            if (entry.getKey().getItemType().equals(ItemType.FOOD)) {
-                foodPresent = true;
-            } else if (entry.getKey().getItemType().equals(ItemType.MEDICAL)) {
-                medicalPresent = true;
-            }
-            if (foodPresent && medicalPresent) {
-                break;
-            }
-        }
-        if (!foodPresent) {
-            availableActionsModel.removeElement(CrewAction.EAT.toString());
-        }
-        if (!medicalPresent) {
-            availableActionsModel.removeElement(CrewAction.MEDICAL.toString());
+        // Check if there are items available. If not remove the consume action as there is nothing to consume.
+        boolean isItemsPresent = gameState.getSpaceShip().getShipItems().size() > 0;
+        if (!isItemsPresent) {
+            availableActionsModel.removeElement(CrewAction.CONSUME.toString());
         }
     }
 
+    /**
+     * Handler for the okay button. Gets the action and the crew members who are to perform the action.
+     * The action is then performed.
+     */
     private void onOK() {
+        // Get the action we are performing.
         CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
+
+        // Set the crew members as required.
         if (actionToPerform.getCrewRequired() == 2) {
             String[] crewMemberDetails = additionalCrewModal.getSelectedItem().toString().split(" - ");
             this.extraCrewMember = this.gameState.getSpaceShip().crewMemberFromNameAndType(
                     crewMemberDetails[0], crewMemberDetails[1]);
         }
-        if (actionToPerform.getCostsActionPoint()) {
-            this.primaryCrewMember.performAction();
-            if (extraCrewMember != null) {
-                extraCrewMember.performAction();
-            }
-        }
+
+        // Perform the action and return control to the caller.
         performAction(actionToPerform);
         dispose();
     }
 
+    /**
+     * Simply returns control to the caller.
+     */
     private void onCancel() {
         dispose();
     }
 
+    /**
+     * Hide all the additional input fields.
+     */
     private void hideAdditionalInput() {
         comboAdditionalInfo1.setVisible(false);
         lblAdditionalInfo1.setVisible(false);
@@ -162,6 +176,12 @@ public class PerformAction extends JDialog {
         comboAdditionalInfo2.setVisible(false);
     }
 
+    /**
+     * Sets the number of additional inputs required visible. Maximum additional
+     * inputs is 2.
+     *
+     * @param additionalInputs number of additional inputs to display.
+     */
     private void setAdditionalInputVisible(int additionalInputs) {
         switch (additionalInputs) {
             case 2:
@@ -174,6 +194,9 @@ public class PerformAction extends JDialog {
         }
     }
 
+    /**
+     * Updates the additional input labels and options depending on the action that has been selected.
+     */
     private void onActionSelected() {
         hideAdditionalInput();
         CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
@@ -187,67 +210,44 @@ public class PerformAction extends JDialog {
                 comboAdditionalInfo2.setSelectedIndex(0);
                 setAdditionalInputVisible(2);
                 break;
-            case EAT:
-                setItemsModel(ItemType.FOOD);
+            case CONSUME:
                 lblAdditionalInfo1.setText("Snack on:");
                 comboAdditionalInfo1.setModel(itemModel);
                 comboAdditionalInfo1.setSelectedIndex(0);
                 setAdditionalInputVisible(1);
                 break;
-            case MEDICAL:
-                setItemsModel(ItemType.MEDICAL);
-                lblAdditionalInfo1.setText("Apply:");
-                comboAdditionalInfo1.setModel(itemModel);
-                comboAdditionalInfo1.setSelectedIndex(0);
-                setAdditionalInputVisible(1);
-                break;
-            default:
-                break;
         }
         actionDialog(actionToPerform);
     }
 
-    private void setItemsModel(ItemType itemType) {
-        itemModel.removeAllElements();
-        gameState.getSpaceShip().getShipItems().forEach((item, qty) -> {
-            if (item.getItemType().equals(itemType)) {
-                itemModel.addElement(String.format("%d x %s", qty, item.toString()));
-            }
-        });
-    }
-
+    /**
+     * Updates the message displayed that informs the use of what will occur with their current selections. The
+     * information displayed depends on the action to be performed. The description from the actions ENUM entry
+     * is fetched and filled.
+     *
+     * @param action being performed.
+     */
     private void actionDialog(CrewAction action) {
         switch (action) {
             case PILOT:
                 if (comboAdditionalInfo2.getSelectedItem() != null) {
                     lblActionText.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
-                        comboAdditionalInfo1.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
-                        comboAdditionalInfo2.getSelectedItem()).replaceFirst(" - [a-zA-Z]*", ""));
+                            comboAdditionalInfo1.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
+                            comboAdditionalInfo2.getSelectedItem()).replaceFirst(" - [a-zA-Z]*", ""));
                 }
-
                 break;
-
             case SEARCH:
                 lblActionText.setText(String.format(CrewAction.SEARCH.getActionText(), primaryCrewMember.getName(),
                         this.gameState.getCurrentPlanet(), this.gameState.getCurrentPlanet().description()));
                 break;
-
             case SLEEP:
                 lblActionText.setText(String.format(CrewAction.SLEEP.getActionText(), primaryCrewMember.getName()));
                 break;
-
-            case EAT:
-                lblActionText.setText(String.format(CrewAction.EAT.getActionText(), primaryCrewMember.getName(),
+            case CONSUME:
+                lblActionText.setText(String.format(CrewAction.CONSUME.getActionText(), primaryCrewMember.getName(),
                         Objects.requireNonNull(comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst(
                                 "([0-9]+ x )", "")));
                 break;
-
-            case MEDICAL:
-                lblActionText.setText(String.format(CrewAction.MEDICAL.getActionText(), primaryCrewMember.getName(),
-                        Objects.requireNonNull(comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst(
-                                "([0-9]+ x )", "")));
-                break;
-
             case REPAIR:
                 lblActionText.setText(String.format(CrewAction.REPAIR.getActionText(), primaryCrewMember.getName(),
                         this.gameState.getSpaceShip().getShipName()));
@@ -256,33 +256,54 @@ public class PerformAction extends JDialog {
         repaint();
     }
 
+    /**
+     * Notifies the event handler that an action is to occur. The required information is generated and
+     * passed to the manager based on the action to be performed.
+     *
+     * @param action being performed.
+     */
     private void performAction(CrewAction action) {
-        String message = null;
+
+        /*
+         To match the ActionHandler requirement. We only have one argument for these actions but
+         this allows for future actions to use more parameters.
+         */
+        Object[] actionArguments;
+
+        // Adds both possible crew. Extra crew member could be null but the handler can deal with an array of 2.
+        CrewMember[] actingCrew;
+        if (extraCrewMember != null) {
+            actingCrew = new CrewMember[]{primaryCrewMember, extraCrewMember};
+        } else {
+            actingCrew = new CrewMember[]{primaryCrewMember};
+        }
+
+        // Get action arguments for actions that require them.
         switch (action) {
             case PILOT:
-                message = new ActionPilot().perform(gameState, new Object[]{gameState.planetFromName(
-                        (String) comboAdditionalInfo2.getSelectedItem())}, primaryCrewMember, extraCrewMember);
+                // Get the destination planet.
+                actionArguments = new Object[]{gameState.planetFromName(
+                        (String) comboAdditionalInfo2.getSelectedItem())};
                 break;
             case SEARCH:
-                message = new ActionSearch().perform(gameState, new Object[]{gameState.getCurrentPlanet()},
-                        primaryCrewMember);
+                // Get the planet that we are currently orbiting.
+                actionArguments = new Object[]{gameState.getCurrentPlanet()};
                 break;
-            case SLEEP:
-                message = new ActionSleep().perform(gameState, null, primaryCrewMember);
+
+            case CONSUME:
+                // Get the selected item. We need to strip the extra information added when displaying.
+                actionArguments = new Object[]{SpaceItem.valueOf(((String) Objects.requireNonNull(
+                        comboAdditionalInfo1.getSelectedItem())).replaceFirst("([0-9]+ x )", ""))};
                 break;
-            case EAT:
-            case MEDICAL:
-                SpaceItem item = SpaceItem.valueOf(Objects.requireNonNull(
-                        comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst("([0-9]+ x )", ""));
-                message = new ActionConsumeItem().perform(gameState, new Object[]{item}, primaryCrewMember);
+            default:
+                actionArguments = new Object[0];
                 break;
-            case REPAIR:
-                message = new ActionRepair().perform(gameState, null, primaryCrewMember);
-                break;
+
         }
-        if (message != null) {
-            JOptionPane.showMessageDialog(this, message);
-        }
+
+        // Notify the event manager of the action
+        GameEnvironment.eventManager.notifyObservers(Event.CREW_MEMBER_ACTION, action, actingCrew, actionArguments,
+                gameState);
     }
 
     {

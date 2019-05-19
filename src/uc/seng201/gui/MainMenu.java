@@ -1,8 +1,8 @@
 package uc.seng201.gui;
 
-import uc.seng201.Display;
-import uc.seng201.GameState;
-import uc.seng201.SpaceExplorer;
+import uc.seng201.environment.Display;
+import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.utils.SavedGameFileFilter;
 import uc.seng201.utils.observerable.Event;
 
@@ -46,7 +46,7 @@ class MainMenu extends ScreenComponent {
         int success = fileChooser.showOpenDialog(this);
         if (success == JFileChooser.APPROVE_OPTION) {
             try {
-                SpaceExplorer.eventManager.notifyObservers(Event.LOADED_GAME_STATE,
+                GameEnvironment.eventManager.notifyObservers(Event.LOADED_GAME_STATE,
                         GameState.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to load file",

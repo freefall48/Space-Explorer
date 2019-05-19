@@ -1,9 +1,8 @@
 package uc.seng201.gui;
 
-import uc.seng201.GameState;
-import uc.seng201.SpaceExplorer;
+import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.actions.ActionSleep;
 import uc.seng201.utils.SavedGameFileFilter;
 import uc.seng201.utils.observerable.Event;
 
@@ -87,7 +86,8 @@ class MainScreen extends ScreenComponent {
         listMedicalSupplies.setModel(listMedicalSuppliesModel);
         listPlanets.setModel(listPlanetsModel);
 
-        updateInfoPane();
+        paintInfoPanel();
+        computeTablesModels();
 
     }
 
@@ -104,8 +104,8 @@ class MainScreen extends ScreenComponent {
         traders.setSize(600, 400);
         traders.setLocationRelativeTo(this);
         traders.setVisible(true);
-        updateTablesModels();
-        updateInfoPane();
+        computeTablesModels();
+        paintInfoPanel();
         panelRoot.repaint();
     }
 
@@ -149,12 +149,11 @@ class MainScreen extends ScreenComponent {
             return;
         }
         // Notify observers that we are moving to the next day.
-        SpaceExplorer.eventManager.notifyObservers(Event.START_DAY, gameState);
+        GameEnvironment.eventManager.notifyObservers(Event.START_DAY, gameState);
 
-        forceRequiredActions();
         // Update the UI to reflect any changes.
-        updateTablesModels();
-        updateInfoPane();
+        computeTablesModels();
+        paintInfoPanel();
         repaint();
     }
 
@@ -175,26 +174,20 @@ class MainScreen extends ScreenComponent {
         return true;
     }
 
-    private void forceRequiredActions() {
-        gameState.getSpaceShip().getShipCrew().forEach(crewMember -> {
-            if (crewMember.getTiredness() == crewMember.getMaxTiredness()) {
-                new ActionSleep().perform(gameState, null, crewMember);
-                JOptionPane.showMessageDialog(this, crewMember.getName() +
-                        " was overcome with tiredness and forced to spend the day sleeping.");
-            }
-        });
-    }
-
+    /**
+     * Creates a perform action window for the selected crew member.
+     */
     private void onPerformAction() {
+
+        //Create the window and configure it as required.
         JDialog performAction = new PerformAction(gameState, listCrew.getSelectedValue().crewMember);
         performAction.setSize(450, 350);
         performAction.setLocationRelativeTo(this);
         performAction.setVisible(true);
 
-        SpaceExplorer.eventManager.notifyObservers(Event.CREW_MEMBER_ACTION);
-
-        updateInfoPane();
-        panelRoot.repaint();
+        // Update the display to reflect the new possible state after an action.
+        paintInfoPanel();
+        computeTablesModels();
     }
 
     /**
@@ -222,18 +215,28 @@ class MainScreen extends ScreenComponent {
         }
     }
 
-    private void updateTablesModels() {
+    /**
+     * Generates the models used to back the lists on the panel.
+     */
+    private void computeTablesModels() {
+
+        /*
+         Clean out the models as the information contains is likely stale.
+         */
         listFoodItemsModel.clear();
         listMedicalSuppliesModel.clear();
         listPlanetsModel.clear();
         crewMemberDefaultListModel.clear();
 
+        // Add all the crew members.
         gameState.getSpaceShip().getShipCrew().forEach(crewMember -> crewMemberDefaultListModel.addElement(
                 new CrewMemberModelEntry(crewMember)));
 
+        // Add all the planets.
         gameState.getPlanets().forEach(planet -> listPlanetsModel.addElement(
                 planet.description()));
 
+        // Although they are all items, split them apart to make it easy for the user to view.
         gameState.getSpaceShip().getShipItems().forEach((item, qty) -> {
             switch (item.getItemType()) {
                 case FOOD:
@@ -247,23 +250,33 @@ class MainScreen extends ScreenComponent {
             }
         });
 
+        // Set the default crew member to displayed and make sure the list is the correct width.
+        revalidate();
+        repaint();
         defaultSelectedCrewMember();
     }
 
-    private void updateInfoPane() {
-        updateTablesModels();
+    /**
+     * Repaints the information about the game-state that is being displayed.
+     */
+    private void paintInfoPanel() {
         lblSpaceShipName.setText(gameState.getSpaceShip().getShipName());
         lblDay.setText(String.format("%d of %d", gameState.getCurrentDay(),
                 gameState.getDuration()));
-        lblOrbiting.setText(gameState.getCurrentPlanet().toString());
+        lblOrbiting.setText(gameState.getCurrentPlanet().getPlanetName());
         lblMissingParts.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
         lblBalance.setText("$" + gameState.getSpaceShip().getBalance());
         lblShipHealth.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
 
         gameState.computeScore();
         currentScoreLabel.setText(String.valueOf(gameState.getScore()));
+        repaint();
     }
 
+    /**
+     * Easy way to hold the crew members within the list model. Final as there is
+     * no need to extend this class.
+     */
     final class CrewMemberModelEntry {
         final CrewMember crewMember;
 

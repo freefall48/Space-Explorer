@@ -1,7 +1,6 @@
 package uc.seng201.crew;
 
-import uc.seng201.Display;
-import uc.seng201.SpaceExplorer;
+import uc.seng201.environment.GameEnvironment;
 import uc.seng201.crew.modifers.Modifications;
 import uc.seng201.errors.CrewMemberException;
 import uc.seng201.utils.observerable.Event;
@@ -17,6 +16,14 @@ import java.util.Set;
  * extend this class.
  */
 public class CrewMember {
+
+    static final int STANDARD_MAX_HEALTH = 100;
+    static final int STANDARD_HEALTH_REGEN = 20;
+    static final int STANDARD_SHIP_REPAIR = 1;
+    static final int STANDARD_MAX_TIREDNESS = 100;
+    static final int STANDARD_TIREDNESS_RATE = 20;
+    static final int STANDARD_MAX_FOOD_LEVEL = 100;
+    static final int STANDARD_FOOD_LEVEL_DECAY = -20;
 
     private String name;
     private CrewType crewType;
@@ -38,17 +45,16 @@ public class CrewMember {
 
 
     private CrewMember() {
-        SpaceExplorer.eventManager.addObserver(Event.START_DAY, new NextDay());
+        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NextDay());
     }
 
     public CrewMember(String name, CrewType crewType) {
-        this(name, crewType, 100, 10, 1, 100, 25,
-                -20, new HashSet<>(), 100);
+        this(name, crewType, STANDARD_MAX_HEALTH, STANDARD_HEALTH_REGEN, STANDARD_SHIP_REPAIR, STANDARD_MAX_TIREDNESS,
+                STANDARD_TIREDNESS_RATE, STANDARD_FOOD_LEVEL_DECAY, STANDARD_MAX_FOOD_LEVEL);
     }
 
     public CrewMember(String name, CrewType crewType, int maxHealth, int healthRegen, int repairAmount,
-                      int maxTiredness, int tirednessRate, int foodDecayRate, Set<Modifications> modifications,
-                      int maxFoodLevel) {
+                      int maxTiredness, int tirednessRate, int foodDecayRate, int maxFoodLevel) {
         this();
         this.name = name;
         this.crewType = crewType;
@@ -58,7 +64,7 @@ public class CrewMember {
         this.maxTiredness = maxTiredness;
         this.currentTirednessRate = baseTirednessRate = tirednessRate;
         this.currentFoodDecayRate = baseFoodDecayRate = foodDecayRate;
-        this.modifications = modifications;
+        this.modifications = new HashSet<>();
         this.maxFoodLevel = foodLevel = maxFoodLevel;
         this.actionsLeftToday = 2;
 
@@ -215,7 +221,7 @@ public class CrewMember {
         if (newHealth > this.maxHealth) {
             newHealth = this.maxHealth;
         } else if (newHealth <= 0) {
-            newHealth = 0;
+            GameEnvironment.eventManager.notifyObservers(Event.CREW_MEMBER_DIED, this);
         }
         this.health = newHealth;
     }
@@ -300,11 +306,6 @@ public class CrewMember {
             // Run through all the onTick() for each modification.
             for (Modifications modification : getModifications()) {
                 modification.getInstance().onTick(CrewMember.this);
-            }
-
-            // Last thing to do is check the crew member is still alive.
-            if (!isAlive()) {
-                SpaceExplorer.eventManager.notifyObservers(Event.CREW_MEMBER_DIED, CrewMember.this);
             }
         }
     }

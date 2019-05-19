@@ -1,7 +1,6 @@
 package uc.seng201.gui;
 
-import uc.seng201.GameState;
-import uc.seng201.SpaceExplorer;
+import uc.seng201.environment.GameState;
 
 public enum Screen {
     MAIN_MENU() {
