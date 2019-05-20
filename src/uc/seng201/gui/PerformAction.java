@@ -14,29 +14,71 @@ import java.util.Objects;
 
 public class PerformAction extends JDialog {
     /**
-     *
+     * Root panel.
      */
-    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    /**
+     * Button to perform the action.
+     */
     private JButton buttonOK;
+    /**
+     * Exit out the current dialog.
+     */
     private JButton buttonCancel;
+    /**
+     * Display the possible actions.
+     */
     private JComboBox<String> comboActions;
+    /**
+     * Display the name of the acting crew member.
+     */
     private JLabel lblName;
+    /**
+     * Displays what the current action will do.
+     */
     private JLabel lblActionText;
+    /**
+     * Allows the user to enter additional information if needed.
+     */
     private JComboBox<String> comboAdditionalInfo1;
+    /**
+     * Label for the first additional input.
+     */
     private JLabel lblAdditionalInfo1;
+    /**
+     * Label for the second additional input.
+     */
     private JLabel lblAdditionalInfo2;
+    /**
+     * Allows the user to enter additional information if needed.
+     */
     private JComboBox<String> comboAdditionalInfo2;
 
+    /**
+     * The current game state.
+     */
     private GameState gameState;
+    /**
+     * The main crew member who is performing the action.
+     */
     private CrewMember primaryCrewMember;
+    /**
+     * Some actions may need 2 crew members to act. This is
+     * the second acting crew member.
+     */
     private CrewMember extraCrewMember;
 
-    private DefaultComboBoxModel<String> additionalCrewModal = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<String> additionalCrewModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> availableActionsModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> targetPlanetsModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> itemModel = new DefaultComboBoxModel<>();
 
+    /**
+     * Perform an action as a crew member.
+     *
+     * @param gameState reference to the game state.
+     * @param crewMember that is to perform the action.
+     */
     PerformAction(GameState gameState, CrewMember crewMember) {
         this.gameState = gameState;
         this.primaryCrewMember = crewMember;
@@ -56,6 +98,7 @@ public class PerformAction extends JDialog {
         comboActions.addActionListener(e -> onActionSelected());
         comboAdditionalInfo1.addActionListener(e -> onAdditionalInput());
         comboAdditionalInfo2.addActionListener(e -> onAdditionalInput());
+
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -74,6 +117,10 @@ public class PerformAction extends JDialog {
         comboActions.setSelectedItem(CrewAction.SEARCH.toString());
     }
 
+    /**
+     * When additional input is needed from the user. This method is called to update the
+     * information displayed relating to the action to be performed.
+     */
     private void onAdditionalInput() {
         CrewAction action = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
         actionDialog(action);
@@ -86,7 +133,7 @@ public class PerformAction extends JDialog {
     private void computeListModels() {
 
         // Clean out any existing items. Prevents any possible duping of entries.
-        additionalCrewModal.removeAllElements();
+        additionalCrewModel.removeAllElements();
         availableActionsModel.removeAllElements();
         targetPlanetsModel.removeAllElements();
         itemModel.removeAllElements();
@@ -94,7 +141,7 @@ public class PerformAction extends JDialog {
         // Add all crew members who are not the primary acting crew member.
         gameState.getSpaceShip().getShipCrew().forEach(additionalCrewMember -> {
             if (!additionalCrewMember.equals(primaryCrewMember) && additionalCrewMember.canPerformActions()) {
-                additionalCrewModal.addElement(additionalCrewMember.toString());
+                additionalCrewModel.addElement(additionalCrewMember.toString());
             }
         });
 
@@ -127,7 +174,7 @@ public class PerformAction extends JDialog {
         for (CrewAction action : actionCache) {
             if (action.getCrewRequired() == 1) {
                 availableActionsModel.addElement(action.toString());
-            } else if (additionalCrewModal.getSize() >= (action.getCrewRequired() - 1)) {
+            } else if (additionalCrewModel.getSize() >= (action.getCrewRequired() - 1)) {
                 availableActionsModel.addElement(action.toString());
             }
         }
@@ -149,7 +196,7 @@ public class PerformAction extends JDialog {
 
         // Set the crew members as required.
         if (actionToPerform.getCrewRequired() == 2) {
-            String[] crewMemberDetails = additionalCrewModal.getSelectedItem().toString().split(" - ");
+            String[] crewMemberDetails = additionalCrewModel.getSelectedItem().toString().split(" - ");
             this.extraCrewMember = this.gameState.getSpaceShip().crewMemberFromNameAndType(
                     crewMemberDetails[0], crewMemberDetails[1]);
         }
@@ -203,7 +250,7 @@ public class PerformAction extends JDialog {
         switch (actionToPerform) {
             case PILOT:
                 lblAdditionalInfo1.setText("Co-pilot:");
-                comboAdditionalInfo1.setModel(additionalCrewModal);
+                comboAdditionalInfo1.setModel(additionalCrewModel);
                 comboAdditionalInfo1.setSelectedIndex(0);
                 lblAdditionalInfo2.setText("Destination Planet:");
                 comboAdditionalInfo2.setModel(targetPlanetsModel);

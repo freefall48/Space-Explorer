@@ -11,20 +11,32 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Provides the load or new game options.
+ */
 class MainMenu extends ScreenComponent {
+
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * Root panel
+     */
 	private JPanel Menu;
+    /**
+     * Button to create a new game.
+     */
     private JButton btnNewGame;
+    /**
+     * Button to load an existing game
+     *
+     */
     private JButton btnLoadGame;
 
-    private GameState gameState;
-
+    /**
+     * Main menu to ask the user if they want to create a new game or load an existing game.
+     *
+     * @param gameState null as not required for this screen.
+     */
     MainMenu(GameState gameState) {
 
-        this.gameState = gameState;
         btnLoadGame.addActionListener(e -> onLoadGame());
         btnNewGame.addActionListener(e -> onNewGame());
 
@@ -35,22 +47,32 @@ class MainMenu extends ScreenComponent {
         return Menu;
     }
 
+    /**
+     * When the user wants to create a new game switches to the correct screen.
+     */
     private void onNewGame() {
         Display.changeScreen(Screen.ADVENTURE_CREATOR);
     }
 
+    /**
+     * When the user wants to load a game. Provides a popup dialog where the user can
+     * select a game save file.
+     */
     private void onLoadGame() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         fileChooser.setFileFilter(new SavedGameFileFilter());
         fileChooser.setAcceptAllFileFilterUsed(false);
         int success = fileChooser.showOpenDialog(this);
         if (success == JFileChooser.APPROVE_OPTION) {
+            // The user has given us a file so try and load it.
             try {
+                // Let the event manager know that there is a new game state.
                 GameEnvironment.eventManager.notifyObservers(Event.LOADED_GAME_STATE,
                         GameState.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to load file",
                         "Error", JOptionPane.ERROR_MESSAGE);
+                // Handles the crash and goes back to the main menu. The user can choose to load or new game again.
                 e.printStackTrace();
                 return;
             }

@@ -18,34 +18,98 @@ import java.util.Iterator;
 class MainScreen extends ScreenComponent {
 
     /**
-     *
+     * Root panel
      */
-    private static final long serialVersionUID = 1L;
     private JPanel panelRoot;
+    /**
+     * Displays the ships name
+     */
     private JLabel lblSpaceShipName;
+    /**
+     * Provides tabs to display the crew, items and planets.
+     */
     private JTabbedPane tabbedContentMenu;
+    /**
+     * Display the current crew members.
+     */
     private JList<CrewMemberModelEntry> listCrew;
+    /**
+     * Displays information about the current and total days.
+     */
     private JLabel lblDay;
+    /**
+     * Displays the current planet being orbited.
+     */
     private JLabel lblOrbiting;
+    /**
+     * Displays how many parts are still missing.
+     */
     private JLabel lblMissingParts;
+    /**
+     * Displays the space ships balance.
+     */
     private JLabel lblBalance;
+    /**
+     * Button to perform an action as a crew member.
+     */
     private JButton btnPerformAction;
+    /**
+     * Button that saves the game.
+     */
     private JButton btnSave;
+    /**
+     * Button that moves to the next day.
+     */
     private JButton btnNextDay;
+    /**
+     * Displays information about the ships health.
+     */
     private JLabel lblShipHealth;
+    /**
+     * Displays the ships current food items.
+     */
     private JList<String> listFoodItems;
+    /**
+     * Displays the ships current medical items.
+     */
     private JList<String> listMedicalSupplies;
+    /**
+     * Displays the planets available in this game.
+     */
     private JList<String> listPlanets;
-    private JButton btnHelp;
+    /**
+     * Button opens the space traders.
+     */
     private JButton btnSpaceTraders;
+    /**
+     * Button allows the user to inspect details about one crew member.
+     */
     private JButton btnInspect;
+    /**
+     * Displays the users current score.
+     */
     private JLabel currentScoreLabel;
 
+    /**
+     * Model backing the user list.
+     */
     private DefaultListModel<CrewMemberModelEntry> crewMemberDefaultListModel = new DefaultListModel<>();
+    /**
+     * Model backing the medical supplies list.
+     */
     private DefaultListModel<String> listMedicalSuppliesModel = new DefaultListModel<>();
+    /**
+     * Model backing the food items list.
+     */
     private DefaultListModel<String> listFoodItemsModel = new DefaultListModel<>();
+    /**
+     * Model backing the planets list.
+     */
     private DefaultListModel<String> listPlanetsModel = new DefaultListModel<>();
 
+    /**
+     * The current game state.
+     */
     private GameState gameState;
 
     MainScreen(GameState gameState) {
@@ -658,15 +722,12 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 0, 20);
         panel8.add(btnSave, gbc);
-        btnHelp = new JButton();
-        btnHelp.setText("Help");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 10.0;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 0, 2);
-        panel8.add(btnHelp, gbc);
         final JSeparator separator3 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
