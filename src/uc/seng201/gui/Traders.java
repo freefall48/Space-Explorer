@@ -9,20 +9,46 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * The user can trade to buy items with money.
+ */
 public class Traders extends JDialog {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private JButton btnBuy;
-    private JButton btnLeave;
-    private JList<ItemModelEntry> listAvailableItems;
-    private JLabel lblBalance;
 
+    /**
+     * Root panel.
+     */
+    private JPanel contentPane;
+    /**
+     * Buy button.
+     */
+    private JButton btnBuy;
+    /**
+     * Leave button.
+     */
+    private JButton btnLeave;
+    /**
+     * List of items available to buy.
+     */
+    private JList<ItemModelEntry> listAvailableItems;
+    /**
+     * Display the current balance of the spaceship.
+     */
+    private JLabel lblBalance;
+    /**
+     * The model backing the list of items.
+     */
     private DefaultListModel<ItemModelEntry> availableItems;
+    /**
+     * The current game state.
+     */
     private GameState gameState;
 
+    /**
+     * Provides access to the traders so the user can buy items with
+     * the money they have collected.
+     *
+     * @param gameState the current game state.
+     */
     public Traders(GameState gameState) {
         this.gameState = gameState;
 
@@ -52,6 +78,10 @@ public class Traders extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    /**
+     * Updates the window to reflect any changes that have occurred as a result
+     * of buying items from the trader.
+     */
     private void repaintWindow() {
         lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
         int currentlySelected = listAvailableItems.getSelectedIndex();
@@ -68,6 +98,12 @@ public class Traders extends JDialog {
     }
 
 
+    /**
+     * When the user selects the item, sets the buy buttons text to
+     * the price of the ite. The balance of the space ship is checked
+     * to verify if there is enough to buy the item. If so the button
+     * is enabled.
+     */
     private void onBuyMenuSelection() {
         if (listAvailableItems.getSelectedIndex() >= 0) {
             btnBuy.setEnabled(false);
@@ -80,6 +116,10 @@ public class Traders extends JDialog {
         }
     }
 
+    /**
+     * When the buy button is clicked. The event manager is notified so the correct
+     * handlers can be called for the event.
+     */
     private void onBuy() {
         ItemModelEntry itemModelEntry = listAvailableItems.getSelectedValue();
         if (itemModelEntry.quantity > 0) {
@@ -91,10 +131,16 @@ public class Traders extends JDialog {
         repaintWindow();
     }
 
+    /**
+     * Allows the user to leave the space traders.
+     */
     private void onLeave() {
         dispose();
     }
 
+    /**
+     * Provides the ability to keep track of the items that are displayed in the list.
+     */
     final class ItemModelEntry {
         final int quantity;
         final SpaceItem spaceItem;

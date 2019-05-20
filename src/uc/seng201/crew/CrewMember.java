@@ -19,7 +19,7 @@ public class CrewMember {
 
     static final int STANDARD_MAX_HEALTH = 100;
     static final int STANDARD_HEALTH_REGEN = 20;
-    static final int STANDARD_SHIP_REPAIR = 1;
+    static final int STANDARD_SHIP_REPAIR = 30;
     static final int STANDARD_MAX_TIREDNESS = 100;
     static final int STANDARD_TIREDNESS_RATE = 20;
     static final int STANDARD_MAX_FOOD_LEVEL = 100;
@@ -153,13 +153,15 @@ public class CrewMember {
         return foodLevel;
     }
 
-    public void setRepairAmount(int repairAmount) {
-        this.repairAmount = repairAmount;
+    public void alterRepairAmount(int value) {
+        int newRepairValue = repairAmount + value;
+        if (newRepairValue < 0) {
+            newRepairValue = 0;
+        }
+
+        repairAmount = newRepairValue;
     }
 
-    public void setHealthRegen(int regenRate) {
-        this.currentHealthRegen = regenRate;
-    }
 
     public void restoreHealthRegen() {
         currentHealthRegen = baseHealthRegen;

@@ -12,6 +12,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 
+/**
+ * Provides the ability for the user to perform
+ * actions as a crew member.
+ */
 public class PerformAction extends JDialog {
     /**
      * Root panel.
@@ -68,9 +72,24 @@ public class PerformAction extends JDialog {
      */
     private CrewMember extraCrewMember;
 
+    /**
+     * Model that contains all the additional crew that can be used by actions
+     * requiring more crew.
+     */
     private DefaultComboBoxModel<String> additionalCrewModel = new DefaultComboBoxModel<>();
+    /**
+     * Model that backs the actions available list.
+     */
     private DefaultComboBoxModel<String> availableActionsModel = new DefaultComboBoxModel<>();
+    /**
+     * Model that contains all the planets that the ship can travel to. Should not contain
+     * the planet that is currently orbited.
+     */
     private DefaultComboBoxModel<String> targetPlanetsModel = new DefaultComboBoxModel<>();
+    /**
+     * Model that contains all the items of the that can be consumed by the current crew
+     * member.
+     */
     private DefaultComboBoxModel<String> itemModel = new DefaultComboBoxModel<>();
 
     /**
@@ -184,6 +203,10 @@ public class PerformAction extends JDialog {
         if (!isItemsPresent) {
             availableActionsModel.removeElement(CrewAction.CONSUME.toString());
         }
+        // No point repairing the ship if its full health.
+        if (gameState.getSpaceShip().getShipHealth() == gameState.getSpaceShip().getShipHealthMax()) {
+            availableActionsModel.removeElement(CrewAction.REPAIR.toString());
+        }
     }
 
     /**
@@ -207,7 +230,7 @@ public class PerformAction extends JDialog {
     }
 
     /**
-     * Simply returns control to the caller.
+     * Gives control back to the caller.
      */
     private void onCancel() {
         dispose();

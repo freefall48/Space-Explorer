@@ -39,7 +39,7 @@ public class GameEnvironment {
      * The game state to pass between objects. It is immutable and can
      * only be directly changed by an event handled by "GameStateChangeHandler".
      */
-    protected static GameState gameState;
+    static GameState gameState;
 
     /**
      * Creates an end screen instance that is either a victory or defeat. The
@@ -59,7 +59,9 @@ public class GameEnvironment {
         endScreen.setLocationRelativeTo(null);
         endScreen.setSize(600, 350);
         endScreen.setVisible(true);
-        Display.changeScreen(Screen.MAIN_MENU, true);
+
+        // Exit out of the game.
+        System.exit(0);
     }
 
     /**

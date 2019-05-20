@@ -25,7 +25,7 @@ public class ActionPilot implements IAction {
              occur, notify the event manager.
              */
             if (SpaceExplorer.randomGenerator.nextBoolean()) {
-                GameEnvironment.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL);
+                GameEnvironment.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL, gameState);
             }
         } else {
             throw new ActionException("Invalid arg passed");

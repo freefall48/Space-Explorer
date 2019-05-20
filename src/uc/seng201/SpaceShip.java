@@ -46,6 +46,14 @@ public class SpaceShip {
      */
     private int shieldCount;
     /**
+     * The health of the spaceship.
+     */
+    private int shipHealth;
+    /**
+     * Maximum spaceship health.
+     */
+    private int shipHealthMax;
+    /**
      * Maximum number of crew members that are allowed on the spaceship. Global to all spaceships.
      */
     public static final int MAXIMUM_CREW_COUNT = 4;
@@ -68,7 +76,8 @@ public class SpaceShip {
         shipCrew = new HashSet<>();
         shipItems = new HashMap<>();
         balance = 0;
-        shieldCount = 2;
+        shieldCount = 4;
+        shipHealth = shipHealthMax = 100;
     }
 
     /**
@@ -261,6 +270,20 @@ public class SpaceShip {
     }
 
     /**
+     * Returns the current health of the ship.
+     *
+     * @return current ship health.
+     */
+    public int getShipHealth() {return shipHealth;}
+
+    /**
+     * Returns the maximum health that the spaceship can have.
+     *
+     * @return maximum spaceship health.
+     */
+    public int getShipHealthMax() {return shipHealthMax;}
+
+    /**
      * Returns the number of parts that are still currently missing from the spaceship.
      *
      * @return number of missing parts.
@@ -284,18 +307,43 @@ public class SpaceShip {
     }
 
     /**
-     * Modifies the number of shields that the spaceship has. The new shield value cannot be
-     * below 0.
+     * Damages the space ship by a given amount. The amount of damage the spaceship takes is
+     * divided by the number of shields the ship has. If ship has no shields then it takes
+     * full damage. Upon taking damage the ship will also lose a shield, increasing
+     * damage that will occur in the future.
      *
-     * @param value amount to adjust shields.
-     * @throws SpaceShipException if the spaceship shields reach 0.
+     * @param value damage before scaling.
      */
-    public void alterShield(int value) throws SpaceShipException {
-        int newShieldValue = shieldCount + value;
-        if (newShieldValue <= 0) {
+    public void damage(int value) {
+        int newShipHealth;
+
+        // Prevent divide by zero errors.
+        if (shieldCount > 0) {
+            newShipHealth = shipHealth - (value / shieldCount);
+        } else {
+            newShipHealth = shipHealth - value;
+        }
+
+        if (newShipHealth <= 0) {
             GameEnvironment.eventManager.notifyObservers(Event.DEFEAT, "Ship fell apart.");
         }
-        shieldCount = newShieldValue;
+        shipHealth = newShipHealth;
+        shieldCount -= 1;
+    }
+
+
+    /**
+     * Repairs the space by the given amount. If the new health would exceed the maximum
+     * ship health then the new health is set to the maximum health.
+     *
+     * @param value to increase the ship health by.
+     */
+    public void repair(int value) {
+        int newShipHealth = shipHealth + value;
+        if (newShipHealth > shipHealthMax) {
+            newShipHealth = shipHealthMax;
+        }
+        shipHealth = newShipHealth;
     }
 
     /**
@@ -336,7 +384,7 @@ public class SpaceShip {
             if (shipCrew.size() == 0) {
                 GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
             }
-            if (shieldCount == 0) {
+            if (shipHealth == 0) {
                 GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
                         "Looks like you have managed to destroy whats left of " + shipCrew);
             }

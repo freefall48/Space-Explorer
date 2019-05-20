@@ -10,7 +10,7 @@ public class ActionRepair implements IAction {
         if (crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");
         }
-        gameState.getSpaceShip().alterShield(crewMembers[0].getRepairAmount());
+        gameState.getSpaceShip().repair(crewMembers[0].getRepairAmount());
         return null;
     }
 }

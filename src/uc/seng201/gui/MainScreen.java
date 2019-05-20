@@ -62,9 +62,9 @@ class MainScreen extends ScreenComponent {
      */
     private JButton btnNextDay;
     /**
-     * Displays information about the ships health.
+     * Displays information about the ships shields.
      */
-    private JLabel lblShipHealth;
+    private JLabel lblShipShields;
     /**
      * Displays the ships current food items.
      */
@@ -89,6 +89,10 @@ class MainScreen extends ScreenComponent {
      * Displays the users current score.
      */
     private JLabel currentScoreLabel;
+    /**
+     * Displays the ships health.
+     */
+    private JLabel lblShipHealth;
 
     /**
      * Model backing the user list.
@@ -350,7 +354,9 @@ class MainScreen extends ScreenComponent {
         lblOrbiting.setText(gameState.getCurrentPlanet().getPlanetName());
         lblMissingParts.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
         lblBalance.setText("$" + gameState.getSpaceShip().getBalance());
-        lblShipHealth.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
+        lblShipShields.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
+        lblShipHealth.setText(String.format("%d/%d", gameState.getSpaceShip().getShipHealth(),
+                gameState.getSpaceShip().getShipHealthMax()));
 
         gameState.computeScore();
         currentScoreLabel.setText(String.valueOf(gameState.getScore()));
@@ -558,14 +564,14 @@ class MainScreen extends ScreenComponent {
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.weighty = 10.0;
         gbc.fill = GridBagConstraints.VERTICAL;
         panel6.add(spacer1, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -576,7 +582,7 @@ class MainScreen extends ScreenComponent {
         btnNextDay.setText("Next Day");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 13;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel6.add(btnNextDay, gbc);
@@ -588,7 +594,7 @@ class MainScreen extends ScreenComponent {
         btnPerformAction.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
@@ -616,27 +622,27 @@ class MainScreen extends ScreenComponent {
         final JLabel label5 = new JLabel();
         Font label5Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label5.getFont());
         if (label5Font != null) label5.setFont(label5Font);
-        label5.setText("Ship Health:");
+        label5.setText("Shields:");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label5, gbc);
-        lblShipHealth = new JLabel();
-        Font lblShipHealthFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblShipHealth.getFont());
-        if (lblShipHealthFont != null) lblShipHealth.setFont(lblShipHealthFont);
-        lblShipHealth.setText("X");
+        lblShipShields = new JLabel();
+        Font lblShipShieldsFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblShipShields.getFont());
+        if (lblShipShieldsFont != null) lblShipShields.setFont(lblShipShieldsFont);
+        lblShipShields.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblShipHealth, gbc);
+        panel6.add(lblShipShields, gbc);
         final JSeparator separator2 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -649,7 +655,7 @@ class MainScreen extends ScreenComponent {
         btnSpaceTraders.setToolTipText("Visit your local space traders.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 2, 0);
@@ -662,7 +668,7 @@ class MainScreen extends ScreenComponent {
         btnInspect.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
@@ -673,7 +679,7 @@ class MainScreen extends ScreenComponent {
         label6.setText("Current Score:");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label6, gbc);
@@ -683,10 +689,30 @@ class MainScreen extends ScreenComponent {
         currentScoreLabel.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
         panel6.add(currentScoreLabel, gbc);
+        final JLabel label7 = new JLabel();
+        Font label7Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label7.getFont());
+        if (label7Font != null) label7.setFont(label7Font);
+        label7.setText("Health:");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 10, 5);
+        panel6.add(label7, gbc);
+        lblShipHealth = new JLabel();
+        Font lblShipHealthFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblShipHealth.getFont());
+        if (lblShipHealthFont != null) lblShipHealth.setFont(lblShipHealthFont);
+        lblShipHealth.setText("X");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        panel6.add(lblShipHealth, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -715,19 +741,15 @@ class MainScreen extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         panelRoot.add(panel8, gbc);
         btnSave = new JButton();
+        btnSave.setHorizontalAlignment(0);
         btnSave.setText("Save");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 2, 0, 20);
-        panel8.add(btnSave, gbc);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 10.0;
         gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 2);
+        gbc.insets = new Insets(0, 2, 0, 20);
+        panel8.add(btnSave, gbc);
         final JSeparator separator3 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
