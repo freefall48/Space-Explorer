@@ -2,14 +2,16 @@ package uc.seng201.gui;
 
 import javax.swing.*;
 
-public class ScreenComponent extends JComponent {
+/**
+ * Extends the JComponent and implements extra functionality.
+ */
+public abstract class ScreenComponent extends JComponent {
 
-    /**
-	 * 
+
+	/**
+	 * Returns the root component of the screen.
+	 *
+	 * @return root component of the screen.
 	 */
-	private static final long serialVersionUID = 1L;
-
-	public JComponent getRootComponent() {
-        return null;
-    }
+	public abstract JComponent getRootComponent();
 }

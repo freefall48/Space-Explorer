@@ -167,7 +167,7 @@ public class CrewMember {
 
     public void alterActionsLeft(int value) {
         int newActionsLeft = actionsLeftToday + value;
-        if (value < 0) {
+        if (newActionsLeft < 0) {
             newActionsLeft = 0;
         }
         actionsLeftToday = newActionsLeft;
@@ -284,6 +284,9 @@ public class CrewMember {
 
         @Override
         public void onEvent(Object... args) {
+            actionsLeftToday = 2;
+
+            // Check if the crew member is hungry
             if (getFoodLevel() == 0) {
                 addModification(Modifications.HUNGRY);
             } else if (modifications.contains(Modifications.HUNGRY)) {
@@ -297,15 +300,19 @@ public class CrewMember {
                 removeModification(Modifications.TIRED);
             }
 
-            // Alter crew member values after all possible modifications have been added.
-            alterFood(getFoodDecayRate());
-            alterHealth(getHealthRegen());
-            alterTiredness(getTirednessRate());
-            actionsLeftToday = 2;
-
             // Run through all the onTick() for each modification.
             for (Modifications modification : getModifications()) {
                 modification.getInstance().onTick(CrewMember.this);
+            }
+
+            // Alter crew member values after all possible modifications have been added.
+            alterFood(getFoodDecayRate());
+            alterTiredness(getTirednessRate());
+            alterHealth(getHealthRegen());
+
+            // If the crew member dies no need form them to listen to this event.
+            if (!isAlive()) {
+                GameEnvironment.eventManager.removeObserver(Event.START_DAY, this);
             }
         }
     }

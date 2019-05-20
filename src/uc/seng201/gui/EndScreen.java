@@ -5,20 +5,51 @@ import uc.seng201.environment.GameState;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Victory or Defeat screen.
+ */
 public class EndScreen extends JDialog {
+
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * Root panel.
+     */
 	private JPanel contentPane;
+    /**
+     * Okay button.
+     */
     private JButton buttonOK;
+    /**
+     * Shows if the user has won or lost.
+     */
     private JLabel stateLabel;
+    /**
+     * Shows why the user won/lost.
+     */
     private JLabel labelMessage;
+    /**
+     * Displays the final score.
+     */
     private JLabel finalScoreLabel;
+    /**
+     * Displays the name of the users ship.
+     */
     private JLabel shipNameLabel;
+    /**
+     * Displays how many days the user took to win/lose.
+     */
     private JLabel daysTakenLabel;
+    /**
+     * Displays if all parts were found or not.
+     */
     private JLabel allPartsFoundLabel;
 
+    /**
+     * Displays a dialog that shows the player how they performed during the game.
+     *
+     * @param gameState reference to the current game state.
+     * @param isVictory true if the user won the game.
+     * @param message why did the user win/lose.
+     */
     public EndScreen(GameState gameState, boolean isVictory, String message) {
         setContentPane(contentPane);
         setModal(true);
@@ -37,6 +68,9 @@ public class EndScreen extends JDialog {
         finalScoreLabel.setText(String.format("%d points", gameState.getScore()));
     }
 
+    /**
+     * Handler for the okay button click.
+     */
     private void onOK() {
         // add your code here
         dispose();

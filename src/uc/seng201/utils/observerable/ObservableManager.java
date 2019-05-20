@@ -13,7 +13,7 @@ public class ObservableManager {
      * the observers to prevent the same observer watching the
      * same event multiple times.
      */
-    private Map<Event, Set<Observer>> observers;
+    private Map<Event, HashSet<Observer>> observers;
 
     /**
      * Initializes the observers as a new hashtable. For each event their known
@@ -35,8 +35,7 @@ public class ObservableManager {
      * @param observer reference to the observer.
      */
     public void addObserver(Event event, Observer observer) {
-        Set<Observer> eventObservers = observers.get(event);
-        eventObservers.add(observer);
+        observers.get(event).add(observer);
     }
 
     /**
@@ -47,7 +46,7 @@ public class ObservableManager {
      * @param observer reference to the observer to be removed.
      */
     public void removeObserver(Event event, Observer observer) {
-        observers.get(event).remove(observer);
+        observers.get(event).removeIf(eventObserver -> eventObserver == observer);
     }
 
     /**
@@ -57,8 +56,14 @@ public class ObservableManager {
      * @param args to be passed to each observer.
      */
     public void notifyObservers(Event event, Object... args) {
-        for (Observer observer : observers.get(event)) {
-            observer.onEvent(args);
-        }
+
+        /*
+        Make a local copy of the observers for the given event. If we dont and
+        an observer removes itself during the iteration we would get a concurrent
+        error.
+         */
+        Set<Observer> eventObservers = new HashSet<>(observers.get(event));
+
+        eventObservers.forEach(observer -> observer.onEvent(args));
     }
 }

@@ -2,6 +2,7 @@ package uc.seng201;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.CrewType;
+import uc.seng201.environment.Display;
 import uc.seng201.environment.GameEnvironment;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
@@ -353,6 +354,7 @@ public class SpaceShip {
             if (args.length == 1) {
                 if (args[0] instanceof CrewMember) {
                     shipCrew.remove(args[0]);
+                    Display.popup(args[0].toString() + " has died!");
                 }
                 if (shipCrew.size() == 0) {
                     GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
@@ -378,7 +380,7 @@ public class SpaceShip {
                     }
 
                     // Update the ships balance
-                    alterSpaceBucks(((SpaceItem) args[0]).getPrice());
+                    alterSpaceBucks(-((SpaceItem) args[0]).getPrice());
                 }
             }
 

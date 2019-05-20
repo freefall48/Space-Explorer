@@ -6,23 +6,48 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
-import java.util.Set;
 
+/**
+ * Provides the ability to create or alter a crew member.
+ */
 public class CreateCrewMember extends JDialog {
 
     /**
-     *
+     * Root panel.
      */
-    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    /**
+     * Allow the user to confirm they wish to create or alter the current
+     * crew member.
+     */
     private JButton buttonOK;
+    /**
+     * Allow the user to exit without creating or altering a crew member.
+     */
     private JButton buttonCancel;
+    /**
+     * The name of the crew member.
+     */
     private JTextField txtName;
+    /**
+     * The available crew types that the user can choose from.
+     */
     private JComboBox<CrewType> comboType;
+    /**
+     * The title of the screen.
+     */
     private JLabel lblTitle;
-
+    /**
+     * The crew member that is represented by the current user selections.
+     */
     private CrewMember crewMember;
 
+    /**
+     * Allows the user to update a crew member. The crew member
+     * is as the default values for the new crew member created.
+     *
+     * @param crewMember to be altered.
+     */
     CreateCrewMember(CrewMember crewMember) {
         this();
         this.crewMember = crewMember;
@@ -31,6 +56,9 @@ public class CreateCrewMember extends JDialog {
         lblTitle.setText("Update Crew Member");
     }
 
+    /**
+     * Allows the user to create a new crew member.
+     */
     CreateCrewMember() {
         setContentPane(contentPane);
         setModal(true);
@@ -69,6 +97,12 @@ public class CreateCrewMember extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    /**
+     * Checks if the crew member has a valid name. If the user is updating
+     * their crew member then make sure the crew member has actually changed.
+     *
+     * @return true if the crew member has a valid name (and has changed from previous details)
+     */
     private boolean isValidState() {
         if (crewMember != null) {
             if (txtName.getText().equals(crewMember.getName())
@@ -81,6 +115,9 @@ public class CreateCrewMember extends JDialog {
     }
 
 
+    /**
+     * Handles when the user has created a crew member.
+     */
     private void onOK() {
         CrewType crewType = (CrewType) comboType.getSelectedItem();
         if (crewType == null) {
@@ -90,11 +127,21 @@ public class CreateCrewMember extends JDialog {
         dispose();
     }
 
+    /**
+     * Handles when the user wants to exit and not
+     * create a new crew member.
+     */
     private void onCancel() {
         this.crewMember = null;
         dispose();
     }
 
+    /**
+     * Returns the crew member created by the user or null
+     * if they have exited.
+     *
+     * @return new CrewMember
+     */
     CrewMember showDialog() {
         setSize(450, 250);
         setVisible(true);

@@ -75,13 +75,14 @@ class MainScreen extends ScreenComponent {
                 listCrew.requestFocus();
             }
         });
+        // Add listeners for button clicks.
         btnPerformAction.addActionListener(e -> onPerformAction());
         btnSpaceTraders.addActionListener(e -> onTrade());
         btnSave.addActionListener(e -> onSave());
         btnInspect.addActionListener(e -> onInspect());
 
+        // Set the models for the lists to follow.
         listCrew.setModel(crewMemberDefaultListModel);
-
         listFoodItems.setModel(listFoodItemsModel);
         listMedicalSupplies.setModel(listMedicalSuppliesModel);
         listPlanets.setModel(listPlanetsModel);
@@ -91,6 +92,10 @@ class MainScreen extends ScreenComponent {
 
     }
 
+    /**
+     * Handler for when the inspect event occurs. Creates a new popup that
+     * displays information about the selected crew member.
+     */
     private void onInspect() {
         JDialog inspectCrewMember = new InspectCrewMember(listCrew.getSelectedValue().crewMember);
         inspectCrewMember.setSize(700, 500);
@@ -99,8 +104,12 @@ class MainScreen extends ScreenComponent {
         inspectCrewMember.setVisible(true);
     }
 
+    /**
+     * Handler for when the trade event occurs. Creates a pop up of the current
+     * space traders.
+     */
     private void onTrade() {
-        JDialog traders = new Traders(gameState.getTrader().getAvailableItems(), gameState.getSpaceShip().getBalance());
+        JDialog traders = new Traders(gameState);
         traders.setSize(600, 400);
         traders.setLocationRelativeTo(this);
         traders.setVisible(true);
@@ -109,6 +118,12 @@ class MainScreen extends ScreenComponent {
         panelRoot.repaint();
     }
 
+    /**
+     * Returns the root component of this screen. All other elements are painted onto this
+     * panel.
+     *
+     * @return the root panel of this screen.
+     */
     @Override
     public JComponent getRootComponent() {
         return panelRoot;
@@ -145,6 +160,10 @@ class MainScreen extends ScreenComponent {
      * is then repainted to reflect any changes that have been made.
      */
     private void onNextDay() {
+        /*
+        The user must be able to move onto the next day at any point but just warn them if they
+        still have actions available.
+         */
         if (!isNextDayNeeded()) {
             return;
         }
@@ -175,7 +194,8 @@ class MainScreen extends ScreenComponent {
     }
 
     /**
-     * Creates a perform action window for the selected crew member.
+     * Creates a perform action window for the selected crew member. This screen
+     * is then
      */
     private void onPerformAction() {
 

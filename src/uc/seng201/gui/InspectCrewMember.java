@@ -5,27 +5,73 @@ import uc.seng201.crew.CrewMember;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Displays detailed information to the user about a crew member.
+ */
 public class InspectCrewMember extends JDialog {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JLabel lblType;
-    private JLabel lblActions;
-    private JLabel lblHealth;
-    private JLabel lblHealthRegen;
-    private JLabel lblFood;
-    private JLabel lblFoodDecay;
-    private JLabel lblTiredness;
-    private JLabel lblTirednessRate;
-    private JList<String> listModifications;
-    private JLabel lblName;
-    private JLabel lblRepair;
 
+    /**
+     * Root panel.
+     */
+    private JPanel contentPane;
+    /**
+     * Allows the user to leave the screen.
+     */
+    private JButton buttonOK;
+    /**
+     * Displays crew members type.
+     */
+    private JLabel lblType;
+    /**
+     * Displays crew members actions left for the day.
+     */
+    private JLabel lblActions;
+    /**
+     * Displays crew members health stat.
+     */
+    private JLabel lblHealth;
+    /**
+     * Displays crew members health regen stat.
+     */
+    private JLabel lblHealthRegen;
+    /**
+     * Displays crew members food level stat.
+     */
+    private JLabel lblFood;
+    /**
+     * Displays crew members food decay stat.
+     */
+    private JLabel lblFoodDecay;
+    /**
+     * Displays crew members tiredness stat.
+     */
+    private JLabel lblTiredness;
+    /**
+     * Displays crew members tiredness rate stat.
+     */
+    private JLabel lblTirednessRate;
+    /**
+     * Displays crew members current modifications.
+     */
+    private JList<String> listModifications;
+    /**
+     * Displays crew members name.
+     */
+    private JLabel lblName;
+    /**
+     * Displays crew members repair stat.
+     */
+    private JLabel lblRepair;
+    /**
+     * Crew member to display information about.
+     */
     private CrewMember crewMember;
 
+    /**
+     * Allow a user to view detailed information about the given crew member.
+     *
+     * @param crewMember to show information about.
+     */
     public InspectCrewMember(CrewMember crewMember) {
         this.crewMember = crewMember;
         setContentPane(contentPane);
@@ -37,6 +83,10 @@ public class InspectCrewMember extends JDialog {
         displayInformation();
     }
 
+    /**
+     * Updates the dialog to display information about the crew member who was
+     * given to this instance.
+     */
     private void displayInformation() {
         lblName.setText(crewMember.getName());
 
@@ -60,6 +110,9 @@ public class InspectCrewMember extends JDialog {
         listModifications.setModel(listModificationModel);
     }
 
+    /**
+     * Handles when the uses wishes to close the dialog.
+     */
     private void onOK() {
         // add your code here
         dispose();

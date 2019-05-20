@@ -41,9 +41,13 @@ public class RandomEventHandler implements Observer {
                         }
                         break;
                 }
+
+                // Trigger the random event and inform the user if there is a message.
                 String message = possibleEvents.get(SpaceExplorer.randomGenerator.nextInt(possibleEvents.size()))
                         .getInstance().onTrigger((GameState) args[1]);
-                Display.popup(message);
+                if (message != null) {
+                    Display.popup(message);
+                }
                 return;
             }
         }

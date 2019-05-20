@@ -1,13 +1,13 @@
 package uc.seng201.gui;
 
 import uc.seng201.environment.GameEnvironment;
+import uc.seng201.environment.GameState;
 import uc.seng201.items.SpaceItem;
 import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
 
 public class Traders extends JDialog {
     /**
@@ -20,14 +20,11 @@ public class Traders extends JDialog {
     private JList<ItemModelEntry> listAvailableItems;
     private JLabel lblBalance;
 
-    private Map<SpaceItem, Integer> tradersItems;
-    private int balance;
-
     private DefaultListModel<ItemModelEntry> availableItems;
+    private GameState gameState;
 
-    public Traders(Map<SpaceItem, Integer> tradersItems, int balance) {
-        this.tradersItems = tradersItems;
-        this.balance = balance;
+    public Traders(GameState gameState) {
+        this.gameState = gameState;
 
         setContentPane(contentPane);
         setModal(true);
@@ -37,7 +34,7 @@ public class Traders extends JDialog {
         this.listAvailableItems.setModel(this.availableItems);
 
         this.listAvailableItems.addListSelectionListener(e -> onBuyMenuSelection());
-        updateScreen();
+        repaintWindow();
 
         btnBuy.addActionListener(e -> onBuy());
         btnLeave.addActionListener(e -> onLeave());
@@ -55,17 +52,19 @@ public class Traders extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void updateScreen() {
-        lblBalance.setText(String.format("$%s", balance));
+    private void repaintWindow() {
+        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
         int currentlySelected = listAvailableItems.getSelectedIndex();
         availableItems.clear();
-        tradersItems.forEach((item, quantity) -> availableItems.addElement(new ItemModelEntry(item, quantity)));
+        gameState.getTrader().getAvailableItems().forEach((item, quantity) -> availableItems.addElement
+                (new ItemModelEntry(item, quantity)));
+
         if (currentlySelected == -1 || currentlySelected >= availableItems.size()) {
             listAvailableItems.setSelectedIndex(0);
         } else {
             listAvailableItems.setSelectedIndex(currentlySelected);
         }
-        repaint();
+        contentPane.repaint();
     }
 
 
@@ -75,7 +74,7 @@ public class Traders extends JDialog {
             SpaceItem item = listAvailableItems.getSelectedValue().spaceItem;
             btnBuy.setText("Buy: $" + item.getPrice());
             btnBuy.repaint();
-            if (item.getPrice() <= balance) {
+            if (item.getPrice() <= gameState.getSpaceShip().getBalance()) {
                 btnBuy.setEnabled(true);
             }
         }
@@ -86,12 +85,10 @@ public class Traders extends JDialog {
         if (itemModelEntry.quantity > 0) {
             GameEnvironment.eventManager.notifyObservers(Event.BUY_FROM_TRADERS, itemModelEntry.spaceItem);
         }
-
-        updateScreen();
         if (availableItems.size() == 0) {
             btnBuy.setEnabled(false);
         }
-        repaint();
+        repaintWindow();
     }
 
     private void onLeave() {

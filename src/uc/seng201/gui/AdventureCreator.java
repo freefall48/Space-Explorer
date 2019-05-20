@@ -15,25 +15,58 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Create a new game.
+ */
 class AdventureCreator extends ScreenComponent {
+
     /**
-     *
+     * Allows the user to enter their ship name.
      */
-    private static final long serialVersionUID = 1L;
     private JTextField textShipName;
+    /**
+     * Allows the user to select the duration of the game.
+     */
     private JSlider sliderDuration;
+    /**
+     * Root panel.
+     */
     private JPanel panelCreator;
+    /**
+     * Continue button. When the user has finished creating crew and
+     * naming the ship.
+     */
     private JButton btnContinue;
+    /**
+     * Add crew button. Allows the user to add crew members.
+     */
     private JButton btnAddCrewMember;
+    /**
+     * Shows the current crew members the user has created.
+     */
     private JList<CrewMember> listCrew;
+    /**
+     * Allows the user to navigate back to the main menu.
+     */
     private JButton btnBack;
+    /**
+     * Update crew member button. Allows the user to modify an existing crew member.
+     */
     private JButton btnUpdateCrewMember;
+    /**
+     * Remove crew member button. Allows the user to remove an existing crew member.
+     */
     private JButton btnRemoveCrewMember;
+    /**
+     * The model that backs the crew member list. Contains all the crew member instances.
+     */
+    private DefaultListModel<CrewMember> crewListModel;
 
-    private DefaultListModel<CrewMember> listCrewModal;
-
+    /**
+     * Allows the user to create a new game. Add their own crew members and name their ship.
+     */
     AdventureCreator(GameState gameState) {
-        listCrewModal = new DefaultListModel<>();
+        crewListModel = new DefaultListModel<>();
 
         textShipName.addKeyListener(new KeyAdapter() {
             @Override
@@ -43,7 +76,7 @@ class AdventureCreator extends ScreenComponent {
             }
         });
 
-        listCrew.setModel(listCrewModal);
+        listCrew.setModel(crewListModel);
 
         listCrew.addListSelectionListener(e -> {
             btnRemoveCrewMember.setEnabled(true);
@@ -77,18 +110,35 @@ class AdventureCreator extends ScreenComponent {
         return panelCreator;
     }
 
+    /**
+     * Called when the continue button is clicked. The users crew and spaceship name are
+     * used to create a new spaceship and added to the new game state. The new game
+     * state is then set to the event manager.
+     */
     private void onContinue() {
         int gameDuration = sliderDuration.getValue();
         SpaceShip spaceShip = new SpaceShip(textShipName.getText(), SpaceShip.calcPartsToFind(gameDuration));
-        spaceShip.add(new HashSet<>(Collections.list(listCrewModal.elements())));
 
+        /*
+        Creates the hash set based on the crew model. We use a hash set as it only
+        allows one copy of each entry and we dont care about the crew order.
+         */
+        spaceShip.add(new HashSet<>(Collections.list(crewListModel.elements())));
+
+        // Generate the planets for this run through.
         List<Planet> planets = generatePlanets(gameDuration);
         GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
+        // There is a new game state so notify the event manager.
         GameEnvironment.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
         Display.changeScreen(Screen.MAIN_SCREEN);
     }
 
+    /**
+     * Called when the add crew member button is called. Creates a dialog for the
+     * user to create a crew member. If the user creates a crew member the new
+     * crew member is added to the backing set.
+     */
     private void onAddCrewMember() {
         CreateCrewMember createDialog = new CreateCrewMember();
         createDialog.setLocationRelativeTo(panelCreator);
@@ -97,28 +147,39 @@ class AdventureCreator extends ScreenComponent {
         if (newCrewMember == null) {
             return;
         }
-        if (listCrewModal.contains(newCrewMember)) {
+        // Make sure we are not adding the same crew member.
+        if (crewListModel.contains(newCrewMember)) {
             Display.popup(String.format("Cannot add %s a %s as they are already part of the crew!",
                     newCrewMember.getName(), newCrewMember.getCrewType()));
         } else {
-            listCrewModal.addElement(newCrewMember);
+            crewListModel.addElement(newCrewMember);
             resetCrewButtons();
             validateState();
         }
 
     }
 
+    /**
+     * Called when the remove crew member button is clicked. Prompts the user
+     * if they really want to remove the selected crew member. If yes the
+     * selected crew member is removed from the backing set.
+     */
     private void onRemoveCrewMember() {
         int confirmed = JOptionPane.showConfirmDialog(panelCreator,
                 String.format("Do you really want to remove %s?", listCrew.getSelectedValue()), "Remove Crew Member",
                 JOptionPane.YES_NO_OPTION);
         if (confirmed == 0) {
-            this.listCrewModal.removeElementAt(listCrew.getSelectedIndex());
+            this.crewListModel.removeElementAt(listCrew.getSelectedIndex());
             resetCrewButtons();
             validateState();
         }
     }
 
+    /**
+     * Called when the update crew member button is clicked. Creates a dialog to
+     * update the details of the selected crew member, and updates the backing
+     * set if the crew member changes.
+     */
     private void onUpdateCrewMember() {
         CrewMember currentCrewMember = listCrew.getSelectedValue();
         CreateCrewMember createCrewMemberDialog = new CreateCrewMember(currentCrewMember);
@@ -126,10 +187,10 @@ class AdventureCreator extends ScreenComponent {
         createCrewMemberDialog.setLocationRelativeTo(panelCreator);
         CrewMember alteredCrewMember = createCrewMemberDialog.showDialog();
         if (alteredCrewMember != null) {
-            if (!listCrewModal.contains(alteredCrewMember)) {
-                int insertIndex = listCrewModal.indexOf(currentCrewMember);
-                listCrewModal.removeElement(currentCrewMember);
-                listCrewModal.add(insertIndex, alteredCrewMember);
+            if (!crewListModel.contains(alteredCrewMember)) {
+                int insertIndex = crewListModel.indexOf(currentCrewMember);
+                crewListModel.removeElement(currentCrewMember);
+                crewListModel.add(insertIndex, alteredCrewMember);
             } else {
                 Display.popup(String.format("Cannot add %s a %s as they are already part of the crew!",
                         alteredCrewMember.getName(), alteredCrewMember.getCrewType()));
@@ -140,17 +201,26 @@ class AdventureCreator extends ScreenComponent {
 
     }
 
+    /**
+     * Disables the update and remove crew buttons. Checks if the add crew member
+     * button should be enabled.
+     */
     private void resetCrewButtons() {
         this.btnUpdateCrewMember.setEnabled(false);
         this.btnRemoveCrewMember.setEnabled(false);
+        btnAddCrewMember.setEnabled(crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT);
         revalidate();
         repaint();
     }
 
+    /**
+     * Makes sure there is a valid number of crew and that the spaceships name is
+     * of an acceptable format.
+     */
     private void validateState() {
-        btnAddCrewMember.setEnabled(SpaceShip.MAXIMUM_CREW_COUNT > listCrewModal.size());
-        btnContinue.setEnabled(this.listCrewModal.size() >= SpaceShip.MINIMUM_CREW_COUNT
-                && this.listCrewModal.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !textShipName.getText().equals("")
+        btnAddCrewMember.setEnabled(SpaceShip.MAXIMUM_CREW_COUNT > crewListModel.size());
+        btnContinue.setEnabled(this.crewListModel.size() >= SpaceShip.MINIMUM_CREW_COUNT
+                && this.crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !textShipName.getText().equals("")
                 && textShipName.getText().matches("^([a-zA-Z0-9_]( [a-zA-Z0-9_]+)*){3,24}$"));
     }
 
