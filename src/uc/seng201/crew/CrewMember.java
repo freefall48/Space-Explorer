@@ -17,42 +17,136 @@ import java.util.Set;
  */
 public class CrewMember {
 
+    /**
+     * Standard starting value for crew health.
+     */
     static final int STANDARD_MAX_HEALTH = 100;
+    /**
+     * Standard health regeneration rate.
+     */
     static final int STANDARD_HEALTH_REGEN = 20;
+    /**
+     * Standard ship repair.
+     */
     static final int STANDARD_SHIP_REPAIR = 30;
+    /**
+     * Standard maximum tiredness.
+     */
     static final int STANDARD_MAX_TIREDNESS = 100;
+    /**
+     * Standard tiredness rate.
+     */
     static final int STANDARD_TIREDNESS_RATE = 20;
+    /**
+     * Standard maximum food level.
+     */
     static final int STANDARD_MAX_FOOD_LEVEL = 100;
+    /**
+     * Standard food decay rate per day.
+     */
     static final int STANDARD_FOOD_LEVEL_DECAY = -20;
 
+    /**
+     * Crew member name.
+     */
     private String name;
+    /**
+     * Type of the crew member.
+     */
     private CrewType crewType;
+    /**
+     * Maximum health of this crew member.
+     */
     private int maxHealth;
+    /**
+     * Standard health regeneration rate of this crew member.
+     */
     private int baseHealthRegen;
+    /**
+     * Repair ability of the crew member.
+     */
     private int repairAmount;
+    /**
+     * Maximum tiredness of the crew member.
+     */
     private int maxTiredness;
+    /**
+     * The current tiredness rate of the crew member.
+     */
     private int currentTirednessRate;
+    /**
+     * The standard tiredness rate of the crew member.
+     */
     private int baseTirednessRate;
+    /**
+     * The current food decay rate of the crew member.
+     */
     private int currentFoodDecayRate;
+    /**
+     * The standard food decay rate of the crew member.
+     */
     private int baseFoodDecayRate;
+    /**
+     * The current health of the crew member.
+     */
     private int health;
+    /**
+     * The current health regeneration rate of the crew member.
+     */
     private int currentHealthRegen;
+    /**
+     * The current tiredness of the crew member.
+     */
     private int tiredness;
+    /**
+     * The actions the crew member has remaining for the current day.
+     */
     private int actionsLeftToday;
+    /**
+     * Contains all the modifiers that apply to the crew member.
+     */
     private Set<Modifications> modifications;
+    /**
+     * The current food level of the crew member.
+     */
     private int foodLevel;
+    /**
+     * The maximum food level of the crew member.
+     */
     private int maxFoodLevel;
 
 
+    /**
+     * Adds the required observers for the crew member class.
+     */
     private CrewMember() {
         GameEnvironment.eventManager.addObserver(Event.START_DAY, new NextDay());
     }
 
+    /**
+     * Creates a crew member of a given name and type with all other stats set to default.
+     *
+     * @param name of crew member.
+     * @param crewType type of crew member.
+     */
     public CrewMember(String name, CrewType crewType) {
         this(name, crewType, STANDARD_MAX_HEALTH, STANDARD_HEALTH_REGEN, STANDARD_SHIP_REPAIR, STANDARD_MAX_TIREDNESS,
                 STANDARD_TIREDNESS_RATE, STANDARD_FOOD_LEVEL_DECAY, STANDARD_MAX_FOOD_LEVEL);
     }
 
+    /**
+     * Creates a crew member where all stats can be customised.
+     *
+     * @param name of crew member.
+     * @param crewType type of crew member.
+     * @param maxHealth maximum health of the crew member.
+     * @param healthRegen health regeneration rate of crew member.
+     * @param repairAmount repair ability of the crew member.
+     * @param maxTiredness maximum tiredness of the crew member.
+     * @param tirednessRate tiredness rate of the crew member.
+     * @param foodDecayRate food decay rate of the crew member.
+     * @param maxFoodLevel maximum food level of the crew member.
+     */
     public CrewMember(String name, CrewType crewType, int maxHealth, int healthRegen, int repairAmount,
                       int maxTiredness, int tirednessRate, int foodDecayRate, int maxFoodLevel) {
         this();
@@ -70,11 +164,22 @@ public class CrewMember {
 
     }
 
+    /**
+     * Returns the name and type of the crew member.
+     *
+     * @return name and type.
+     */
     @Override
     public String toString() {
         return String.format("%s - %s", name, crewType);
     }
 
+    /**
+     * Compares if two crew members are the same.
+     *
+     * @param obj crew member to compare to.
+     * @return true if they are the same crew member.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof CrewMember) {
@@ -84,11 +189,21 @@ public class CrewMember {
         return false;
     }
 
+    /**
+     * Computes the hashcode of this crew member. Required for using a hash-set.
+     *
+     * @return hashcode.
+     */
     @Override
     public int hashCode() {
         return (name + crewType).hashCode();
     }
 
+    /**
+     * Provides a textual description of the crew member.
+     *
+     * @return crew member description.
+     */
     public String description() {
         return String.format("%s the %s has %d actions. ",
                 this.name, this.crewType, this.actionsLeftToday) +
@@ -97,62 +212,139 @@ public class CrewMember {
                         this.maxFoodLevel, this.currentFoodDecayRate, this.tiredness, this.maxTiredness, this.currentTirednessRate);
     }
 
+    /**
+     * Returns the current tiredness rate of the crew member.
+     *
+     * @return tiredness rate.
+     */
     public int getTirednessRate() {
         return currentTirednessRate;
     }
 
+    /**
+     * Returns the maximum food level of this crew member.
+     *
+     * @return maximum food level.
+     */
     public int getMaxFoodLevel() {
         return maxFoodLevel;
     }
 
+    /**
+     * Returns the current food decay rate of the crew member.
+     *
+     * @return food decay rate.
+     */
     public int getFoodDecayRate() {
         return currentFoodDecayRate;
     }
 
+    /**
+     * Returns the name of the crew member.
+     *
+     * @return name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Returns the maximum health of this crew member.
+     *
+     * @return maximum health.
+     */
     public int getMaxHealth() {
         return maxHealth;
     }
 
+    /**
+     * Returns the repair ability of the crew member.
+     *
+     * @return repair ability.
+     */
     public int getRepairAmount() {
         return repairAmount;
     }
 
+    /**
+     * Returns the maximum tiredness value for this crew member.
+     *
+     * @return maximum tiredness.
+     */
     public int getMaxTiredness() {
         return maxTiredness;
     }
 
+    /**
+     * Returns the crew member type.
+     *
+     * @return crew type.
+     */
     public CrewType getCrewType() {
         return crewType;
     }
 
+    /**
+     * Returns the current health of the crew member.
+     *
+     * @return current health.
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     * Returns the current health regen rate of the crew member.
+     *
+     * @return current health regen rate.
+     */
     public int getHealthRegen() {
         return currentHealthRegen;
     }
 
+    /**
+     * Returns the current tiredness of the crew member.
+     *
+     * @return current tiredness.
+     */
     public int getTiredness() {
         return tiredness;
     }
 
+    /**
+     * Returns the number of actions the crew member has left for the current day.
+     *
+     * @return number of actions remaining.
+     */
     public int getActionsLeftToday() {
         return actionsLeftToday;
     }
 
+    /**
+     * Returns an unmodifiable view to the modifications of the crew member.
+     * The backing collection cannot be altered directly via this reference but
+     * it does reflect any changes made to the backing collection.
+     *
+     * @return crew member modifications.
+     */
     public Collection<Modifications> getModifications() {
         return Collections.unmodifiableSet(modifications);
     }
 
+    /**
+     * Returns the current food level of the crew member.
+     *
+     * @return  current food level.
+     */
     public int getFoodLevel() {
         return foodLevel;
     }
 
+    /**
+     * Alters the crew members repair ability. Makes sure it is non-negative.
+     *
+     * @param value to alter the repair ability by.
+     */
     public void alterRepairAmount(int value) {
         int newRepairValue = repairAmount + value;
         if (newRepairValue < 0) {
@@ -163,10 +355,19 @@ public class CrewMember {
     }
 
 
+    /**
+     * Restores the crew members health regen to their base stat.
+     */
     public void restoreHealthRegen() {
         currentHealthRegen = baseHealthRegen;
     }
 
+    /**
+     * Alters the number of actions the crew member has remaining for the current day. Makes
+     * sure the new number of actions is non-negative.
+     *
+     * @param value to alter the actions left by.
+     */
     public void alterActionsLeft(int value) {
         int newActionsLeft = actionsLeftToday + value;
         if (newActionsLeft < 0) {
@@ -174,23 +375,50 @@ public class CrewMember {
         }
         actionsLeftToday = newActionsLeft;
     }
+
+    /**
+     * Alters the health regen of the crew member.
+     *
+     * @param value to alter the health regen by.
+     */
     public void alterHealthRegen(int value) {
         currentHealthRegen += value;
     }
 
-    public void alterFood(int food) {
-        int newLevel = this.foodLevel + food;
-        if (newLevel >= this.maxFoodLevel) {
-            newLevel = this.maxFoodLevel;
-        } else if (newLevel <= 0) {
+    /**
+     * Alters the crew members food level. If the new food level reaches 0 then the
+     * hungry modifier is added to the crew member. If the hunger is increased
+     * from zero then the modifier is then removed.
+     *
+     * @param value to alter the food level by.
+     */
+    public void alterFood(int value) {
+        int newLevel = this.foodLevel + value;
+        if (newLevel <= 0) {
             newLevel = 0;
+            addModification(Modifications.HUNGRY);
+        } else {
+            removeModification(Modifications.HUNGRY);
+        }
+        if (newLevel > maxFoodLevel) {
+            newLevel = maxFoodLevel;
         }
         foodLevel = newLevel;
     }
 
+    /**
+     * Restores the crew members food decay rate to their base rate.
+     */
     public void restoreFoodDecayRate() {
         currentFoodDecayRate = baseFoodDecayRate;
     }
+
+    /**
+     * Alters the crew members food decay rate. Makes sure the bew
+     * rate is non-negative.
+     *
+     * @param value to alter food decay rate by.
+     */
     public void alterFoodDecayRate(int value) {
         int newFoodDecayRate = currentFoodDecayRate + value;
         if (newFoodDecayRate < 0) {
@@ -199,10 +427,20 @@ public class CrewMember {
         currentFoodDecayRate = newFoodDecayRate;
     }
 
+    /**
+     * Restores the crew members tiredness rate to the base rate for
+     * this crew member.
+     */
     public void restoreTirednessRate() {
         currentTirednessRate = baseTirednessRate;
     }
 
+    /**
+     * Alters the crew members tiredness rate. Makes sure that the rate
+     * is non-negative.
+     *
+     * @param value to alter the tiredness rate by.
+     */
     public void alterTirednessRate(int value) {
         int newTirednessRate = currentTirednessRate + value;
         if (newTirednessRate < 0) {
@@ -212,10 +450,12 @@ public class CrewMember {
     }
 
     /**
-     * Adds health to crew member. Does not exceed the
-     * maximum health the member can have.
+     * Alters the current health of the crew member. Makes sure the maximum
+     * health is not exceeded. If the crew members new health would be equal to
+     * or less than 0 then the event manager is notified of the Crew Member Died
+     * event.
      *
-     * @param health The amount of health to give the crew member.
+     * @param health to alter the current health by.
      */
     public void alterHealth(int health) {
 
@@ -232,11 +472,26 @@ public class CrewMember {
         tiredness = 0;
     }
 
+    /**
+     * Alters the tiredness of the crew member by a given value. If the new
+     * tiredness is equal or exceeds the maximum tiredness then the
+     * TIRED modifier is added. If the tiredness is below maximum tiredness then
+     * the TIRED modifier is removed.
+     *
+     * @param tiredness to alter the current tiredness by.
+     */
     public void alterTiredness(int tiredness) {
         int newValue = this.tiredness + tiredness;
-        if (newValue > this.maxTiredness) {
+
+        // Make sure the maximum tiredness is not exceeded and apply or remove Tired modifier.
+        if (newValue >= this.maxTiredness) {
             newValue = this.maxTiredness;
-        } else if (newValue < 0) {
+            addModification(Modifications.TIRED);
+        } else  {
+            removeModification(Modifications.TIRED);
+        }
+        // Make sure the value is non-negative.
+        if (newValue < 0) {
             newValue = 0;
         }
         this.tiredness = newValue;
@@ -244,11 +499,12 @@ public class CrewMember {
 
     /**
      * Applies an illness to the crew member. The Illnesses onAdd() method
-     * is called.
+     * is called if the crew member did not already contain the modification.
      *
      * @param modification Modification to add to crew member
      */
     public void addModification(Modifications modification) {
+        // If true then it was added else it was already present.
         if (modifications.add(modification)) {
             modification.getInstance().onAdd(this);
         }
@@ -256,20 +512,31 @@ public class CrewMember {
 
     /**
      * Removes an illness from a crew member. The Illnesses onRemove()
-     * method is called.
+     * method is called if the crew member did not already contain the modification.
      *
      * @param modification The Illness to remove from the crew member.
      */
     public void removeModification(Modifications modification) {
+        // If true then the crew member had the modification else it was not present.
         if (modifications.remove(modification)) {
             modification.getInstance().onRemove(this);
         }
     }
 
+    /**
+     * Returns if the crew member can perform actions that require action points.
+     *
+     * @return true if the crew member can perform actions.
+     */
     public boolean canPerformActions() {
         return this.actionsLeftToday > 0;
     }
 
+    /**
+     * Reduces the number of action points remaining for the day.
+     *
+     * @throws CrewMemberException if the crew member has no action points remaining when called.
+     */
     public void performAction() {
         if (this.actionsLeftToday > 0) {
             this.actionsLeftToday -= 1;
@@ -278,36 +545,24 @@ public class CrewMember {
         }
     }
 
+    /**
+     * Returns if the current crew member is alive.
+     * @return true if the crew member is alive.
+     */
     boolean isAlive() {
         return this.health > 0;
     }
 
+    /**
+     * Handler for the next day event for crew members. When the Next day event is called. Alters
+     * the crew members stats. If the crew member dies, the event manager is notified and this
+     * observer is removed from the list of observers for the Start day event.
+     */
     class NextDay implements Observer {
 
         @Override
         public void onEvent(Object... args) {
             actionsLeftToday = 2;
-
-            // Check if the crew member is hungry
-            if (getFoodLevel() == 0) {
-                addModification(Modifications.HUNGRY);
-            } else if (modifications.contains(Modifications.HUNGRY)) {
-                removeModification(Modifications.HUNGRY);
-            }
-
-            // Check if the crew member is tired. If they are add Modification TIRED else remove it.
-            if (getTiredness() == getMaxTiredness()) {
-                addModification(Modifications.TIRED);
-            } else if (modifications.contains(Modifications.TIRED)){
-                removeModification(Modifications.TIRED);
-            }
-
-            // Run through all the onTick() for each modification.
-            for (Modifications modification : getModifications()) {
-                modification.getInstance().onTick(CrewMember.this);
-            }
-
-            // Alter crew member values after all possible modifications have been added.
             alterFood(getFoodDecayRate());
             alterTiredness(getTirednessRate());
             alterHealth(getHealthRegen());
@@ -315,7 +570,16 @@ public class CrewMember {
             // If the crew member dies no need form them to listen to this event.
             if (!isAlive()) {
                 GameEnvironment.eventManager.removeObserver(Event.START_DAY, this);
+                return;
             }
+
+            // Run through all the onTick() for each modification.
+            for (Modifications modification : getModifications()) {
+                modification.getInstance().onTick(CrewMember.this);
+            }
+
+
+
         }
     }
 }

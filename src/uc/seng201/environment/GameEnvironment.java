@@ -1,7 +1,6 @@
 package uc.seng201.environment;
 
 import uc.seng201.gui.EndScreen;
-import uc.seng201.gui.Screen;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.ObservableManager;
 import uc.seng201.utils.observerable.Observer;

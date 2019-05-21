@@ -76,7 +76,7 @@ public class SpaceShip {
         shipCrew = new HashSet<>();
         shipItems = new HashMap<>();
         balance = 0;
-        shieldCount = 4;
+        shieldCount = 2;
         shipHealth = shipHealthMax = 100;
     }
 
