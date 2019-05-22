@@ -5,9 +5,13 @@ import uc.seng201.environment.GameState;
 import uc.seng201.errors.ActionException;
 import uc.seng201.items.SpaceItem;
 
-public class ActionConsumeItem implements IAction {
+/**
+ * Action for a crew member consuming an item from the space ship.
+ */
+public final class ActionConsumeItem implements IAction {
     @Override
-    public String perform(GameState gameState, Object[] args, CrewMember... crewMembers) {
+    public String perform(final GameState gameState, final Object[] args,
+                          final CrewMember... crewMembers) {
 
         if (args.length != 1 && crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");

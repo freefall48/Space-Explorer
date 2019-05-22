@@ -67,7 +67,7 @@ class MainMenu extends ScreenComponent {
             // The user has given us a file so try and load it.
             try {
                 // Let the event manager know that there is a new game state.
-                GameEnvironment.eventManager.notifyObservers(Event.LOADED_GAME_STATE,
+                GameEnvironment.EVENT_MANAGER.notifyObservers(Event.LOADED_GAME_STATE,
                         GameState.loadState(fileChooser.getSelectedFile().getAbsolutePath()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Failed to load file",

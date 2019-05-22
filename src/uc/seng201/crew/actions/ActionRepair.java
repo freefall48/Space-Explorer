@@ -4,9 +4,13 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.GameState;
 import uc.seng201.errors.ActionException;
 
-public class ActionRepair implements IAction {
+/**
+ * Action for a crew member repairing the spaceship.
+ */
+public final class ActionRepair implements IAction {
     @Override
-    public String perform(GameState gameState, Object[] args, CrewMember... crewMembers) {
+    public String perform(final GameState gameState, final Object[] args,
+                          final CrewMember... crewMembers) {
         if (crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");
         }

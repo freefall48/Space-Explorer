@@ -9,9 +9,13 @@ import uc.seng201.errors.ActionException;
 import uc.seng201.misc.events.EventTrigger;
 import uc.seng201.utils.observerable.Event;
 
-public class ActionPilot implements IAction {
+/**
+ * Action for when crew members pilot the ship to a different planet.
+ */
+public final class ActionPilot implements IAction {
     @Override
-    public String perform(GameState gameState, Object[] args, CrewMember... crewMembers) {
+    public String perform(final GameState gameState, final Object[] args,
+                          final CrewMember... crewMembers) {
 
         // Check we have got arguments we need.
         if (args.length != 1 && crewMembers.length == 2) {
@@ -21,11 +25,13 @@ public class ActionPilot implements IAction {
             gameState.setCurrentPlanet((Planet) args[0]);
 
             /*
-             Checks if the random event should occur after this action has been performed. If it is to
-             occur, notify the event manager.
+             Checks if the random event should occur after this
+             action has been performed. If it is to occur,
+             notify the event manager.
              */
             if (SpaceExplorer.randomGenerator.nextBoolean()) {
-                GameEnvironment.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.TRAVEL, gameState);
+                GameEnvironment.EVENT_MANAGER.notifyObservers(
+                        Event.RANDOM_EVENT, EventTrigger.TRAVEL, gameState);
             }
         } else {
             throw new ActionException("Invalid arg passed");

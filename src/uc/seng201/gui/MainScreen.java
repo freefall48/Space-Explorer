@@ -236,7 +236,7 @@ class MainScreen extends ScreenComponent {
             return;
         }
         // Notify observers that we are moving to the next day.
-        GameEnvironment.eventManager.notifyObservers(Event.START_DAY, gameState);
+        GameEnvironment.EVENT_MANAGER.notifyObservers(Event.START_DAY, gameState);
 
         // Update the UI to reflect any changes.
         computeTablesModels();

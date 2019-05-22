@@ -63,21 +63,36 @@ public class SpaceShip {
     public static final int MINIMUM_CREW_COUNT = 2;
 
     /**
+     * The starting health for a spaceship.
+     */
+    private static final int SPACE_SHIP_STARTING_HEALTH = 100;
+    /**
+     * When multiplied with the duration gets the number of parts
+     * to find.
+     */
+    private static final double PARTS_TO_FIND_MULTIPLIER = 0.6666;
+
+    /**
+     * Starting number of shields for the spaceship.
+     */
+    private static final int SHIP_STARTING_SHIELDS = 3;
+
+    /**
      * Creates a spaceship with a name and missing part count and defaults
      * the remaining variables.
      *
      * @param shipName     The name of the ship.
      * @param missingParts The number of missing parts to crewMemberFromName.
      */
-    public SpaceShip(String shipName, int missingParts) {
+    public SpaceShip(final String shipName, final int missingParts) {
         this();
         this.shipName = shipName;
         this.missingParts = originalMissingParts = missingParts;
         shipCrew = new HashSet<>();
         shipItems = new HashMap<>();
         balance = 0;
-        shieldCount = 2;
-        shipHealth = shipHealthMax = 100;
+        shieldCount = SHIP_STARTING_SHIELDS;
+        shipHealth = shipHealthMax = SPACE_SHIP_STARTING_HEALTH;
     }
 
     /**
@@ -85,9 +100,9 @@ public class SpaceShip {
      * to help Gson when creating object instances.
      */
     private SpaceShip() {
-        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NextDayHandler());
-        GameEnvironment.eventManager.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDiedHandler());
-        GameEnvironment.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, new NextDayHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.CREW_MEMBER_DIED, new CrewMemberDiedHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
     }
 
     /**
@@ -97,8 +112,8 @@ public class SpaceShip {
      * @param duration number of days the game will run.
      * @return number of parts that should be found.
      */
-    public static int calcPartsToFind(int duration) {
-        return (duration * 2/3);
+    public static int calcPartsToFind(final int duration) {
+        return (int) (duration * PARTS_TO_FIND_MULTIPLIER);
     }
 
 //    public String toString() {
@@ -116,7 +131,7 @@ public class SpaceShip {
      * @param crewMembers collection containing crew members to be added to the ship crew.
      * @return true if all crew members were added to the ship crew.
      */
-    public boolean add(Set<CrewMember> crewMembers) {
+    public boolean add(final Set<CrewMember> crewMembers) {
         int newCrewSize = crewMembers.size() + shipCrew.size();
         if (newCrewSize >= MINIMUM_CREW_COUNT && newCrewSize <= MAXIMUM_CREW_COUNT) {
             return shipCrew.addAll(crewMembers);
@@ -131,7 +146,7 @@ public class SpaceShip {
      *
      * @param item item to be added to the ships items.
      */
-    public void add(SpaceItem item) {
+    public void add(final SpaceItem item) {
         if (shipItems.containsKey(item)) {
             shipItems.put(item, shipItems.get(item) + 1);
         } else {
@@ -145,10 +160,10 @@ public class SpaceShip {
      * @param crewMemberName name of the crew member to look up
      * @return crew member if present, null if not.
      */
-    public CrewMember crewMemberFromNameAndType(String crewMemberName, String type) {
+    public CrewMember crewMemberFromNameAndType(final String crewMemberName, final String type) {
         for (CrewMember crewMember : this.shipCrew) {
-            if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase()) &&
-            crewMember.getCrewType().equals(CrewType.valueOf(type.toUpperCase()))) {
+            if (crewMember.getName().toUpperCase().equals(crewMemberName.toUpperCase())
+                    && crewMember.getCrewType().equals(CrewType.valueOf(type.toUpperCase()))) {
                 return crewMember;
             }
         }
@@ -161,7 +176,7 @@ public class SpaceShip {
      * @param item element whose presence in the list is to be tested.
      * @return true if the spaceship contains the space item.
      */
-    public boolean contains(SpaceItem item) {
+    public boolean contains(final SpaceItem item) {
         return this.shipItems.containsKey(item);
     }
 
@@ -171,7 +186,7 @@ public class SpaceShip {
      * @param crewMember crew member whose presence in the list is to be tested.
      * @return true if the spaceship contains the element.
      */
-    public boolean contains(CrewMember crewMember) {
+    public boolean contains(final CrewMember crewMember) {
         return this.shipCrew.contains(crewMember);
     }
 
@@ -193,7 +208,7 @@ public class SpaceShip {
      *
      * @throws InvalidGameState if the ships inventory contains a 0 or negative count of the item.
      */
-    public SpaceItem remove(SpaceItem item) throws InvalidGameState {
+    public SpaceItem remove(final SpaceItem item) throws InvalidGameState {
         if (contains(item)) {
             int itemCount = shipItems.get(item);
             if (itemCount <= 0) {
@@ -217,7 +232,7 @@ public class SpaceShip {
      * @param crewMember CrewMember to remove from the spaceship.
      * @return true if the crew member was removed.
      */
-    public boolean remove(CrewMember crewMember) {
+    public boolean remove(final CrewMember crewMember) {
         return shipCrew.remove(crewMember);
     }
 
@@ -274,15 +289,17 @@ public class SpaceShip {
      *
      * @return current ship health.
      */
-    public int getShipHealth() {return shipHealth;}
+    public int getShipHealth() {
+        return shipHealth; }
 
     /**
      * Returns the maximum health that the spaceship can have.
      *
      * @return maximum spaceship health.
      */
-    public int getShipHealthMax() {return shipHealthMax;}
-
+    public int getShipHealthMax() {
+        return shipHealthMax;
+    }
     /**
      * Returns the number of parts that are still currently missing from the spaceship.
      *
@@ -314,7 +331,7 @@ public class SpaceShip {
      *
      * @param value damage before scaling.
      */
-    public void damage(int value) {
+    public void damage(final int value) {
         int newShipHealth;
 
         // Prevent divide by zero errors.
@@ -325,7 +342,7 @@ public class SpaceShip {
         }
 
         if (newShipHealth <= 0) {
-            GameEnvironment.eventManager.notifyObservers(Event.DEFEAT, "Ship fell apart.");
+            GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT, "Ship fell apart.");
         }
         shipHealth = newShipHealth;
         shieldCount -= 1;
@@ -338,7 +355,10 @@ public class SpaceShip {
      *
      * @param value to increase the ship health by.
      */
-    public void repair(int value) {
+    public void repair(final int value) {
+        if (value <= 0) {
+            return;
+        }
         int newShipHealth = shipHealth + value;
         if (newShipHealth > shipHealthMax) {
             newShipHealth = shipHealthMax;
@@ -352,7 +372,7 @@ public class SpaceShip {
      * @param value amount to adjust balance.
      * @throws SpaceShipException if the balance would be below 0.
      */
-    public void alterSpaceBucks(int value) throws SpaceShipException {
+    public void alterSpaceBucks(final int value) throws SpaceShipException {
         int newBalance = balance + value;
         if (newBalance < 0) {
             throw new SpaceShipException("Cannot remove " + value + " from Spaceship balance");
@@ -380,12 +400,12 @@ public class SpaceShip {
      */
     final class NextDayHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (shipCrew.size() == 0) {
-                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT, "Looks like you have run out of crew...");
             }
             if (shipHealth == 0) {
-                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
+                GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT,
                         "Looks like you have managed to destroy whats left of " + shipCrew);
             }
         }
@@ -398,14 +418,14 @@ public class SpaceShip {
      */
     final class CrewMemberDiedHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (args.length == 1) {
                 if (args[0] instanceof CrewMember) {
                     shipCrew.remove(args[0]);
                     Display.popup(args[0].toString() + " has died!");
                 }
                 if (shipCrew.size() == 0) {
-                    GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,"Looks like you have run out of crew...");
+                    GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT, "Looks like you have run out of crew...");
                 }
             }
         }
@@ -417,7 +437,7 @@ public class SpaceShip {
      */
     final class BuyFromTradersHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (args.length == 1) {
                 if (args[0] instanceof SpaceItem) {
 

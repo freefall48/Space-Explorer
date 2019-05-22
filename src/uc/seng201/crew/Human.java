@@ -13,7 +13,7 @@ public class Human extends CrewMember {
      *
      * @param name Name of the crew member.
      */
-    public Human(String name) {
+    public Human(final String name) {
 
         super(name, CrewType.HUMAN);
         addModification(Modifications.FRIENDLY);

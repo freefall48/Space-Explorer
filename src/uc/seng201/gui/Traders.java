@@ -123,7 +123,7 @@ public class Traders extends JDialog {
     private void onBuy() {
         ItemModelEntry itemModelEntry = listAvailableItems.getSelectedValue();
         if (itemModelEntry.quantity > 0) {
-            GameEnvironment.eventManager.notifyObservers(Event.BUY_FROM_TRADERS, itemModelEntry.spaceItem);
+            GameEnvironment.EVENT_MANAGER.notifyObservers(Event.BUY_FROM_TRADERS, itemModelEntry.spaceItem);
         }
         if (availableItems.size() == 0) {
             btnBuy.setEnabled(false);

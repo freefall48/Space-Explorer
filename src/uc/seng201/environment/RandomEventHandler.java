@@ -20,7 +20,7 @@ public class RandomEventHandler implements Observer {
      * @param args passed to the observers by the event caller.
      */
     @Override
-    public void onEvent(Object... args) {
+    public void onEvent(final Object... args) {
 
         List<RandomEventType> possibleEvents = new ArrayList<>();
         if (args.length == 2) {

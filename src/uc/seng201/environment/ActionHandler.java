@@ -7,10 +7,10 @@ import uc.seng201.utils.observerable.Observer;
 /**
  * Handler responsible for controlling crew members actions.
  */
-public class ActionHandler implements Observer {
+public final class ActionHandler implements Observer {
 
     @Override
-    public void onEvent(Object... args) {
+    public void onEvent(final Object... args) {
         if (args.length == 4) {
             // Check to make sure we have the right arguments.
             if (args[0] instanceof CrewAction && args[1] instanceof CrewMember[] && args[2] instanceof Object[]

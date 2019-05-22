@@ -7,31 +7,34 @@ import uc.seng201.utils.observerable.Observer;
 
 import javax.swing.*;
 
+/**
+ * The main game environment.
+ */
 public class GameEnvironment {
     /**
      * The global event manager. Observers can be registered to respond to
      * known events, as well as trigger events.
      */
-    public static ObservableManager eventManager;
+    public static final ObservableManager EVENT_MANAGER =  new ObservableManager();
 
-
+    /**
+     * Adds the main game handlers to the event manager.
+     */
     public GameEnvironment() {
-        //Create an event manager
-        eventManager = new ObservableManager();
         // Add handlers for outcome conditions
-        eventManager.addObserver(Event.VICTORY, new GameEnvironment.VictoryHandler());
-        eventManager.addObserver(Event.DEFEAT, new GameEnvironment.FailedHandler());
+        EVENT_MANAGER.addObserver(Event.VICTORY, new GameEnvironment.VictoryHandler());
+        EVENT_MANAGER.addObserver(Event.DEFEAT, new GameEnvironment.FailedHandler());
 
         // Add handler for changing game-state instance
         GameStateChangeHandler changeHandler = new GameEnvironment.GameStateChangeHandler();
-        eventManager.addObserver(Event.NEW_GAME_STATE, changeHandler);
-        eventManager.addObserver(Event.LOADED_GAME_STATE, changeHandler);
+        EVENT_MANAGER.addObserver(Event.NEW_GAME_STATE, changeHandler);
+        EVENT_MANAGER.addObserver(Event.LOADED_GAME_STATE, changeHandler);
 
         // Add handler for random game events
-        eventManager.addObserver(Event.RANDOM_EVENT, new RandomEventHandler());
+        EVENT_MANAGER.addObserver(Event.RANDOM_EVENT, new RandomEventHandler());
 
         // Add handler for crew actions
-        eventManager.addObserver(Event.CREW_MEMBER_ACTION, new ActionHandler());
+        EVENT_MANAGER.addObserver(Event.CREW_MEMBER_ACTION, new ActionHandler());
     }
 
     /**
@@ -47,7 +50,7 @@ public class GameEnvironment {
      * @param isVictory did the user win the game.
      * @param args possible message that was passed by the event handlers.
      */
-    private static void displayEndScreen(boolean isVictory, Object[] args) {
+    private static void displayEndScreen(final boolean isVictory, final Object[] args) {
         String message = null;
         if (args.length == 1) {
             if (args[0] instanceof String) {
@@ -69,7 +72,7 @@ public class GameEnvironment {
      */
     static class GameStateChangeHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (args.length == 1) {
                 if (args[0] instanceof GameState) {
                     gameState = (GameState) args[0];
@@ -84,7 +87,7 @@ public class GameEnvironment {
      */
     static class VictoryHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             displayEndScreen(true, args);
         }
     }
@@ -95,7 +98,7 @@ public class GameEnvironment {
      */
     static class FailedHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             displayEndScreen(false, args);
         }
 

@@ -372,7 +372,7 @@ public class PerformAction extends JDialog {
         }
 
         // Notify the event manager of the action
-        GameEnvironment.eventManager.notifyObservers(Event.CREW_MEMBER_ACTION, action, actingCrew, actionArguments,
+        GameEnvironment.EVENT_MANAGER.notifyObservers(Event.CREW_MEMBER_ACTION, action, actingCrew, actionArguments,
                 gameState);
     }
 

@@ -30,9 +30,9 @@ public class SpaceTraders {
      */
     public SpaceTraders() {
         NewItemsHandler newItemsHandler = new NewItemsHandler();
-        GameEnvironment.eventManager.addObserver(Event.START_DAY, newItemsHandler);
-        GameEnvironment.eventManager.addObserver(Event.NEW_GAME_STATE, newItemsHandler);
-        GameEnvironment.eventManager.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, newItemsHandler);
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.NEW_GAME_STATE, newItemsHandler);
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.BUY_FROM_TRADERS, new BuyFromTradersHandler());
 
         availableItems = new Hashtable<>();
     }

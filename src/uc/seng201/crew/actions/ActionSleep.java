@@ -4,9 +4,14 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.GameState;
 import uc.seng201.errors.ActionException;
 
-public class ActionSleep implements IAction {
+/**
+ * Action for crew members to sleep and reduce their current
+ * tiredness level.
+ */
+public final class ActionSleep implements IAction {
     @Override
-    public String perform(GameState gameState, Object[] args, CrewMember... crewMembers) {
+    public String perform(final GameState gameState, final Object[] args,
+                          final CrewMember... crewMembers) {
         if (crewMembers.length != 1) {
             throw new ActionException("Invalid args given");
         }

@@ -120,7 +120,7 @@ public class CrewMember {
      * Adds the required observers for the crew member class.
      */
     private CrewMember() {
-        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NextDay());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, new NextDay());
     }
 
     /**
@@ -129,7 +129,7 @@ public class CrewMember {
      * @param name of crew member.
      * @param crewType type of crew member.
      */
-    public CrewMember(String name, CrewType crewType) {
+    public CrewMember(final String name, final CrewType crewType) {
         this(name, crewType, STANDARD_MAX_HEALTH, STANDARD_HEALTH_REGEN, STANDARD_SHIP_REPAIR, STANDARD_MAX_TIREDNESS,
                 STANDARD_TIREDNESS_RATE, STANDARD_FOOD_LEVEL_DECAY, STANDARD_MAX_FOOD_LEVEL);
     }
@@ -147,8 +147,9 @@ public class CrewMember {
      * @param foodDecayRate food decay rate of the crew member.
      * @param maxFoodLevel maximum food level of the crew member.
      */
-    public CrewMember(String name, CrewType crewType, int maxHealth, int healthRegen, int repairAmount,
-                      int maxTiredness, int tirednessRate, int foodDecayRate, int maxFoodLevel) {
+    public CrewMember(final String name, final CrewType crewType, final int maxHealth, final int healthRegen,
+                      final int repairAmount, final int maxTiredness, final int tirednessRate,
+                      final int foodDecayRate, final int maxFoodLevel) {
         this();
         this.name = name;
         this.crewType = crewType;
@@ -181,7 +182,7 @@ public class CrewMember {
      * @return true if they are the same crew member.
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof CrewMember) {
             CrewMember crewMember = (CrewMember) obj;
             return crewMember.getName().equals(name) && crewMember.getCrewType().equals(crewType);
@@ -345,7 +346,7 @@ public class CrewMember {
      *
      * @param value to alter the repair ability by.
      */
-    public void alterRepairAmount(int value) {
+    public void alterRepairAmount(final int value) {
         int newRepairValue = repairAmount + value;
         if (newRepairValue < 0) {
             newRepairValue = 0;
@@ -368,7 +369,7 @@ public class CrewMember {
      *
      * @param value to alter the actions left by.
      */
-    public void alterActionsLeft(int value) {
+    public void alterActionsLeft(final int value) {
         int newActionsLeft = actionsLeftToday + value;
         if (newActionsLeft < 0) {
             newActionsLeft = 0;
@@ -381,7 +382,7 @@ public class CrewMember {
      *
      * @param value to alter the health regen by.
      */
-    public void alterHealthRegen(int value) {
+    public void alterHealthRegen(final int value) {
         currentHealthRegen += value;
     }
 
@@ -392,7 +393,7 @@ public class CrewMember {
      *
      * @param value to alter the food level by.
      */
-    public void alterFood(int value) {
+    public void alterFood(final int value) {
         int newLevel = this.foodLevel + value;
         if (newLevel <= 0) {
             newLevel = 0;
@@ -419,7 +420,7 @@ public class CrewMember {
      *
      * @param value to alter food decay rate by.
      */
-    public void alterFoodDecayRate(int value) {
+    public void alterFoodDecayRate(final int value) {
         int newFoodDecayRate = currentFoodDecayRate + value;
         if (newFoodDecayRate < 0) {
             newFoodDecayRate = 0;
@@ -441,7 +442,7 @@ public class CrewMember {
      *
      * @param value to alter the tiredness rate by.
      */
-    public void alterTirednessRate(int value) {
+    public void alterTirednessRate(final int value) {
         int newTirednessRate = currentTirednessRate + value;
         if (newTirednessRate < 0) {
             newTirednessRate = 0;
@@ -455,19 +456,22 @@ public class CrewMember {
      * or less than 0 then the event manager is notified of the Crew Member Died
      * event.
      *
-     * @param health to alter the current health by.
+     * @param value to alter the current health by.
      */
-    public void alterHealth(int health) {
+    public void alterHealth(final int value) {
 
-        int newHealth = this.health + health;
+        int newHealth = this.health + value;
         if (newHealth > this.maxHealth) {
             newHealth = this.maxHealth;
         } else if (newHealth <= 0) {
-            GameEnvironment.eventManager.notifyObservers(Event.CREW_MEMBER_DIED, this);
+            GameEnvironment.EVENT_MANAGER.notifyObservers(Event.CREW_MEMBER_DIED, this);
         }
         this.health = newHealth;
     }
 
+    /**
+     * Restores crew members health regen to their base rate.
+     */
     public void restoreTiredness() {
         tiredness = 0;
     }
@@ -478,10 +482,10 @@ public class CrewMember {
      * TIRED modifier is added. If the tiredness is below maximum tiredness then
      * the TIRED modifier is removed.
      *
-     * @param tiredness to alter the current tiredness by.
+     * @param value to alter the current tiredness by.
      */
-    public void alterTiredness(int tiredness) {
-        int newValue = this.tiredness + tiredness;
+    public void alterTiredness(final int value) {
+        int newValue = this.tiredness + value;
 
         // Make sure the maximum tiredness is not exceeded and apply or remove Tired modifier.
         if (newValue >= this.maxTiredness) {
@@ -503,7 +507,7 @@ public class CrewMember {
      *
      * @param modification Modification to add to crew member
      */
-    public void addModification(Modifications modification) {
+    public void addModification(final Modifications modification) {
         // If true then it was added else it was already present.
         if (modifications.add(modification)) {
             modification.getInstance().onAdd(this);
@@ -516,7 +520,7 @@ public class CrewMember {
      *
      * @param modification The Illness to remove from the crew member.
      */
-    public void removeModification(Modifications modification) {
+    public void removeModification(final Modifications modification) {
         // If true then the crew member had the modification else it was not present.
         if (modifications.remove(modification)) {
             modification.getInstance().onRemove(this);
@@ -558,10 +562,10 @@ public class CrewMember {
      * the crew members stats. If the crew member dies, the event manager is notified and this
      * observer is removed from the list of observers for the Start day event.
      */
-    class NextDay implements Observer {
+    final class NextDay implements Observer {
 
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             actionsLeftToday = 2;
             alterFood(getFoodDecayRate());
             alterTiredness(getTirednessRate());
@@ -569,7 +573,7 @@ public class CrewMember {
 
             // If the crew member dies no need form them to listen to this event.
             if (!isAlive()) {
-                GameEnvironment.eventManager.removeObserver(Event.START_DAY, this);
+                GameEnvironment.EVENT_MANAGER.removeObserver(Event.START_DAY, this);
                 return;
             }
 

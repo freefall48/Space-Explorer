@@ -58,7 +58,7 @@ public class GameState {
      * @param duration number of days the game should run.
      * @param planets planets to be available to the player.
      */
-    public GameState(SpaceShip spaceShip, int duration, List<Planet> planets) {
+    public GameState(final SpaceShip spaceShip, final int duration, final List<Planet> planets) {
         this(spaceShip, planets, planets.get(0), 1, duration);
     }
 
@@ -72,7 +72,8 @@ public class GameState {
      * @param currentDay day that the player should start on.
      * @param duration number of days the game should run.
      */
-    public GameState(SpaceShip spaceShip, List<Planet> planets, Planet currentPlanet, int currentDay, int duration) {
+    public GameState(final SpaceShip spaceShip, final List<Planet> planets, final Planet currentPlanet,
+                     final int currentDay, final int duration) {
         this();
         this.spaceShip = spaceShip;
         this.planets = planets;
@@ -89,8 +90,8 @@ public class GameState {
      * form to support Gson when creating object instances.
      */
     private GameState() {
-        GameEnvironment.eventManager.addObserver(Event.START_DAY, new NewDayHandler());
-        GameEnvironment.eventManager.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, new NewDayHandler());
+        GameEnvironment.EVENT_MANAGER.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
     }
 
     /**
@@ -126,7 +127,7 @@ public class GameState {
      * @param newPlanet new planet to orbit.
      * @throws IllegalArgumentException if the new planet is not known to the game state.
      */
-    public void setCurrentPlanet(Planet newPlanet) throws IllegalArgumentException {
+    public void setCurrentPlanet(final Planet newPlanet) throws IllegalArgumentException {
         if (planets.contains(newPlanet)) {
             this.currentPlanet = newPlanet;
         } else {
@@ -141,7 +142,7 @@ public class GameState {
      * @param name name of planet to find.
      * @return planet if present or null if not.
      */
-    public Planet planetFromName(String name) {
+    public Planet planetFromName(final String name) {
         for (Planet planet : planets) {
             if (planet.getPlanetName().equals(name)) {
                 return planet;
@@ -224,9 +225,10 @@ public class GameState {
      * @param filename URI to save the state to.
      * @throws IOException if unable to write to the file-system.
      */
-    public static void saveState(GameState gameState, String filename) throws IOException{
-
-        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    public static void saveState(
+            final GameState gameState, final String filename) throws IOException {
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting().create();
         String json = gson.toJson(gameState);
         Path file = Paths.get(filename + ".json");
         Files.writeString(file, json, Charset.forName("UTF-8"));
@@ -240,7 +242,8 @@ public class GameState {
      * @return a game state.
      * @throws IOException if unable to read from the file-system.
      */
-    public static GameState loadState(String filename) throws IOException {
+    public static GameState loadState(final String filename)
+            throws IOException {
         Path file = Paths.get(filename);
         String json = Files.readString(file);
         Gson gson = new Gson();
@@ -257,14 +260,14 @@ public class GameState {
     final class NewDayHandler implements Observer {
 
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (!hasNextDay()) {
-                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
-                        "On no! It seems you have failed to rebuild your ship in time! Err....");
+                GameEnvironment.EVENT_MANAGER.notifyObservers(
+                        Event.DEFEAT, "On no! It seems you have failed to rebuild your ship in time! Err....");
             }
             if (SpaceExplorer.randomGenerator.nextBoolean()) {
-                GameEnvironment.eventManager.notifyObservers(Event.RANDOM_EVENT, EventTrigger.START_DAY,
-                        GameState.this);
+                GameEnvironment.EVENT_MANAGER.notifyObservers(
+                        Event.RANDOM_EVENT, EventTrigger.START_DAY, GameState.this);
             }
 
             currentDay += 1;
@@ -281,13 +284,15 @@ public class GameState {
      */
     final class CrewActionHandler implements Observer {
         @Override
-        public void onEvent(Object... args) {
+        public void onEvent(final Object... args) {
             if (spaceShip.getShieldCount() == 0) {
-                GameEnvironment.eventManager.notifyObservers(Event.DEFEAT,
-                        "Looks like you have managed to destroy whats left of " + spaceShip.getShipCrew());
+                GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT,
+                        "Looks like you have managed to destroy whats left of "
+                                + spaceShip.getShipCrew());
             }
             if (!isMissingShipParts()) {
-                GameEnvironment.eventManager.notifyObservers(Event.VICTORY, "All parts found!");
+                GameEnvironment.EVENT_MANAGER.notifyObservers(
+                        Event.VICTORY, "All parts found!");
             }
         }
     }

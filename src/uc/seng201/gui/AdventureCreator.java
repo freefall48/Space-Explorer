@@ -130,7 +130,7 @@ class AdventureCreator extends ScreenComponent {
         GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
         // There is a new game state so notify the event manager.
-        GameEnvironment.eventManager.notifyObservers(Event.NEW_GAME_STATE, gameState);
+        GameEnvironment.EVENT_MANAGER.notifyObservers(Event.NEW_GAME_STATE, gameState);
         Display.changeScreen(Screen.MAIN_SCREEN);
     }
 

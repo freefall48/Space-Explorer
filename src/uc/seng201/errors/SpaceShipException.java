@@ -1,17 +1,24 @@
 package uc.seng201.errors;
 
+/**
+ * Spaceship errors.
+ */
 public class SpaceShipException extends IllegalStateException {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public SpaceShipException() {
+     * When the spaceship cannot be modified in way attempted.
+     */
+    public SpaceShipException() {
         super();
     }
 
-    public SpaceShipException(String message) {
+    /**
+     * When the spaceship cannot be modified in the way attempted and
+     * a message to describe why it will not work.
+     *
+     * @param message why the spaceship cannot be modifed in that way.
+     */
+    public SpaceShipException(final String message) {
         super(message);
     }
 }

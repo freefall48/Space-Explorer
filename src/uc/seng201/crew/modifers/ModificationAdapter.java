@@ -8,13 +8,28 @@ import uc.seng201.crew.CrewMember;
  */
 public class ModificationAdapter implements IModification {
 
+    /**
+     * Triggered when the crew member has the modification added to them.
+     *
+     * @param crewMember to have the modification added.
+     */
     @Override
-    public void onAdd(CrewMember crewMember){
-    }
+    public void onAdd(final CrewMember crewMember) { }
 
+    /**
+     * Triggered when the crew member has the modification and a new
+     * day is started.
+     *
+     * @param crewMember who has the modification.
+     */
     @Override
-    public void onTick(CrewMember crewMember){}
+    public void onTick(final CrewMember crewMember) { }
 
+    /**
+     * Triggered when the crew member has the modification removed.
+     *
+     * @param crewMember who had the modification removed.
+     */
     @Override
-    public void onRemove(CrewMember crewMember){}
+    public void onRemove(final CrewMember crewMember) { }
 }

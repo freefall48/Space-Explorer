@@ -32,7 +32,7 @@ public class Display {
      * @param screen the new Screen to show.
      * @param reinitialise true if the screen needs to be replaced.
      */
-    public static void changeScreen(Screen screen, boolean reinitialise) {
+    public static void changeScreen(final Screen screen, final boolean reinitialise) {
         ScreenComponent component = screens.get(screen);
         if (reinitialise) {
             screens.forEach((key, value) -> screens.put(key, key.createInstance(GameEnvironment.gameState)));
@@ -61,7 +61,7 @@ public class Display {
      *
      * @param screen the new Screen to show.
      */
-    public static void changeScreen(Screen screen) {
+    public static void changeScreen(final Screen screen) {
         changeScreen(screen, false);
     }
 
@@ -71,7 +71,7 @@ public class Display {
      *
      * @param message to be displayed within the window.
      */
-    public static void popup(String message) {
+    public static void popup(final String message) {
         JOptionPane.showMessageDialog(rootFrame, message);
     }
 
