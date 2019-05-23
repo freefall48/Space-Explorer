@@ -23,7 +23,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="e7465" class="javax.swing.JButton" binding="buttonOK">
+              <component id="e7465" class="javax.swing.JButton" binding="okButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="1.0" weighty="1.0"/>
@@ -52,14 +52,14 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="38c03" class="javax.swing.JLabel" binding="lblName">
+              <component id="38c03" class="javax.swing.JLabel" binding="nameLabel">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag top="0" left="5" bottom="0" right="0" weightx="5.0" weighty="0.0"/>
                 </constraints>
                 <properties>
                   <font size="36"/>
-                  <text value="##############"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="2351e" class="javax.swing.JSeparator">
@@ -177,7 +177,7 @@
                       <text value="Type:"/>
                     </properties>
                   </component>
-                  <component id="da5ad" class="javax.swing.JLabel" binding="lblHealth">
+                  <component id="da5ad" class="javax.swing.JLabel" binding="healthLabel">
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="10" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -187,7 +187,7 @@
                       <text value="Health"/>
                     </properties>
                   </component>
-                  <component id="d9efd" class="javax.swing.JLabel" binding="lblFood">
+                  <component id="d9efd" class="javax.swing.JLabel" binding="foodLabel">
                     <constraints>
                       <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="10" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -197,7 +197,7 @@
                       <text value="Food"/>
                     </properties>
                   </component>
-                  <component id="91e44" class="javax.swing.JLabel" binding="lblTiredness">
+                  <component id="91e44" class="javax.swing.JLabel" binding="tirednessLabel">
                     <constraints>
                       <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="10" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -207,7 +207,7 @@
                       <text value="Tiredness"/>
                     </properties>
                   </component>
-                  <component id="d32a0" class="javax.swing.JLabel" binding="lblActions">
+                  <component id="d32a0" class="javax.swing.JLabel" binding="actionsLabel">
                     <constraints>
                       <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -217,7 +217,7 @@
                       <text value="Actions"/>
                     </properties>
                   </component>
-                  <component id="a7d1c" class="javax.swing.JLabel" binding="lblHealthRegen">
+                  <component id="a7d1c" class="javax.swing.JLabel" binding="healthRegenLabel">
                     <constraints>
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -227,7 +227,7 @@
                       <text value="Health Regen"/>
                     </properties>
                   </component>
-                  <component id="64126" class="javax.swing.JLabel" binding="lblFoodDecay">
+                  <component id="64126" class="javax.swing.JLabel" binding="foodDecayLabel">
                     <constraints>
                       <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -237,7 +237,7 @@
                       <text value="Food Decay"/>
                     </properties>
                   </component>
-                  <component id="df703" class="javax.swing.JLabel" binding="lblTirednessRate">
+                  <component id="df703" class="javax.swing.JLabel" binding="tirednessRateLabel">
                     <constraints>
                       <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -247,7 +247,7 @@
                       <text value="Tiredness Rate"/>
                     </properties>
                   </component>
-                  <component id="5af75" class="javax.swing.JLabel" binding="lblType">
+                  <component id="5af75" class="javax.swing.JLabel" binding="typeLabel">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -267,7 +267,7 @@
                       <text value="Repair Ability:"/>
                     </properties>
                   </component>
-                  <component id="a97d3" class="javax.swing.JLabel" binding="lblRepair">
+                  <component id="a97d3" class="javax.swing.JLabel" binding="repairLabel">
                     <constraints>
                       <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="10" left="5" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -305,7 +305,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="ed605" class="javax.swing.JList" binding="listModifications">
+                      <component id="ed605" class="javax.swing.JList" binding="modificationsList">
                         <constraints/>
                         <properties>
                           <fixedCellHeight value="30"/>

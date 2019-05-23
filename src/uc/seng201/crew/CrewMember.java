@@ -1,7 +1,7 @@
 package uc.seng201.crew;
 
-import uc.seng201.environment.GameEnvironment;
 import uc.seng201.crew.modifers.Modifications;
+import uc.seng201.environment.GameEnvironment;
 import uc.seng201.errors.CrewMemberException;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
@@ -126,10 +126,10 @@ public class CrewMember {
     /**
      * Creates a crew member of a given name and type with all other stats set to default.
      *
-     * @param name of crew member.
+     * @param name     of crew member.
      * @param crewType type of crew member.
      */
-    public CrewMember(final String name, final CrewType crewType) {
+    CrewMember(final String name, final CrewType crewType) {
         this(name, crewType, STANDARD_MAX_HEALTH, STANDARD_HEALTH_REGEN, STANDARD_SHIP_REPAIR, STANDARD_MAX_TIREDNESS,
                 STANDARD_TIREDNESS_RATE, STANDARD_FOOD_LEVEL_DECAY, STANDARD_MAX_FOOD_LEVEL);
     }
@@ -137,19 +137,19 @@ public class CrewMember {
     /**
      * Creates a crew member where all stats can be customised.
      *
-     * @param name of crew member.
-     * @param crewType type of crew member.
-     * @param maxHealth maximum health of the crew member.
-     * @param healthRegen health regeneration rate of crew member.
-     * @param repairAmount repair ability of the crew member.
-     * @param maxTiredness maximum tiredness of the crew member.
+     * @param name          of crew member.
+     * @param crewType      type of crew member.
+     * @param maxHealth     maximum health of the crew member.
+     * @param healthRegen   health regeneration rate of crew member.
+     * @param repairAmount  repair ability of the crew member.
+     * @param maxTiredness  maximum tiredness of the crew member.
      * @param tirednessRate tiredness rate of the crew member.
      * @param foodDecayRate food decay rate of the crew member.
-     * @param maxFoodLevel maximum food level of the crew member.
+     * @param maxFoodLevel  maximum food level of the crew member.
      */
-    public CrewMember(final String name, final CrewType crewType, final int maxHealth, final int healthRegen,
-                      final int repairAmount, final int maxTiredness, final int tirednessRate,
-                      final int foodDecayRate, final int maxFoodLevel) {
+    CrewMember(final String name, final CrewType crewType, final int maxHealth, final int healthRegen,
+               final int repairAmount, final int maxTiredness, final int tirednessRate,
+               final int foodDecayRate, final int maxFoodLevel) {
         this();
         this.name = name;
         this.crewType = crewType;
@@ -335,7 +335,7 @@ public class CrewMember {
     /**
      * Returns the current food level of the crew member.
      *
-     * @return  current food level.
+     * @return current food level.
      */
     public int getFoodLevel() {
         return foodLevel;
@@ -492,7 +492,7 @@ public class CrewMember {
         if (newValue >= this.maxTiredness) {
             newValue = this.maxTiredness;
             addModification(Modifications.TIRED);
-        } else  {
+        } else {
             removeModification(Modifications.TIRED);
         }
         // Make sure the value is non-negative.
@@ -552,6 +552,7 @@ public class CrewMember {
 
     /**
      * Returns if the current crew member is alive.
+     *
      * @return true if the crew member is alive.
      */
     boolean isAlive() {
@@ -582,7 +583,6 @@ public class CrewMember {
             for (Modifications modification : getModifications()) {
                 modification.getInstance().onTick(CrewMember.this);
             }
-
 
 
         }

@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.SpaceShip;
-import uc.seng201.misc.traders.SpaceTraders;
 import uc.seng201.misc.Planet;
 import uc.seng201.misc.events.EventTrigger;
+import uc.seng201.misc.traders.SpaceTraders;
 import uc.seng201.utils.observerable.Event;
 import uc.seng201.utils.observerable.Observer;
 
@@ -15,7 +15,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -56,24 +55,23 @@ public class GameState {
     private int score;
 
     /**
-     *
      * @param spaceShip players spaceship.
-     * @param duration number of days the game should run.
-     * @param planets planets to be available to the player.
+     * @param duration  number of days the game should run.
+     * @param planets   planets to be available to the player.
      */
     public GameState(final SpaceShip spaceShip, final int duration, final Set<Planet> planets) {
-            this(spaceShip, planets, null, 1, duration);
+        this(spaceShip, planets, null, 1, duration);
     }
 
     /**
      * Creates a game state that can be fully customised. Contains no checks
      * to validate the arguments.
      *
-     * @param spaceShip players spaceship.
-     * @param planets planets to be available to the player.
+     * @param spaceShip     players spaceship.
+     * @param planets       planets to be available to the player.
      * @param currentPlanet planet to start at. Can be null.
-     * @param currentDay day that the player should start on.
-     * @param duration number of days the game should run.
+     * @param currentDay    day that the player should start on.
+     * @param duration      number of days the game should run.
      */
     public GameState(final SpaceShip spaceShip, final Set<Planet> planets, final Planet currentPlanet,
                      final int currentDay, final int duration) {
@@ -103,6 +101,38 @@ public class GameState {
      */
     private GameState() {
         GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, new NewDayHandler());
+    }
+
+    /**
+     * Save the game to the file-system. The game state is saved to a JSON file.
+     *
+     * @param gameState state to be saved to file.
+     * @param filename  URI to save the state to.
+     * @throws IOException if unable to write to the file-system.
+     */
+    public static void saveState(
+            final GameState gameState, final String filename) throws IOException {
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting().create();
+        String json = gson.toJson(gameState);
+        Path file = Paths.get(filename + ".json");
+        Files.writeString(file, json, Charset.forName("UTF-8"));
+    }
+
+    /**
+     * Loads an existing game from a given file. The JSON file is parsed an converted into a valid game state
+     * which is then returned.
+     *
+     * @param filename URI to load the save from.
+     * @return a game state.
+     * @throws IOException if unable to read from the file-system.
+     */
+    public static GameState loadState(final String filename)
+            throws IOException {
+        Path file = Paths.get(filename);
+        String json = Files.readString(file);
+        Gson gson = new Gson();
+        return gson.fromJson(json, GameState.class);
     }
 
     /**
@@ -227,38 +257,6 @@ public class GameState {
      */
     public int getScore() {
         return score;
-    }
-
-    /**
-     * Save the game to the file-system. The game state is saved to a JSON file.
-     *
-     * @param gameState state to be saved to file.
-     * @param filename URI to save the state to.
-     * @throws IOException if unable to write to the file-system.
-     */
-    public static void saveState(
-            final GameState gameState, final String filename) throws IOException {
-        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
-                .setPrettyPrinting().create();
-        String json = gson.toJson(gameState);
-        Path file = Paths.get(filename + ".json");
-        Files.writeString(file, json, Charset.forName("UTF-8"));
-    }
-
-    /**
-     * Loads an existing game from a given file. The JSON file is parsed an converted into a valid game state
-     * which is then returned.
-     *
-     * @param filename URI to load the save from.
-     * @return a game state.
-     * @throws IOException if unable to read from the file-system.
-     */
-    public static GameState loadState(final String filename)
-            throws IOException {
-        Path file = Paths.get(filename);
-        String json = Files.readString(file);
-        Gson gson = new Gson();
-        return gson.fromJson(json, GameState.class);
     }
 
     /**

@@ -1,10 +1,9 @@
 package uc.seng201.misc.events;
 
-import uc.seng201.environment.GameState;
 import uc.seng201.SpaceExplorer;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.crew.modifers.Modifications;
-import uc.seng201.items.SpaceItem;
+import uc.seng201.environment.GameState;
 
 import java.util.Iterator;
 
@@ -50,6 +49,6 @@ public class EventSpacePlague implements IRandomEvent {
         if (hasInfected > 0) {
             return stringBuilder.toString();
         }
-       return null;
+        return null;
     }
 }

@@ -5,7 +5,7 @@ package uc.seng201.utils.observerable;
  * the requirements for the event arguments are met. Failing to do
  * so may cause some handlers to handle the event incorrectly.
  */
-public enum  Event {
+public enum Event {
     /**
      * Event is called when the game state should start a new day.
      * The event must contain only a reference to the current game state

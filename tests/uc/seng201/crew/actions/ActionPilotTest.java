@@ -5,14 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.Human;
+import uc.seng201.crew.CrewType;
 import uc.seng201.environment.GameState;
 import uc.seng201.misc.Planet;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ActionPilotTest {
     private GameState gameState;
@@ -32,8 +32,8 @@ class ActionPilotTest {
     @DisplayName("Pilot action changes planet")
     @Test
     void perform() {
-        CrewMember crew1 = new Human("test1");
-        CrewMember crew2 = new Human("test2");
+        CrewMember crew1 = CrewType.HUMAN.getInstance("test1");
+        CrewMember crew2 = CrewType.HUMAN.getInstance("test2");
         new ActionPilot().perform(gameState, new Object[]{destination},
                 crew1, crew2);
         assertEquals(destination, gameState.getCurrentPlanet());

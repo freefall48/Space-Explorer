@@ -17,51 +17,51 @@ public class InspectCrewMember extends JDialog {
     /**
      * Allows the user to leave the screen.
      */
-    private JButton buttonOK;
+    private JButton okButton;
     /**
      * Displays crew members type.
      */
-    private JLabel lblType;
+    private JLabel typeLabel;
     /**
      * Displays crew members actions left for the day.
      */
-    private JLabel lblActions;
+    private JLabel actionsLabel;
     /**
      * Displays crew members health stat.
      */
-    private JLabel lblHealth;
+    private JLabel healthLabel;
     /**
      * Displays crew members health regen stat.
      */
-    private JLabel lblHealthRegen;
+    private JLabel healthRegenLabel;
     /**
      * Displays crew members food level stat.
      */
-    private JLabel lblFood;
+    private JLabel foodLabel;
     /**
      * Displays crew members food decay stat.
      */
-    private JLabel lblFoodDecay;
+    private JLabel foodDecayLabel;
     /**
      * Displays crew members tiredness stat.
      */
-    private JLabel lblTiredness;
+    private JLabel tirednessLabel;
     /**
      * Displays crew members tiredness rate stat.
      */
-    private JLabel lblTirednessRate;
+    private JLabel tirednessRateLabel;
     /**
      * Displays crew members current modifications.
      */
-    private JList<String> listModifications;
+    private JList<String> modificationsList;
     /**
      * Displays crew members name.
      */
-    private JLabel lblName;
+    private JLabel nameLabel;
     /**
      * Displays crew members repair stat.
      */
-    private JLabel lblRepair;
+    private JLabel repairLabel;
     /**
      * Crew member to display information about.
      */
@@ -76,9 +76,9 @@ public class InspectCrewMember extends JDialog {
         this.crewMember = crewMember;
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(okButton);
 
-        buttonOK.addActionListener(e -> onOK());
+        okButton.addActionListener(e -> onOK());
 
         displayInformation();
     }
@@ -88,26 +88,26 @@ public class InspectCrewMember extends JDialog {
      * given to this instance.
      */
     private void displayInformation() {
-        lblName.setText(crewMember.getName());
+        nameLabel.setText(crewMember.getName());
 
-        lblType.setText(crewMember.getCrewType().toString());
-        lblActions.setText(String.valueOf(crewMember.getActionsLeftToday()));
+        typeLabel.setText(crewMember.getCrewType().toString());
+        actionsLabel.setText(String.valueOf(crewMember.getActionsLeftToday()));
 
-        lblHealth.setText(String.format("%d/%d", crewMember.getHealth(), crewMember.getMaxHealth()));
-        lblHealthRegen.setText(String.format("%d per day", crewMember.getHealthRegen()));
+        healthLabel.setText(String.format("%d/%d", crewMember.getHealth(), crewMember.getMaxHealth()));
+        healthRegenLabel.setText(String.format("%d per day", crewMember.getHealthRegen()));
 
-        lblFood.setText(String.format("%d/%d", crewMember.getFoodLevel(), crewMember.getMaxFoodLevel()));
-        lblFoodDecay.setText(String.format("%d per day", crewMember.getFoodDecayRate()));
+        foodLabel.setText(String.format("%d/%d", crewMember.getFoodLevel(), crewMember.getMaxFoodLevel()));
+        foodDecayLabel.setText(String.format("%d per day", crewMember.getFoodDecayRate()));
 
-        lblTiredness.setText(String.format("%d/%d", crewMember.getTiredness(), crewMember.getMaxTiredness()));
-        lblTirednessRate.setText(String.format("%d per day", crewMember.getTirednessRate()));
+        tirednessLabel.setText(String.format("%d/%d", crewMember.getTiredness(), crewMember.getMaxTiredness()));
+        tirednessRateLabel.setText(String.format("%d per day", crewMember.getTirednessRate()));
 
-        lblRepair.setText(String.format("%d per repair", crewMember.getRepairAmount()));
+        repairLabel.setText(String.format("%d per repair", crewMember.getRepairAmount()));
 
         DefaultListModel<String> listModificationModel = new DefaultListModel<>();
         crewMember.getModifications().forEach(modification -> listModificationModel.addElement(String.format("%s - %s",
                 modification.toString(), modification.getDescription())));
-        listModifications.setModel(listModificationModel);
+        modificationsList.setModel(listModificationModel);
     }
 
     /**
@@ -153,15 +153,15 @@ public class InspectCrewMember extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
-        buttonOK = new JButton();
-        buttonOK.setText("Done");
+        okButton = new JButton();
+        okButton.setText("Done");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonOK, gbc);
+        panel2.add(okButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -181,17 +181,17 @@ public class InspectCrewMember extends JDialog {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(20, 20, 0, 20);
         panel3.add(panel4, gbc);
-        lblName = new JLabel();
-        Font lblNameFont = this.$$$getFont$$$(null, -1, 36, lblName.getFont());
-        if (lblNameFont != null) lblName.setFont(lblNameFont);
-        lblName.setText("##############");
+        nameLabel = new JLabel();
+        Font nameLabelFont = this.$$$getFont$$$(null, -1, 36, nameLabel.getFont());
+        if (nameLabelFont != null) nameLabel.setFont(nameLabelFont);
+        nameLabel.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 5.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 0, 0);
-        panel4.add(lblName, gbc);
+        panel4.add(nameLabel, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -310,86 +310,86 @@ public class InspectCrewMember extends JDialog {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 2, 5);
         panel6.add(label9, gbc);
-        lblHealth = new JLabel();
-        Font lblHealthFont = this.$$$getFont$$$(null, -1, 16, lblHealth.getFont());
-        if (lblHealthFont != null) lblHealth.setFont(lblHealthFont);
-        lblHealth.setText("Health");
+        healthLabel = new JLabel();
+        Font healthLabelFont = this.$$$getFont$$$(null, -1, 16, healthLabel.getFont());
+        if (healthLabelFont != null) healthLabel.setFont(healthLabelFont);
+        healthLabel.setText("Health");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(10, 5, 2, 0);
-        panel6.add(lblHealth, gbc);
-        lblFood = new JLabel();
-        Font lblFoodFont = this.$$$getFont$$$(null, -1, 16, lblFood.getFont());
-        if (lblFoodFont != null) lblFood.setFont(lblFoodFont);
-        lblFood.setText("Food");
+        panel6.add(healthLabel, gbc);
+        foodLabel = new JLabel();
+        Font foodLabelFont = this.$$$getFont$$$(null, -1, 16, foodLabel.getFont());
+        if (foodLabelFont != null) foodLabel.setFont(foodLabelFont);
+        foodLabel.setText("Food");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(10, 5, 2, 0);
-        panel6.add(lblFood, gbc);
-        lblTiredness = new JLabel();
-        Font lblTirednessFont = this.$$$getFont$$$(null, -1, 16, lblTiredness.getFont());
-        if (lblTirednessFont != null) lblTiredness.setFont(lblTirednessFont);
-        lblTiredness.setText("Tiredness");
+        panel6.add(foodLabel, gbc);
+        tirednessLabel = new JLabel();
+        Font tirednessLabelFont = this.$$$getFont$$$(null, -1, 16, tirednessLabel.getFont());
+        if (tirednessLabelFont != null) tirednessLabel.setFont(tirednessLabelFont);
+        tirednessLabel.setText("Tiredness");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(10, 5, 2, 0);
-        panel6.add(lblTiredness, gbc);
-        lblActions = new JLabel();
-        Font lblActionsFont = this.$$$getFont$$$(null, -1, 16, lblActions.getFont());
-        if (lblActionsFont != null) lblActions.setFont(lblActionsFont);
-        lblActions.setText("Actions");
+        panel6.add(tirednessLabel, gbc);
+        actionsLabel = new JLabel();
+        Font actionsLabelFont = this.$$$getFont$$$(null, -1, 16, actionsLabel.getFont());
+        if (actionsLabelFont != null) actionsLabel.setFont(actionsLabelFont);
+        actionsLabel.setText("Actions");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 2, 0);
-        panel6.add(lblActions, gbc);
-        lblHealthRegen = new JLabel();
-        Font lblHealthRegenFont = this.$$$getFont$$$(null, -1, 16, lblHealthRegen.getFont());
-        if (lblHealthRegenFont != null) lblHealthRegen.setFont(lblHealthRegenFont);
-        lblHealthRegen.setText("Health Regen");
+        panel6.add(actionsLabel, gbc);
+        healthRegenLabel = new JLabel();
+        Font healthRegenLabelFont = this.$$$getFont$$$(null, -1, 16, healthRegenLabel.getFont());
+        if (healthRegenLabelFont != null) healthRegenLabel.setFont(healthRegenLabelFont);
+        healthRegenLabel.setText("Health Regen");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 2, 0);
-        panel6.add(lblHealthRegen, gbc);
-        lblFoodDecay = new JLabel();
-        Font lblFoodDecayFont = this.$$$getFont$$$(null, -1, 16, lblFoodDecay.getFont());
-        if (lblFoodDecayFont != null) lblFoodDecay.setFont(lblFoodDecayFont);
-        lblFoodDecay.setText("Food Decay");
+        panel6.add(healthRegenLabel, gbc);
+        foodDecayLabel = new JLabel();
+        Font foodDecayLabelFont = this.$$$getFont$$$(null, -1, 16, foodDecayLabel.getFont());
+        if (foodDecayLabelFont != null) foodDecayLabel.setFont(foodDecayLabelFont);
+        foodDecayLabel.setText("Food Decay");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 2, 0);
-        panel6.add(lblFoodDecay, gbc);
-        lblTirednessRate = new JLabel();
-        Font lblTirednessRateFont = this.$$$getFont$$$(null, -1, 16, lblTirednessRate.getFont());
-        if (lblTirednessRateFont != null) lblTirednessRate.setFont(lblTirednessRateFont);
-        lblTirednessRate.setText("Tiredness Rate");
+        panel6.add(foodDecayLabel, gbc);
+        tirednessRateLabel = new JLabel();
+        Font tirednessRateLabelFont = this.$$$getFont$$$(null, -1, 16, tirednessRateLabel.getFont());
+        if (tirednessRateLabelFont != null) tirednessRateLabel.setFont(tirednessRateLabelFont);
+        tirednessRateLabel.setText("Tiredness Rate");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 7;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 2, 0);
-        panel6.add(lblTirednessRate, gbc);
-        lblType = new JLabel();
-        Font lblTypeFont = this.$$$getFont$$$(null, -1, 16, lblType.getFont());
-        if (lblTypeFont != null) lblType.setFont(lblTypeFont);
-        lblType.setText("Type");
+        panel6.add(tirednessRateLabel, gbc);
+        typeLabel = new JLabel();
+        Font typeLabelFont = this.$$$getFont$$$(null, -1, 16, typeLabel.getFont());
+        if (typeLabelFont != null) typeLabel.setFont(typeLabelFont);
+        typeLabel.setText("Type");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 2, 0);
-        panel6.add(lblType, gbc);
+        panel6.add(typeLabel, gbc);
         final JLabel label10 = new JLabel();
         Font label10Font = this.$$$getFont$$$(null, -1, 16, label10.getFont());
         if (label10Font != null) label10.setFont(label10Font);
@@ -400,16 +400,16 @@ public class InspectCrewMember extends JDialog {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 2, 5);
         panel6.add(label10, gbc);
-        lblRepair = new JLabel();
-        Font lblRepairFont = this.$$$getFont$$$(null, -1, 16, lblRepair.getFont());
-        if (lblRepairFont != null) lblRepair.setFont(lblRepairFont);
-        lblRepair.setText("Repair");
+        repairLabel = new JLabel();
+        Font repairLabelFont = this.$$$getFont$$$(null, -1, 16, repairLabel.getFont());
+        if (repairLabelFont != null) repairLabel.setFont(repairLabelFont);
+        repairLabel.setText("Repair");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 8;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(10, 5, 2, 0);
-        panel6.add(lblRepair, gbc);
+        panel6.add(repairLabel, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -437,12 +437,12 @@ public class InspectCrewMember extends JDialog {
         gbc.weighty = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel7.add(scrollPane1, gbc);
-        listModifications = new JList();
-        listModifications.setFixedCellHeight(30);
-        Font listModificationsFont = this.$$$getFont$$$(null, -1, 14, listModifications.getFont());
-        if (listModificationsFont != null) listModifications.setFont(listModificationsFont);
-        listModifications.setSelectionMode(0);
-        scrollPane1.setViewportView(listModifications);
+        modificationsList = new JList();
+        modificationsList.setFixedCellHeight(30);
+        Font modificationsListFont = this.$$$getFont$$$(null, -1, 14, modificationsList.getFont());
+        if (modificationsListFont != null) modificationsList.setFont(modificationsListFont);
+        modificationsList.setSelectionMode(0);
+        scrollPane1.setViewportView(modificationsList);
         final JSeparator separator2 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;

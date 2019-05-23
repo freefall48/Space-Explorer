@@ -19,16 +19,15 @@ class MainMenu extends ScreenComponent {
     /**
      * Root panel
      */
-	private JPanel Menu;
+    private JPanel Menu;
     /**
      * Button to create a new game.
      */
-    private JButton btnNewGame;
+    private JButton newGameButton;
     /**
      * Button to load an existing game
-     *
      */
-    private JButton btnLoadGame;
+    private JButton loadGameButton;
 
     /**
      * Main menu to ask the user if they want to create a new game or load an existing game.
@@ -37,8 +36,8 @@ class MainMenu extends ScreenComponent {
      */
     MainMenu(GameState gameState) {
 
-        btnLoadGame.addActionListener(e -> onLoadGame());
-        btnNewGame.addActionListener(e -> onNewGame());
+        loadGameButton.addActionListener(e -> onLoadGame());
+        newGameButton.addActionListener(e -> onNewGame());
 
     }
 
@@ -110,35 +109,35 @@ class MainMenu extends ScreenComponent {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 20, 0);
         Menu.add(label1, gbc);
-        btnLoadGame = new JButton();
-        btnLoadGame.setActionCommand("SLOT3");
-        btnLoadGame.setEnabled(true);
-        Font btnLoadGameFont = this.$$$getFont$$$("Droid Sans Mono", -1, 20, btnLoadGame.getFont());
-        if (btnLoadGameFont != null) btnLoadGame.setFont(btnLoadGameFont);
-        btnLoadGame.setText("Load Game");
-        btnLoadGame.setToolTipText("No save game avaliable in this slot!");
+        loadGameButton = new JButton();
+        loadGameButton.setActionCommand("SLOT3");
+        loadGameButton.setEnabled(true);
+        Font loadGameButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 20, loadGameButton.getFont());
+        if (loadGameButtonFont != null) loadGameButton.setFont(loadGameButtonFont);
+        loadGameButton.setText("Load Game");
+        loadGameButton.setToolTipText("No save game avaliable in this slot!");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipady = 20;
         gbc.insets = new Insets(10, 40, 0, 40);
-        Menu.add(btnLoadGame, gbc);
-        btnNewGame = new JButton();
-        btnNewGame.setActionCommand("NEW");
-        btnNewGame.setEnabled(true);
-        Font btnNewGameFont = this.$$$getFont$$$("Droid Sans Mono", -1, 20, btnNewGame.getFont());
-        if (btnNewGameFont != null) btnNewGame.setFont(btnNewGameFont);
-        btnNewGame.setSelected(false);
-        btnNewGame.setText("New Game");
-        btnNewGame.setToolTipText("New Game");
+        Menu.add(loadGameButton, gbc);
+        newGameButton = new JButton();
+        newGameButton.setActionCommand("NEW");
+        newGameButton.setEnabled(true);
+        Font newGameButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 20, newGameButton.getFont());
+        if (newGameButtonFont != null) newGameButton.setFont(newGameButtonFont);
+        newGameButton.setSelected(false);
+        newGameButton.setText("New Game");
+        newGameButton.setToolTipText("New Game");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipady = 20;
         gbc.insets = new Insets(30, 40, 0, 40);
-        Menu.add(btnNewGame, gbc);
+        Menu.add(newGameButton, gbc);
     }
 
     /**

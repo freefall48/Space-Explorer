@@ -1,6 +1,9 @@
 package uc.seng201.utils.observerable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Contains implementation for an ObservableManager object. Does
@@ -31,7 +34,7 @@ public class ObservableManager {
      * Adds an observer to the list of observers to be notified
      * of a certain event.
      *
-     * @param event that the observer wishes to subscribe to.
+     * @param event    that the observer wishes to subscribe to.
      * @param observer reference to the observer.
      */
     public void addObserver(Event event, Observer observer) {
@@ -42,7 +45,7 @@ public class ObservableManager {
      * Removes an observer from the list of observers to be notified
      * of a certain event.
      *
-     * @param event that the observer wishes to be removed from.
+     * @param event    that the observer wishes to be removed from.
      * @param observer reference to the observer to be removed.
      */
     public void removeObserver(Event event, Observer observer) {
@@ -53,7 +56,7 @@ public class ObservableManager {
      * Notifies all observers of a given event.
      *
      * @param event notify observers of this event.
-     * @param args to be passed to each observer.
+     * @param args  to be passed to each observer.
      */
     public void notifyObservers(Event event, Object... args) {
 

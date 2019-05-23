@@ -1,10 +1,14 @@
 package uc.seng201.gui;
 
-import uc.seng201.crew.*;
+import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.CrewType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 /**
@@ -20,23 +24,23 @@ public class CreateCrewMember extends JDialog {
      * Allow the user to confirm they wish to create or alter the current
      * crew member.
      */
-    private JButton buttonOK;
+    private JButton okButton;
     /**
      * Allow the user to exit without creating or altering a crew member.
      */
-    private JButton buttonCancel;
+    private JButton cancelButton;
     /**
      * The name of the crew member.
      */
-    private JTextField txtName;
+    private JTextField NameText;
     /**
      * The available crew types that the user can choose from.
      */
-    private JComboBox<CrewType> comboType;
+    private JComboBox<CrewType> typeComboBox;
     /**
      * The title of the screen.
      */
-    private JLabel lblTitle;
+    private JLabel titleLabel;
     /**
      * The crew member that is represented by the current user selections.
      */
@@ -51,9 +55,9 @@ public class CreateCrewMember extends JDialog {
     CreateCrewMember(CrewMember crewMember) {
         this();
         this.crewMember = crewMember;
-        txtName.setText(crewMember.getName());
-        comboType.setSelectedItem(crewMember.getCrewType());
-        lblTitle.setText("Update Crew Member");
+        NameText.setText(crewMember.getName());
+        typeComboBox.setSelectedItem(crewMember.getCrewType());
+        titleLabel.setText("Update Crew Member");
     }
 
     /**
@@ -62,28 +66,28 @@ public class CreateCrewMember extends JDialog {
     CreateCrewMember() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-        lblTitle.setText("Add Crew Member");
-        comboType.setModel(new DefaultComboBoxModel<>(CrewType.values()));
-        comboType.setSelectedIndex(0);
+        getRootPane().setDefaultButton(okButton);
+        titleLabel.setText("Add Crew Member");
+        typeComboBox.setModel(new DefaultComboBoxModel<>(CrewType.values()));
+        typeComboBox.setSelectedIndex(0);
 
-        buttonOK.addActionListener(e -> onOK());
+        okButton.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(e -> onCancel());
+        cancelButton.addActionListener(e -> onCancel());
 
-        txtName.addKeyListener(new KeyAdapter() {
+        NameText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyTyped(e);
                 if (isValidState()) {
-                    buttonOK.setEnabled(true);
+                    okButton.setEnabled(true);
                 } else {
-                    buttonOK.setEnabled(false);
+                    okButton.setEnabled(false);
                 }
             }
         });
 
-        comboType.addActionListener(e -> buttonOK.setEnabled(isValidState()));
+        typeComboBox.addActionListener(e -> okButton.setEnabled(isValidState()));
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -105,25 +109,24 @@ public class CreateCrewMember extends JDialog {
      */
     private boolean isValidState() {
         if (crewMember != null) {
-            if (txtName.getText().equals(crewMember.getName())
-                    && Objects.equals(comboType.getSelectedItem(), crewMember.getCrewType())) {
+            if (NameText.getText().equals(crewMember.getName())
+                    && Objects.equals(typeComboBox.getSelectedItem(), crewMember.getCrewType())) {
                 return false;
             }
         }
-        return (!txtName.getText().equals("")
-                && txtName.getText().matches("^([a-zA-Z]){3,12}$"));
+        return (!NameText.getText().equals("")
+                && NameText.getText().matches("^([a-zA-Z]){3,12}$"));
     }
-
 
     /**
      * Handles when the user has created a crew member.
      */
     private void onOK() {
-        CrewType crewType = (CrewType) comboType.getSelectedItem();
+        CrewType crewType = (CrewType) typeComboBox.getSelectedItem();
         if (crewType == null) {
             return;
         }
-        this.crewMember = crewType.getInstance(txtName.getText());
+        this.crewMember = crewType.getInstance(NameText.getText());
         dispose();
     }
 
@@ -185,25 +188,25 @@ public class CreateCrewMember extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
-        buttonOK = new JButton();
-        buttonOK.setEnabled(false);
-        buttonOK.setText("OK");
+        okButton = new JButton();
+        okButton.setEnabled(false);
+        okButton.setText("OK");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonOK, gbc);
-        buttonCancel = new JButton();
-        buttonCancel.setText("Cancel");
+        panel2.add(okButton, gbc);
+        cancelButton = new JButton();
+        cancelButton.setText("Cancel");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonCancel, gbc);
+        panel2.add(cancelButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -213,8 +216,8 @@ public class CreateCrewMember extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel3, gbc);
-        txtName = new JTextField();
-        txtName.setToolTipText("Name must only contain letters and be 3-12 characters long.");
+        NameText = new JTextField();
+        NameText.setToolTipText("Name must only contain letters and be 3-12 characters long.");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
@@ -222,7 +225,7 @@ public class CreateCrewMember extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipadx = 200;
         gbc.insets = new Insets(0, 0, 5, 0);
-        panel3.add(txtName, gbc);
+        panel3.add(NameText, gbc);
         final JLabel label1 = new JLabel();
         label1.setHorizontalAlignment(4);
         label1.setText("Name:");
@@ -241,14 +244,14 @@ public class CreateCrewMember extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 0, 0, 5);
         panel3.add(label2, gbc);
-        comboType = new JComboBox();
+        typeComboBox = new JComboBox();
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 0, 0, 0);
-        panel3.add(comboType, gbc);
+        panel3.add(typeComboBox, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -293,18 +296,18 @@ public class CreateCrewMember extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel4, gbc);
-        lblTitle = new JLabel();
-        Font lblTitleFont = this.$$$getFont$$$("Droid Sans Mono", -1, 36, lblTitle.getFont());
-        if (lblTitleFont != null) lblTitle.setFont(lblTitleFont);
-        lblTitle.setHorizontalAlignment(0);
-        lblTitle.setPreferredSize(new Dimension(396, 43));
-        lblTitle.setText("######");
+        titleLabel = new JLabel();
+        Font titleLabelFont = this.$$$getFont$$$("Droid Sans Mono", -1, 36, titleLabel.getFont());
+        if (titleLabelFont != null) titleLabel.setFont(titleLabelFont);
+        titleLabel.setHorizontalAlignment(0);
+        titleLabel.setPreferredSize(new Dimension(396, 43));
+        titleLabel.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel4.add(lblTitle, gbc);
-        label1.setLabelFor(txtName);
-        label2.setLabelFor(comboType);
+        panel4.add(titleLabel, gbc);
+        label1.setLabelFor(NameText);
+        label2.setLabelFor(typeComboBox);
     }
 
     /**

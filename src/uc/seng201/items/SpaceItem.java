@@ -5,8 +5,8 @@ import uc.seng201.crew.modifers.Modifications;
 
 /**
  * Contains the items that are available in the game.
- * @author Matthew Johnson
  *
+ * @author Matthew Johnson
  */
 public enum SpaceItem {
     /**
@@ -91,8 +91,8 @@ public enum SpaceItem {
     /**
      * Creates a reference item that is available throughout the code.
      *
-     * @param itemType the type of item.
-     * @param price cost of the item.
+     * @param itemType        the type of item.
+     * @param price           cost of the item.
      * @param itemDescription message to describe the item.
      */
     SpaceItem(ItemType itemType, int price, String itemDescription) {

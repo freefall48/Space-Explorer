@@ -12,6 +12,7 @@ public class ModSpacePlague extends ModificationAdapter {
      * reduced by.
      */
     private static final int ALTERED_HEALTH_REGEN = -10;
+
     /**
      * When added to a crew member, makes their health regen negative.
      *

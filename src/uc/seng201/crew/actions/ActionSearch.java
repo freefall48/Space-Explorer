@@ -2,8 +2,8 @@ package uc.seng201.crew.actions;
 
 import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.GameState;
-import uc.seng201.misc.Planet;
 import uc.seng201.errors.ActionException;
+import uc.seng201.misc.Planet;
 
 /**
  * Action for crew members who are searching the planet that is

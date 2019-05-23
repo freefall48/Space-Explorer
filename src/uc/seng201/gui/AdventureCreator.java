@@ -1,19 +1,20 @@
 package uc.seng201.gui;
 
-import uc.seng201.*;
+import uc.seng201.SpaceShip;
 import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.Display;
-import uc.seng201.misc.Planet;
 import uc.seng201.environment.GameEnvironment;
 import uc.seng201.environment.GameState;
+import uc.seng201.misc.Planet;
 import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.*;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Create a new game.
@@ -23,11 +24,11 @@ class AdventureCreator extends ScreenComponent {
     /**
      * Allows the user to enter their ship name.
      */
-    private JTextField textShipName;
+    private JTextField shipNameText;
     /**
      * Allows the user to select the duration of the game.
      */
-    private JSlider sliderDuration;
+    private JSlider durationSlider;
     /**
      * Root panel.
      */
@@ -36,27 +37,27 @@ class AdventureCreator extends ScreenComponent {
      * Continue button. When the user has finished creating crew and
      * naming the ship.
      */
-    private JButton btnContinue;
+    private JButton continueButton;
     /**
      * Add crew button. Allows the user to add crew members.
      */
-    private JButton btnAddCrewMember;
+    private JButton addCrewMemberButton;
     /**
      * Shows the current crew members the user has created.
      */
-    private JList<CrewMember> listCrew;
+    private JList<CrewMember> crewList;
     /**
      * Allows the user to navigate back to the main menu.
      */
-    private JButton btnBack;
+    private JButton backButton;
     /**
      * Update crew member button. Allows the user to modify an existing crew member.
      */
-    private JButton btnUpdateCrewMember;
+    private JButton updateCrewMemberButton;
     /**
      * Remove crew member button. Allows the user to remove an existing crew member.
      */
-    private JButton btnRemoveCrewMember;
+    private JButton removeCrewMemberButton;
     /**
      * The model that backs the crew member list. Contains all the crew member instances.
      */
@@ -68,7 +69,7 @@ class AdventureCreator extends ScreenComponent {
     AdventureCreator(GameState gameState) {
         crewListModel = new DefaultListModel<>();
 
-        textShipName.addKeyListener(new KeyAdapter() {
+        shipNameText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyTyped(e);
@@ -76,18 +77,18 @@ class AdventureCreator extends ScreenComponent {
             }
         });
 
-        listCrew.setModel(crewListModel);
+        crewList.setModel(crewListModel);
 
-        listCrew.addListSelectionListener(e -> {
-            btnRemoveCrewMember.setEnabled(true);
-            btnUpdateCrewMember.setEnabled(true);
+        crewList.addListSelectionListener(e -> {
+            removeCrewMemberButton.setEnabled(true);
+            updateCrewMemberButton.setEnabled(true);
         });
 
-        btnBack.addActionListener(e -> Display.changeScreen(Screen.MAIN_MENU));
-        btnAddCrewMember.addActionListener(e -> onAddCrewMember());
-        btnContinue.addActionListener(e -> onContinue());
-        btnUpdateCrewMember.addActionListener(e -> onUpdateCrewMember());
-        btnRemoveCrewMember.addActionListener(e -> onRemoveCrewMember());
+        backButton.addActionListener(e -> Display.changeScreen(Screen.MAIN_MENU));
+        addCrewMemberButton.addActionListener(e -> onAddCrewMember());
+        continueButton.addActionListener(e -> onContinue());
+        updateCrewMemberButton.addActionListener(e -> onUpdateCrewMember());
+        removeCrewMemberButton.addActionListener(e -> onRemoveCrewMember());
     }
 
     /**
@@ -116,8 +117,8 @@ class AdventureCreator extends ScreenComponent {
      * state is then set to the event manager.
      */
     private void onContinue() {
-        int gameDuration = sliderDuration.getValue();
-        SpaceShip spaceShip = new SpaceShip(textShipName.getText(), SpaceShip.calcPartsToFind(gameDuration));
+        int gameDuration = durationSlider.getValue();
+        SpaceShip spaceShip = new SpaceShip(shipNameText.getText(), SpaceShip.calcPartsToFind(gameDuration));
 
         /*
         Creates the hash set based on the crew model. We use a hash set as it only
@@ -166,10 +167,10 @@ class AdventureCreator extends ScreenComponent {
      */
     private void onRemoveCrewMember() {
         int confirmed = JOptionPane.showConfirmDialog(panelCreator,
-                String.format("Do you really want to remove %s?", listCrew.getSelectedValue()), "Remove Crew Member",
+                String.format("Do you really want to remove %s?", crewList.getSelectedValue()), "Remove Crew Member",
                 JOptionPane.YES_NO_OPTION);
         if (confirmed == 0) {
-            this.crewListModel.removeElementAt(listCrew.getSelectedIndex());
+            this.crewListModel.removeElementAt(crewList.getSelectedIndex());
             resetCrewButtons();
             validateState();
         }
@@ -181,7 +182,7 @@ class AdventureCreator extends ScreenComponent {
      * set if the crew member changes.
      */
     private void onUpdateCrewMember() {
-        CrewMember currentCrewMember = listCrew.getSelectedValue();
+        CrewMember currentCrewMember = crewList.getSelectedValue();
         CreateCrewMember createCrewMemberDialog = new CreateCrewMember(currentCrewMember);
         createCrewMemberDialog.setResizable(false);
         createCrewMemberDialog.setLocationRelativeTo(panelCreator);
@@ -206,9 +207,9 @@ class AdventureCreator extends ScreenComponent {
      * button should be enabled.
      */
     private void resetCrewButtons() {
-        this.btnUpdateCrewMember.setEnabled(false);
-        this.btnRemoveCrewMember.setEnabled(false);
-        btnAddCrewMember.setEnabled(crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT);
+        this.updateCrewMemberButton.setEnabled(false);
+        this.removeCrewMemberButton.setEnabled(false);
+        addCrewMemberButton.setEnabled(crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT);
         revalidate();
         repaint();
     }
@@ -218,10 +219,10 @@ class AdventureCreator extends ScreenComponent {
      * of an acceptable format.
      */
     private void validateState() {
-        btnAddCrewMember.setEnabled(SpaceShip.MAXIMUM_CREW_COUNT > crewListModel.size());
-        btnContinue.setEnabled(this.crewListModel.size() >= SpaceShip.MINIMUM_CREW_COUNT
-                && this.crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !textShipName.getText().equals("")
-                && textShipName.getText().matches("^([a-zA-Z0-9_]( [a-zA-Z0-9_]+)*){3,24}$"));
+        addCrewMemberButton.setEnabled(SpaceShip.MAXIMUM_CREW_COUNT > crewListModel.size());
+        continueButton.setEnabled(this.crewListModel.size() >= SpaceShip.MINIMUM_CREW_COUNT
+                && this.crewListModel.size() <= SpaceShip.MAXIMUM_CREW_COUNT && !shipNameText.getText().equals("")
+                && shipNameText.getText().matches("^([a-zA-Z0-9_]( [a-zA-Z0-9_]+)*){3,24}$"));
     }
 
     {
@@ -302,18 +303,18 @@ class AdventureCreator extends ScreenComponent {
         gbc.weighty = 7.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel2.add(scrollPane1, gbc);
-        listCrew = new JList();
-        listCrew.setAutoscrolls(true);
-        listCrew.setEnabled(true);
-        listCrew.setFixedCellHeight(40);
-        listCrew.setFixedCellWidth(-1);
-        Font listCrewFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, listCrew.getFont());
-        if (listCrewFont != null) listCrew.setFont(listCrewFont);
+        crewList = new JList();
+        crewList.setAutoscrolls(true);
+        crewList.setEnabled(true);
+        crewList.setFixedCellHeight(40);
+        crewList.setFixedCellWidth(-1);
+        Font crewListFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, crewList.getFont());
+        if (crewListFont != null) crewList.setFont(crewListFont);
         final DefaultListModel defaultListModel1 = new DefaultListModel();
-        listCrew.setModel(defaultListModel1);
-        listCrew.setSelectionMode(0);
-        listCrew.setVisibleRowCount(4);
-        scrollPane1.setViewportView(listCrew);
+        crewList.setModel(defaultListModel1);
+        crewList.setSelectionMode(0);
+        crewList.setVisibleRowCount(4);
+        scrollPane1.setViewportView(crewList);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -321,39 +322,39 @@ class AdventureCreator extends ScreenComponent {
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.BOTH;
         panel2.add(panel3, gbc);
-        btnRemoveCrewMember = new JButton();
-        btnRemoveCrewMember.setEnabled(false);
-        btnRemoveCrewMember.setText("Remove");
-        btnRemoveCrewMember.setToolTipText("Remove selected crew member from our force.");
+        removeCrewMemberButton = new JButton();
+        removeCrewMemberButton.setEnabled(false);
+        removeCrewMemberButton.setText("Remove");
+        removeCrewMemberButton.setToolTipText("Remove selected crew member from our force.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 10, 2, 0);
-        panel3.add(btnRemoveCrewMember, gbc);
-        btnUpdateCrewMember = new JButton();
-        btnUpdateCrewMember.setEnabled(false);
-        btnUpdateCrewMember.setText("Change");
-        btnUpdateCrewMember.setToolTipText("Change the selected crew memeber.");
+        panel3.add(removeCrewMemberButton, gbc);
+        updateCrewMemberButton = new JButton();
+        updateCrewMemberButton.setEnabled(false);
+        updateCrewMemberButton.setText("Change");
+        updateCrewMemberButton.setToolTipText("Change the selected crew memeber.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 10, 2, 0);
-        panel3.add(btnUpdateCrewMember, gbc);
-        btnAddCrewMember = new JButton();
-        btnAddCrewMember.setEnabled(true);
-        btnAddCrewMember.setText("Add");
-        btnAddCrewMember.setToolTipText("Add a crew member to our force");
+        panel3.add(updateCrewMemberButton, gbc);
+        addCrewMemberButton = new JButton();
+        addCrewMemberButton.setEnabled(true);
+        addCrewMemberButton.setText("Add");
+        addCrewMemberButton.setToolTipText("Add a crew member to our force");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 10, 2, 0);
-        panel3.add(btnAddCrewMember, gbc);
+        panel3.add(addCrewMemberButton, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -369,25 +370,25 @@ class AdventureCreator extends ScreenComponent {
         gbc.gridwidth = 3;
         gbc.fill = GridBagConstraints.BOTH;
         panel2.add(panel4, gbc);
-        textShipName = new JTextField();
-        textShipName.setToolTipText("Ship name must be between 3-24 characters long");
+        shipNameText = new JTextField();
+        shipNameText.setToolTipText("Ship name must be between 3-24 characters long");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipadx = 200;
-        panel4.add(textShipName, gbc);
-        sliderDuration = new JSlider();
-        sliderDuration.setMajorTickSpacing(1);
-        sliderDuration.setMaximum(10);
-        sliderDuration.setMinimum(3);
-        sliderDuration.setPaintLabels(true);
-        sliderDuration.setPaintTicks(false);
-        sliderDuration.setSnapToTicks(true);
-        sliderDuration.setToolTipText("Duration of the game");
-        sliderDuration.setValue(5);
-        sliderDuration.setValueIsAdjusting(false);
+        panel4.add(shipNameText, gbc);
+        durationSlider = new JSlider();
+        durationSlider.setMajorTickSpacing(1);
+        durationSlider.setMaximum(10);
+        durationSlider.setMinimum(3);
+        durationSlider.setPaintLabels(true);
+        durationSlider.setPaintTicks(false);
+        durationSlider.setSnapToTicks(true);
+        durationSlider.setToolTipText("Duration of the game");
+        durationSlider.setValue(5);
+        durationSlider.setValueIsAdjusting(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
         gbc.gridy = 1;
@@ -395,7 +396,7 @@ class AdventureCreator extends ScreenComponent {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipadx = 150;
         gbc.insets = new Insets(10, 0, 10, 0);
-        panel4.add(sliderDuration, gbc);
+        panel4.add(durationSlider, gbc);
         final JLabel label3 = new JLabel();
         label3.setText("Ship Name:");
         gbc = new GridBagConstraints();
@@ -429,23 +430,23 @@ class AdventureCreator extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 20, 20, 20);
         panelCreator.add(panel5, gbc);
-        btnBack = new JButton();
-        btnBack.setText("Main Menu");
+        backButton = new JButton();
+        backButton.setText("Main Menu");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 0, 0, 10);
-        panel5.add(btnBack, gbc);
-        btnContinue = new JButton();
-        btnContinue.setEnabled(false);
-        btnContinue.setText("Start Adventure");
+        panel5.add(backButton, gbc);
+        continueButton = new JButton();
+        continueButton.setEnabled(false);
+        continueButton.setText("Start Adventure");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel5.add(btnContinue, gbc);
+        panel5.add(continueButton, gbc);
         final JPanel spacer2 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -461,7 +462,7 @@ class AdventureCreator extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 0, 0);
         panel5.add(separator3, gbc);
-        label3.setLabelFor(textShipName);
+        label3.setLabelFor(shipNameText);
     }
 
     /**

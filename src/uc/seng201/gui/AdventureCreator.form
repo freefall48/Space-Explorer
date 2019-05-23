@@ -70,7 +70,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="51b6c" class="javax.swing.JList" binding="listCrew">
+              <component id="51b6c" class="javax.swing.JList" binding="crewList">
                 <constraints/>
                 <properties>
                   <autoscrolls value="true"/>
@@ -93,7 +93,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="8c4a1" class="javax.swing.JButton" binding="btnRemoveCrewMember">
+              <component id="8c4a1" class="javax.swing.JButton" binding="removeCrewMemberButton">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -104,7 +104,7 @@
                   <toolTipText value="Remove selected crew member from our force."/>
                 </properties>
               </component>
-              <component id="19425" class="javax.swing.JButton" binding="btnUpdateCrewMember">
+              <component id="19425" class="javax.swing.JButton" binding="updateCrewMemberButton">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -115,7 +115,7 @@
                   <toolTipText value="Change the selected crew memeber."/>
                 </properties>
               </component>
-              <component id="bb3d0" class="javax.swing.JButton" binding="btnAddCrewMember">
+              <component id="bb3d0" class="javax.swing.JButton" binding="addCrewMemberButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="2" left="10" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -142,7 +142,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="3026d" class="javax.swing.JTextField" binding="textShipName">
+              <component id="3026d" class="javax.swing.JTextField" binding="shipNameText">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -153,7 +153,7 @@
                   <toolTipText value="Ship name must be between 3-24 characters long"/>
                 </properties>
               </component>
-              <component id="4bf2f" class="javax.swing.JSlider" binding="sliderDuration">
+              <component id="4bf2f" class="javax.swing.JSlider" binding="durationSlider">
                 <constraints>
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0" ipadx="150"/>
@@ -208,7 +208,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="58c85" class="javax.swing.JButton" binding="btnBack">
+          <component id="58c85" class="javax.swing.JButton" binding="backButton">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="0" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
@@ -217,7 +217,7 @@
               <text value="Main Menu"/>
             </properties>
           </component>
-          <component id="6c11d" class="javax.swing.JButton" binding="btnContinue">
+          <component id="6c11d" class="javax.swing.JButton" binding="continueButton">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>

@@ -8,6 +8,7 @@ public class ActionException extends IllegalStateException {
     /**
      * When an action attempted cannot be performed because it would
      * produce an inconsistent game state.
+     *
      * @param message describes how the state would be inconsistent.
      */
     public ActionException(final String message) {

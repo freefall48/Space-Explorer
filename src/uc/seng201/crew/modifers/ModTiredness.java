@@ -12,6 +12,7 @@ public class ModTiredness extends ModificationAdapter {
      * The crew members food decay rate should be increased by.
      */
     private static final int INCREASED_FOOD_DECAY = 20;
+
     /**
      * Increased the crew members food decay rate and notifies the user
      * that the crew member is now tired.

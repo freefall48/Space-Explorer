@@ -5,7 +5,7 @@ import uc.seng201.crew.modifers.Modifications;
 /**
  * Specific crew member type.
  */
-public class Human extends CrewMember {
+class Human extends CrewMember {
 
     /**
      * Creates a crew member with CrewType Human and a name. Humans increase the number of items
@@ -13,7 +13,7 @@ public class Human extends CrewMember {
      *
      * @param name Name of the crew member.
      */
-    public Human(final String name) {
+    Human(final String name) {
 
         super(name, CrewType.HUMAN);
         addModification(Modifications.FRIENDLY);

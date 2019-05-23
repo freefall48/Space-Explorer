@@ -15,7 +15,12 @@ public class GameEnvironment {
      * The global event manager. Observers can be registered to respond to
      * known events, as well as trigger events.
      */
-    public static final ObservableManager EVENT_MANAGER =  new ObservableManager();
+    public static final ObservableManager EVENT_MANAGER = new ObservableManager();
+    /**
+     * The game state to pass between objects. It is immutable and can
+     * only be directly changed by an event handled by "GameStateChangeHandler".
+     */
+    static GameState gameState;
 
     /**
      * Adds the main game handlers to the event manager.
@@ -38,17 +43,11 @@ public class GameEnvironment {
     }
 
     /**
-     * The game state to pass between objects. It is immutable and can
-     * only be directly changed by an event handled by "GameStateChangeHandler".
-     */
-    static GameState gameState;
-
-    /**
      * Creates an end screen instance that is either a victory or defeat. The
      * end condition message is then passed to the instance.
      *
      * @param isVictory did the user win the game.
-     * @param args possible message that was passed by the event handlers.
+     * @param args      possible message that was passed by the event handlers.
      */
     private static void displayEndScreen(final boolean isVictory, final Object[] args) {
         String message = null;

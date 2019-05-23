@@ -63,7 +63,7 @@ public enum CrewType {
     /**
      * Name to be displayed when printing the enum value.
      */
-    private String name;
+    private final String name;
 
     /**
      * Type of crew member.
@@ -79,7 +79,6 @@ public enum CrewType {
      * enum value.
      *
      * @param name of the crew member.
-     *
      * @return crew member with a name and the type of the enum.
      */
     public abstract CrewMember getInstance(String name);

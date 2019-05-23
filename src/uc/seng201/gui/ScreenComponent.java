@@ -8,10 +8,10 @@ import javax.swing.*;
 public abstract class ScreenComponent extends JComponent {
 
 
-	/**
-	 * Returns the root component of the screen.
-	 *
-	 * @return root component of the screen.
-	 */
-	public abstract JComponent getRootComponent();
+    /**
+     * Returns the root component of the screen.
+     *
+     * @return root component of the screen.
+     */
+    public abstract JComponent getRootComponent();
 }

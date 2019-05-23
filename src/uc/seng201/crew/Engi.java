@@ -3,7 +3,7 @@ package uc.seng201.crew;
 /**
  * Specific crew member type.
  */
-public class Engi extends CrewMember {
+class Engi extends CrewMember {
 
     /**
      * Engi has increased health regen.
@@ -17,6 +17,7 @@ public class Engi extends CrewMember {
      * Engi has a decreased food decay rate.
      */
     private static final int DECREASED_FOOD_DECAY_RATE = STANDARD_FOOD_LEVEL_DECAY - 5;
+
     /**
      * Creates a crew member with a given name and CrewType of Engi.
      * Engi regenerate health at a greater rate, become tired
@@ -24,7 +25,7 @@ public class Engi extends CrewMember {
      *
      * @param name Name of the crew member.
      */
-    public Engi(final String name) {
+    Engi(final String name) {
         super(name, CrewType.ENGI,
                 STANDARD_MAX_HEALTH,
                 INCREASED_HEALTH_REGEN,

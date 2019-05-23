@@ -163,7 +163,7 @@
               <text value="Orbiting Planet:"/>
             </properties>
           </component>
-          <component id="ad6f0" class="javax.swing.JLabel" binding="lblOrbiting">
+          <component id="ad6f0" class="javax.swing.JLabel" binding="orbitingLabel">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -183,7 +183,7 @@
               <text value="Missing Parts:"/>
             </properties>
           </component>
-          <component id="e9b40" class="javax.swing.JLabel" binding="lblMissingParts">
+          <component id="e9b40" class="javax.swing.JLabel" binding="missingPartsLabel">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -203,7 +203,7 @@
               <text value="Day:"/>
             </properties>
           </component>
-          <component id="85d6c" class="javax.swing.JLabel" binding="lblDay">
+          <component id="85d6c" class="javax.swing.JLabel" binding="dayLabel">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -226,7 +226,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="fb5f0" class="javax.swing.JButton" binding="btnNextDay">
+          <component id="fb5f0" class="javax.swing.JButton" binding="nextDayButton">
             <constraints>
               <grid row="13" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
@@ -236,7 +236,7 @@
               <text value="Next Day"/>
             </properties>
           </component>
-          <component id="ac4c4" class="javax.swing.JButton" binding="btnPerformAction">
+          <component id="ac4c4" class="javax.swing.JButton" binding="actionButton">
             <constraints>
               <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="2" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
@@ -258,7 +258,7 @@
               <text value="Balance:"/>
             </properties>
           </component>
-          <component id="6d622" class="javax.swing.JLabel" binding="lblBalance">
+          <component id="6d622" class="javax.swing.JLabel" binding="balanceLabel">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -278,7 +278,7 @@
               <text value="Shields:"/>
             </properties>
           </component>
-          <component id="f1ff2" class="javax.swing.JLabel" binding="lblShipShields">
+          <component id="f1ff2" class="javax.swing.JLabel" binding="shipShieldsLabel">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -295,7 +295,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="965ca" class="javax.swing.JButton" binding="btnSpaceTraders">
+          <component id="965ca" class="javax.swing.JButton" binding="spaceTradersButton">
             <constraints>
               <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="2" right="0" weightx="0.0" weighty="0.0"/>
@@ -307,7 +307,7 @@
               <toolTipText value="Visit your local space traders."/>
             </properties>
           </component>
-          <component id="fb619" class="javax.swing.JButton" binding="btnInspect">
+          <component id="fb619" class="javax.swing.JButton" binding="inspectButton">
             <constraints>
               <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="2" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
@@ -349,7 +349,7 @@
               <text value="Health:"/>
             </properties>
           </component>
-          <component id="6f744" class="javax.swing.JLabel" binding="lblShipHealth">
+          <component id="6f744" class="javax.swing.JLabel" binding="shipHealthLabel">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -369,7 +369,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="4ae8a" class="javax.swing.JLabel" binding="lblSpaceShipName">
+          <component id="4ae8a" class="javax.swing.JLabel" binding="spaceShipLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="20" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
@@ -389,7 +389,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c9617" class="javax.swing.JButton" binding="btnSave">
+          <component id="c9617" class="javax.swing.JButton" binding="saveButton">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="0" left="2" bottom="0" right="20" weightx="10.0" weighty="0.0"/>

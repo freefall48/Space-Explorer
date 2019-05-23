@@ -73,7 +73,7 @@ public enum Modifications {
     /**
      * Create a modification.
      *
-     * @param name to display for the modification.
+     * @param name        to display for the modification.
      * @param description of the modification.
      */
     Modifications(final String name, final String description) {
@@ -103,6 +103,7 @@ public enum Modifications {
      * @return modification description.
      */
     public String getDescription() {
-        return description; }
+        return description;
+    }
 
 }

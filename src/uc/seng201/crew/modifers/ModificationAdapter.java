@@ -14,7 +14,8 @@ public class ModificationAdapter implements IModification {
      * @param crewMember to have the modification added.
      */
     @Override
-    public void onAdd(final CrewMember crewMember) { }
+    public void onAdd(final CrewMember crewMember) {
+    }
 
     /**
      * Triggered when the crew member has the modification and a new
@@ -23,7 +24,8 @@ public class ModificationAdapter implements IModification {
      * @param crewMember who has the modification.
      */
     @Override
-    public void onTick(final CrewMember crewMember) { }
+    public void onTick(final CrewMember crewMember) {
+    }
 
     /**
      * Triggered when the crew member has the modification removed.
@@ -31,5 +33,6 @@ public class ModificationAdapter implements IModification {
      * @param crewMember who had the modification removed.
      */
     @Override
-    public void onRemove(final CrewMember crewMember) { }
+    public void onRemove(final CrewMember crewMember) {
+    }
 }

@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import uc.seng201.crew.*;
+import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.CrewType;
 import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +29,7 @@ class SpaceShipTest {
     @Test
     void add() {
         Set<CrewMember> testCrew = new HashSet<>();
-        testCrew.add(new Human("Test1"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
         assertFalse(spaceShip.add(testCrew));
     }
 
@@ -38,11 +37,11 @@ class SpaceShipTest {
     @Test
     void add1() {
         Set<CrewMember> testCrew = new HashSet<>();
-        testCrew.add(new Human("Test1"));
-        testCrew.add(new Human("Test2"));
-        testCrew.add(new Human("Test3"));
-        testCrew.add(new Human("Test4"));
-        testCrew.add(new Human("Test5"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test2"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test3"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test4"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test5"));
         assertFalse(spaceShip.add(testCrew));
     }
 
@@ -50,9 +49,9 @@ class SpaceShipTest {
     @Test
     void add2() {
         Set<CrewMember> testCrew = new HashSet<>();
-        testCrew.add(new Human("Test1"));
-        testCrew.add(new Human("Test2"));
-        testCrew.add(new Human("Test3"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test2"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test3"));
         spaceShip.add(testCrew);
         assertEquals(testCrew, spaceShip.getShipCrew());
     }
@@ -61,10 +60,10 @@ class SpaceShipTest {
     @Test
     void crewMemberFromName() {
         Set<CrewMember> testCrew = new HashSet<>();
-        CrewMember crewToFind = new Engi("Test1");
-        testCrew.add(new Human("Test1"));
+        CrewMember crewToFind = CrewType.ENGI.getInstance("Test1");
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
         testCrew.add(crewToFind);
-        testCrew.add(new Crystal("Test1"));
+        testCrew.add(CrewType.CRYSTAL.getInstance("Test1"));
         spaceShip.add(testCrew);
         assertEquals(crewToFind, spaceShip.crewMemberFromNameAndType("Test1", "Engi"));
     }
@@ -73,8 +72,8 @@ class SpaceShipTest {
     @Test
     void crewMemberFromName1() {
         Set<CrewMember> testCrew = new HashSet<>();
-        testCrew.add(new Human("Test1"));
-        testCrew.add(new Crystal("Test1"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
+        testCrew.add(CrewType.CRYSTAL.getInstance("Test1"));
         spaceShip.add(testCrew);
         assertNull(spaceShip.crewMemberFromNameAndType("Test1", "Engi"));
     }
@@ -152,8 +151,8 @@ class SpaceShipTest {
     @Test
     void actionsRemaining() {
         Set<CrewMember> testCrew = new HashSet<>();
-        testCrew.add(new Human("Test1"));
-        testCrew.add(new Crystal("Test1"));
+        testCrew.add(CrewType.HUMAN.getInstance("Test1"));
+        testCrew.add(CrewType.CRYSTAL.getInstance("Test1"));
         spaceShip.add(testCrew);
 
         assertTrue(spaceShip.hasCrewActionsRemaining());

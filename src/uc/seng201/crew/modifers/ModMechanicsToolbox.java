@@ -12,6 +12,7 @@ public class ModMechanicsToolbox extends ModificationAdapter {
      * The value to increase the crew members repair ability by.
      */
     private static final int INCREASED_REPAIR_ABILITY = 20;
+
     /**
      * Increases the crew members repair ability.
      *

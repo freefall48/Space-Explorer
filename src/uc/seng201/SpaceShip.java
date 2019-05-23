@@ -18,6 +18,27 @@ import java.util.*;
 public class SpaceShip {
 
     /**
+     * Maximum number of crew members that are allowed on the spaceship. Global to all spaceships.
+     */
+    public static final int MAXIMUM_CREW_COUNT = 4;
+    /**
+     * Minimum number of crew members needed for this spaceship.Global to all spaceships.
+     */
+    public static final int MINIMUM_CREW_COUNT = 2;
+    /**
+     * The starting health for a spaceship.
+     */
+    private static final int SPACE_SHIP_STARTING_HEALTH = 100;
+    /**
+     * When multiplied with the duration gets the number of parts
+     * to find. (Make sure we are not using integer division)
+     */
+    private static final double PARTS_TO_FIND_MULTIPLIER = 2.0 / 3.0;
+    /**
+     * Starting number of shields for the spaceship.
+     */
+    private static final int SHIP_STARTING_SHIELDS = 3;
+    /**
      * Name of the spaceship.
      */
     private String shipName;
@@ -53,29 +74,6 @@ public class SpaceShip {
      * Maximum spaceship health.
      */
     private int shipHealthMax;
-    /**
-     * Maximum number of crew members that are allowed on the spaceship. Global to all spaceships.
-     */
-    public static final int MAXIMUM_CREW_COUNT = 4;
-    /**
-     * Minimum number of crew members needed for this spaceship.Global to all spaceships.
-     */
-    public static final int MINIMUM_CREW_COUNT = 2;
-
-    /**
-     * The starting health for a spaceship.
-     */
-    private static final int SPACE_SHIP_STARTING_HEALTH = 100;
-    /**
-     * When multiplied with the duration gets the number of parts
-     * to find. (Make sure we are not using integer division)
-     */
-    private static final double PARTS_TO_FIND_MULTIPLIER = 2.0 / 3.0;
-
-    /**
-     * Starting number of shields for the spaceship.
-     */
-    private static final int SHIP_STARTING_SHIELDS = 3;
 
     /**
      * Creates a spaceship with a name and missing part count and defaults
@@ -205,7 +203,6 @@ public class SpaceShip {
      *
      * @param item space item that is to be removed.
      * @return the space item that was removed, or null if no item was present.
-     *
      * @throws InvalidGameState if the ships inventory contains a 0 or negative count of the item.
      */
     public SpaceItem remove(final SpaceItem item) throws InvalidGameState {
@@ -290,7 +287,8 @@ public class SpaceShip {
      * @return current ship health.
      */
     public int getShipHealth() {
-        return shipHealth; }
+        return shipHealth;
+    }
 
     /**
      * Returns the maximum health that the spaceship can have.
@@ -300,6 +298,7 @@ public class SpaceShip {
     public int getShipHealthMax() {
         return shipHealthMax;
     }
+
     /**
      * Returns the number of parts that are still currently missing from the spaceship.
      *
@@ -314,13 +313,12 @@ public class SpaceShip {
      * parts left then the game has been won so let the event manager know.
      *
      * @throws InvalidGameState if the number of parts still missing would be 0 or negative as a part
-     * could not have been missing.
+     *                          could not have been missing.
      */
     public void partFound() throws InvalidGameState {
         if (missingParts > 0) {
             missingParts -= 1;
-        }
-        else {
+        } else {
             throw new InvalidGameState("Cannot reduce parts if no parts are missing");
         }
         // If the number of parts is now 0 then all parts are found.

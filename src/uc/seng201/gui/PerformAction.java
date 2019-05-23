@@ -1,15 +1,17 @@
 package uc.seng201.gui;
 
+import uc.seng201.crew.CrewMember;
+import uc.seng201.crew.actions.CrewAction;
 import uc.seng201.environment.GameEnvironment;
 import uc.seng201.environment.GameState;
-import uc.seng201.crew.CrewMember;
-import uc.seng201.crew.actions.*;
 import uc.seng201.items.SpaceItem;
 import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 /**
@@ -24,39 +26,39 @@ public class PerformAction extends JDialog {
     /**
      * Button to perform the action.
      */
-    private JButton buttonOK;
+    private JButton okButton;
     /**
      * Exit out the current dialog.
      */
-    private JButton buttonCancel;
+    private JButton cancelButton;
     /**
      * Display the possible actions.
      */
-    private JComboBox<String> comboActions;
+    private JComboBox<String> actionsComboBox;
     /**
      * Display the name of the acting crew member.
      */
-    private JLabel lblName;
+    private JLabel crewMemberNameLabel;
     /**
      * Displays what the current action will do.
      */
-    private JLabel lblActionText;
+    private JLabel actionTextLabel;
     /**
      * Allows the user to enter additional information if needed.
      */
-    private JComboBox<String> comboAdditionalInfo1;
+    private JComboBox<String> additionalInput1ComboBox;
     /**
      * Label for the first additional input.
      */
-    private JLabel lblAdditionalInfo1;
+    private JLabel additionalInput1Label;
     /**
      * Label for the second additional input.
      */
-    private JLabel lblAdditionalInfo2;
+    private JLabel additionalInput2Label;
     /**
      * Allows the user to enter additional information if needed.
      */
-    private JComboBox<String> comboAdditionalInfo2;
+    private JComboBox<String> additionalInput2ComboBox;
 
     /**
      * The current game state.
@@ -95,7 +97,7 @@ public class PerformAction extends JDialog {
     /**
      * Perform an action as a crew member.
      *
-     * @param gameState reference to the game state.
+     * @param gameState  reference to the game state.
      * @param crewMember that is to perform the action.
      */
     PerformAction(GameState gameState, CrewMember crewMember) {
@@ -105,18 +107,18 @@ public class PerformAction extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(okButton);
 
-        lblName.setText(crewMember.getName());
-        comboActions.setModel(availableActionsModel);
+        crewMemberNameLabel.setText(crewMember.getName());
+        actionsComboBox.setModel(availableActionsModel);
         CrewAction defaultAction = CrewAction.SEARCH;
         availableActionsModel.setSelectedItem(defaultAction);
         actionDialog(defaultAction);
-        buttonOK.addActionListener(e -> onOK());
-        buttonCancel.addActionListener(e -> onCancel());
-        comboActions.addActionListener(e -> onActionSelected());
-        comboAdditionalInfo1.addActionListener(e -> onAdditionalInput());
-        comboAdditionalInfo2.addActionListener(e -> onAdditionalInput());
+        okButton.addActionListener(e -> onOK());
+        cancelButton.addActionListener(e -> onCancel());
+        actionsComboBox.addActionListener(e -> onActionSelected());
+        additionalInput1ComboBox.addActionListener(e -> onAdditionalInput());
+        additionalInput2ComboBox.addActionListener(e -> onAdditionalInput());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -133,7 +135,7 @@ public class PerformAction extends JDialog {
         // Generate the models and actions. Sets the default action to searching.
         computeListModels();
         computeAvailableActions();
-        comboActions.setSelectedItem(CrewAction.SEARCH.toString());
+        actionsComboBox.setSelectedItem(CrewAction.SEARCH.toString());
     }
 
     /**
@@ -141,7 +143,7 @@ public class PerformAction extends JDialog {
      * information displayed relating to the action to be performed.
      */
     private void onAdditionalInput() {
-        CrewAction action = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
+        CrewAction action = CrewAction.valueOf(actionsComboBox.getItemAt(actionsComboBox.getSelectedIndex()));
         actionDialog(action);
     }
 
@@ -215,7 +217,7 @@ public class PerformAction extends JDialog {
      */
     private void onOK() {
         // Get the action we are performing.
-        CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
+        CrewAction actionToPerform = CrewAction.valueOf(actionsComboBox.getItemAt(actionsComboBox.getSelectedIndex()));
 
         // Set the crew members as required.
         if (actionToPerform.getCrewRequired() == 2) {
@@ -240,10 +242,10 @@ public class PerformAction extends JDialog {
      * Hide all the additional input fields.
      */
     private void hideAdditionalInput() {
-        comboAdditionalInfo1.setVisible(false);
-        lblAdditionalInfo1.setVisible(false);
-        lblAdditionalInfo2.setVisible(false);
-        comboAdditionalInfo2.setVisible(false);
+        additionalInput1ComboBox.setVisible(false);
+        additionalInput1Label.setVisible(false);
+        additionalInput2Label.setVisible(false);
+        additionalInput2ComboBox.setVisible(false);
     }
 
     /**
@@ -255,11 +257,11 @@ public class PerformAction extends JDialog {
     private void setAdditionalInputVisible(int additionalInputs) {
         switch (additionalInputs) {
             case 2:
-                comboAdditionalInfo2.setVisible(true);
-                lblAdditionalInfo2.setVisible(true);
+                additionalInput2ComboBox.setVisible(true);
+                additionalInput2Label.setVisible(true);
             case 1:
-                comboAdditionalInfo1.setVisible(true);
-                lblAdditionalInfo1.setVisible(true);
+                additionalInput1ComboBox.setVisible(true);
+                additionalInput1Label.setVisible(true);
                 break;
         }
     }
@@ -269,21 +271,21 @@ public class PerformAction extends JDialog {
      */
     private void onActionSelected() {
         hideAdditionalInput();
-        CrewAction actionToPerform = CrewAction.valueOf(comboActions.getItemAt(comboActions.getSelectedIndex()));
+        CrewAction actionToPerform = CrewAction.valueOf(actionsComboBox.getItemAt(actionsComboBox.getSelectedIndex()));
         switch (actionToPerform) {
             case PILOT:
-                lblAdditionalInfo1.setText("Co-pilot:");
-                comboAdditionalInfo1.setModel(additionalCrewModel);
-                comboAdditionalInfo1.setSelectedIndex(0);
-                lblAdditionalInfo2.setText("Destination Planet:");
-                comboAdditionalInfo2.setModel(targetPlanetsModel);
-                comboAdditionalInfo2.setSelectedIndex(0);
+                additionalInput1Label.setText("Co-pilot:");
+                additionalInput1ComboBox.setModel(additionalCrewModel);
+                additionalInput1ComboBox.setSelectedIndex(0);
+                additionalInput2Label.setText("Destination Planet:");
+                additionalInput2ComboBox.setModel(targetPlanetsModel);
+                additionalInput2ComboBox.setSelectedIndex(0);
                 setAdditionalInputVisible(2);
                 break;
             case CONSUME:
-                lblAdditionalInfo1.setText("Snack on:");
-                comboAdditionalInfo1.setModel(itemModel);
-                comboAdditionalInfo1.setSelectedIndex(0);
+                additionalInput1Label.setText("Snack on:");
+                additionalInput1ComboBox.setModel(itemModel);
+                additionalInput1ComboBox.setSelectedIndex(0);
                 setAdditionalInputVisible(1);
                 break;
         }
@@ -300,26 +302,26 @@ public class PerformAction extends JDialog {
     private void actionDialog(CrewAction action) {
         switch (action) {
             case PILOT:
-                if (comboAdditionalInfo2.getSelectedItem() != null) {
-                    lblActionText.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
-                            comboAdditionalInfo1.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
-                            comboAdditionalInfo2.getSelectedItem()).replaceFirst(" - [a-zA-Z]*", ""));
+                if (additionalInput2ComboBox.getSelectedItem() != null) {
+                    actionTextLabel.setText(String.format(CrewAction.PILOT.getActionText(), primaryCrewMember.getName(),
+                            additionalInput1ComboBox.getSelectedItem(), this.gameState.getSpaceShip().getShipName(),
+                            additionalInput2ComboBox.getSelectedItem()).replaceFirst(" - [a-zA-Z]*", ""));
                 }
                 break;
             case SEARCH:
-                lblActionText.setText(String.format(CrewAction.SEARCH.getActionText(), primaryCrewMember.getName(),
+                actionTextLabel.setText(String.format(CrewAction.SEARCH.getActionText(), primaryCrewMember.getName(),
                         this.gameState.getCurrentPlanet(), this.gameState.getCurrentPlanet().description()));
                 break;
             case SLEEP:
-                lblActionText.setText(String.format(CrewAction.SLEEP.getActionText(), primaryCrewMember.getName()));
+                actionTextLabel.setText(String.format(CrewAction.SLEEP.getActionText(), primaryCrewMember.getName()));
                 break;
             case CONSUME:
-                lblActionText.setText(String.format(CrewAction.CONSUME.getActionText(), primaryCrewMember.getName(),
-                        Objects.requireNonNull(comboAdditionalInfo1.getSelectedItem()).toString().replaceFirst(
+                actionTextLabel.setText(String.format(CrewAction.CONSUME.getActionText(), primaryCrewMember.getName(),
+                        Objects.requireNonNull(additionalInput1ComboBox.getSelectedItem()).toString().replaceFirst(
                                 "([0-9]+ x )", "")));
                 break;
             case REPAIR:
-                lblActionText.setText(String.format(CrewAction.REPAIR.getActionText(), primaryCrewMember.getName(),
+                actionTextLabel.setText(String.format(CrewAction.REPAIR.getActionText(), primaryCrewMember.getName(),
                         this.gameState.getSpaceShip().getShipName()));
                 break;
         }
@@ -353,7 +355,7 @@ public class PerformAction extends JDialog {
             case PILOT:
                 // Get the destination planet.
                 actionArguments = new Object[]{gameState.planetFromName(
-                        (String) comboAdditionalInfo2.getSelectedItem())};
+                        (String) additionalInput2ComboBox.getSelectedItem())};
                 break;
             case SEARCH:
                 // Get the planet that we are currently orbiting.
@@ -363,7 +365,7 @@ public class PerformAction extends JDialog {
             case CONSUME:
                 // Get the selected item. We need to strip the extra information added when displaying.
                 actionArguments = new Object[]{SpaceItem.valueOf(((String) Objects.requireNonNull(
-                        comboAdditionalInfo1.getSelectedItem())).replaceFirst("([0-9]+ x )", ""))};
+                        additionalInput1ComboBox.getSelectedItem())).replaceFirst("([0-9]+ x )", ""))};
                 break;
             default:
                 actionArguments = new Object[0];
@@ -411,25 +413,25 @@ public class PerformAction extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
-        buttonOK = new JButton();
-        buttonOK.setEnabled(true);
-        buttonOK.setText("OK");
+        okButton = new JButton();
+        okButton.setEnabled(true);
+        okButton.setText("OK");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonOK, gbc);
-        buttonCancel = new JButton();
-        buttonCancel.setText("Cancel");
+        panel2.add(okButton, gbc);
+        cancelButton = new JButton();
+        cancelButton.setText("Cancel");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonCancel, gbc);
+        panel2.add(cancelButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -452,16 +454,16 @@ public class PerformAction extends JDialog {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         panel3.add(label1, gbc);
-        lblName = new JLabel();
-        Font lblNameFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, lblName.getFont());
-        if (lblNameFont != null) lblName.setFont(lblNameFont);
-        lblName.setText("#CrewMember");
+        crewMemberNameLabel = new JLabel();
+        Font crewMemberNameLabelFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, crewMemberNameLabel.getFont());
+        if (crewMemberNameLabelFont != null) crewMemberNameLabel.setFont(crewMemberNameLabelFont);
+        crewMemberNameLabel.setText("#CrewMember");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        panel3.add(lblName, gbc);
+        panel3.add(crewMemberNameLabel, gbc);
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -471,15 +473,15 @@ public class PerformAction extends JDialog {
         gbc.weighty = 7.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel4, gbc);
-        comboActions = new JComboBox();
-        comboActions.setToolTipText("Select an action to perform.");
+        actionsComboBox = new JComboBox();
+        actionsComboBox.setToolTipText("Select an action to perform.");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 10, 0, 0);
-        panel4.add(comboActions, gbc);
+        panel4.add(actionsComboBox, gbc);
         final JLabel label2 = new JLabel();
         label2.setText("Avaliable Actions:");
         gbc = new GridBagConstraints();
@@ -487,44 +489,44 @@ public class PerformAction extends JDialog {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         panel4.add(label2, gbc);
-        comboAdditionalInfo1 = new JComboBox();
-        comboAdditionalInfo1.setToolTipText("Select an action to perform.");
-        comboAdditionalInfo1.setVisible(false);
+        additionalInput1ComboBox = new JComboBox();
+        additionalInput1ComboBox.setToolTipText("Select an action to perform.");
+        additionalInput1ComboBox.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 0, 0);
-        panel4.add(comboAdditionalInfo1, gbc);
-        lblAdditionalInfo1 = new JLabel();
-        lblAdditionalInfo1.setText("Additional Crew:");
-        lblAdditionalInfo1.setVisible(false);
+        panel4.add(additionalInput1ComboBox, gbc);
+        additionalInput1Label = new JLabel();
+        additionalInput1Label.setText("Additional Crew:");
+        additionalInput1Label.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel4.add(lblAdditionalInfo1, gbc);
-        comboAdditionalInfo2 = new JComboBox();
-        comboAdditionalInfo2.setToolTipText("Select an action to perform.");
-        comboAdditionalInfo2.setVisible(false);
+        panel4.add(additionalInput1Label, gbc);
+        additionalInput2ComboBox = new JComboBox();
+        additionalInput2ComboBox.setToolTipText("Select an action to perform.");
+        additionalInput2ComboBox.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 0, 0);
-        panel4.add(comboAdditionalInfo2, gbc);
-        lblAdditionalInfo2 = new JLabel();
-        lblAdditionalInfo2.setText("Select Destination:");
-        lblAdditionalInfo2.setVisible(false);
+        panel4.add(additionalInput2ComboBox, gbc);
+        additionalInput2Label = new JLabel();
+        additionalInput2Label.setText("Select Destination:");
+        additionalInput2Label.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel4.add(lblAdditionalInfo2, gbc);
+        panel4.add(additionalInput2Label, gbc);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -533,19 +535,19 @@ public class PerformAction extends JDialog {
         gbc.weighty = 3.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel5, gbc);
-        lblActionText = new JLabel();
-        Font lblActionTextFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 12, lblActionText.getFont());
-        if (lblActionTextFont != null) lblActionText.setFont(lblActionTextFont);
-        lblActionText.setHorizontalAlignment(0);
-        lblActionText.setHorizontalTextPosition(0);
-        lblActionText.setText("#ActionText");
-        lblActionText.setVisible(true);
+        actionTextLabel = new JLabel();
+        Font actionTextLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 12, actionTextLabel.getFont());
+        if (actionTextLabelFont != null) actionTextLabel.setFont(actionTextLabelFont);
+        actionTextLabel.setHorizontalAlignment(0);
+        actionTextLabel.setHorizontalTextPosition(0);
+        actionTextLabel.setText("#ActionText");
+        actionTextLabel.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        panel5.add(lblActionText, gbc);
+        panel5.add(actionTextLabel, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -562,7 +564,7 @@ public class PerformAction extends JDialog {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 20, 10, 20);
         contentPane.add(separator2, gbc);
-        label2.setLabelFor(comboActions);
+        label2.setLabelFor(actionsComboBox);
     }
 
     /**

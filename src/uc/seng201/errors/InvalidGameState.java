@@ -12,6 +12,7 @@ public class InvalidGameState extends IllegalStateException {
     public InvalidGameState() {
         super();
     }
+
     /**
      * When modifying the game state would produce and inconsistent
      * state.

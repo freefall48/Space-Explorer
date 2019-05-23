@@ -27,20 +27,20 @@ public class Display {
 
     /**
      * Determines how the display class will output information to the user.
-     *  0 = no output.
-     *  1 = console.
-     *  2 = gui.
+     * 0 = no output.
+     * 1 = console.
+     * 2 = gui.
      */
-    private static int outputMethod = 0;
+    private static int outputMethod;
 
     /**
      * Changes the main screen component that is being displayed. Replaces
      * the instance of the screens if needed.
      *
-     * @param screen the new Screen to show.
+     * @param screen       the new Screen to show.
      * @param reinitialise true if the screen needs to be replaced.
      */
-    public static void changeScreen(final Screen screen, final boolean reinitialise) {
+    private static void changeScreen(final Screen screen, final boolean reinitialise) {
         ScreenComponent component = screens.get(screen);
         if (reinitialise) {
             screens.forEach((key, value) -> screens.put(key, key.createInstance(GameEnvironment.gameState)));
@@ -55,14 +55,14 @@ public class Display {
 
     }
 
-    /**
-     * Returns the root JFrame.
-     *
-     * @return the root JFrame.
-     */
-    public static JFrame getRootFrame() {
-        return rootFrame;
-    }
+//    /**
+//     * Returns the root JFrame.
+//     *
+//     * @return the root JFrame.
+//     */
+//    public static JFrame getRootFrame() {
+//        return rootFrame;
+//    }
 
     /**
      * Changes the main screen component that is being displayed.

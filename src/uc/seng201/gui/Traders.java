@@ -7,7 +7,9 @@ import uc.seng201.utils.observerable.Event;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * The user can trade to buy items with money.
@@ -21,19 +23,19 @@ public class Traders extends JDialog {
     /**
      * Buy button.
      */
-    private JButton btnBuy;
+    private JButton buyButton;
     /**
      * Leave button.
      */
-    private JButton btnLeave;
+    private JButton leaveButton;
     /**
      * List of items available to buy.
      */
-    private JList<ItemModelEntry> listAvailableItems;
+    private JList<ItemModelEntry> availableItemsList;
     /**
      * Display the current balance of the spaceship.
      */
-    private JLabel lblBalance;
+    private JLabel balanceLabel;
     /**
      * The model backing the list of items.
      */
@@ -54,16 +56,16 @@ public class Traders extends JDialog {
 
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(btnBuy);
+        getRootPane().setDefaultButton(buyButton);
 
         this.availableItems = new DefaultListModel<>();
-        this.listAvailableItems.setModel(this.availableItems);
+        this.availableItemsList.setModel(this.availableItems);
 
-        this.listAvailableItems.addListSelectionListener(e -> onBuyMenuSelection());
+        this.availableItemsList.addListSelectionListener(e -> onBuyMenuSelection());
         repaintWindow();
 
-        btnBuy.addActionListener(e -> onBuy());
-        btnLeave.addActionListener(e -> onLeave());
+        buyButton.addActionListener(e -> onBuy());
+        leaveButton.addActionListener(e -> onLeave());
 
         // call onLeave() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -83,20 +85,19 @@ public class Traders extends JDialog {
      * of buying items from the trader.
      */
     private void repaintWindow() {
-        lblBalance.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
-        int currentlySelected = listAvailableItems.getSelectedIndex();
+        balanceLabel.setText(String.format("$%s", gameState.getSpaceShip().getBalance()));
+        int currentlySelected = availableItemsList.getSelectedIndex();
         availableItems.clear();
         gameState.getTrader().getAvailableItems().forEach((item, quantity) -> availableItems.addElement
                 (new ItemModelEntry(item, quantity)));
 
         if (currentlySelected == -1 || currentlySelected >= availableItems.size()) {
-            listAvailableItems.setSelectedIndex(0);
+            availableItemsList.setSelectedIndex(0);
         } else {
-            listAvailableItems.setSelectedIndex(currentlySelected);
+            availableItemsList.setSelectedIndex(currentlySelected);
         }
         contentPane.repaint();
     }
-
 
     /**
      * When the user selects the item, sets the buy buttons text to
@@ -105,13 +106,13 @@ public class Traders extends JDialog {
      * is enabled.
      */
     private void onBuyMenuSelection() {
-        if (listAvailableItems.getSelectedIndex() >= 0) {
-            btnBuy.setEnabled(false);
-            SpaceItem item = listAvailableItems.getSelectedValue().spaceItem;
-            btnBuy.setText("Buy: $" + item.getPrice());
-            btnBuy.repaint();
+        if (availableItemsList.getSelectedIndex() >= 0) {
+            buyButton.setEnabled(false);
+            SpaceItem item = availableItemsList.getSelectedValue().spaceItem;
+            buyButton.setText("Buy: $" + item.getPrice());
+            buyButton.repaint();
             if (item.getPrice() <= gameState.getSpaceShip().getBalance()) {
-                btnBuy.setEnabled(true);
+                buyButton.setEnabled(true);
             }
         }
     }
@@ -121,12 +122,12 @@ public class Traders extends JDialog {
      * handlers can be called for the event.
      */
     private void onBuy() {
-        ItemModelEntry itemModelEntry = listAvailableItems.getSelectedValue();
+        ItemModelEntry itemModelEntry = availableItemsList.getSelectedValue();
         if (itemModelEntry.quantity > 0) {
             GameEnvironment.EVENT_MANAGER.notifyObservers(Event.BUY_FROM_TRADERS, itemModelEntry.spaceItem);
         }
         if (availableItems.size() == 0) {
-            btnBuy.setEnabled(false);
+            buyButton.setEnabled(false);
         }
         repaintWindow();
     }
@@ -136,24 +137,6 @@ public class Traders extends JDialog {
      */
     private void onLeave() {
         dispose();
-    }
-
-    /**
-     * Provides the ability to keep track of the items that are displayed in the list.
-     */
-    final class ItemModelEntry {
-        final int quantity;
-        final SpaceItem spaceItem;
-
-        ItemModelEntry(SpaceItem spaceItem, int quantity) {
-            this.spaceItem = spaceItem;
-            this.quantity = quantity;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%d x %s - %s", quantity, spaceItem, spaceItem.getItemDescription());
-        }
     }
 
     {
@@ -191,8 +174,8 @@ public class Traders extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
-        btnLeave = new JButton();
-        btnLeave.setText("Leave");
+        leaveButton = new JButton();
+        leaveButton.setText("Leave");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -200,10 +183,10 @@ public class Traders extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 5, 0, 0);
-        panel2.add(btnLeave, gbc);
-        btnBuy = new JButton();
-        btnBuy.setEnabled(false);
-        btnBuy.setText("Buy");
+        panel2.add(leaveButton, gbc);
+        buyButton = new JButton();
+        buyButton.setEnabled(false);
+        buyButton.setText("Buy");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -211,7 +194,7 @@ public class Traders extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 0, 5);
-        panel2.add(btnBuy, gbc);
+        panel2.add(buyButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -264,16 +247,16 @@ public class Traders extends JDialog {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 0, 5);
         panel4.add(label2, gbc);
-        lblBalance = new JLabel();
-        Font lblBalanceFont = this.$$$getFont$$$(null, -1, 16, lblBalance.getFont());
-        if (lblBalanceFont != null) lblBalance.setFont(lblBalanceFont);
-        lblBalance.setText("####");
+        balanceLabel = new JLabel();
+        Font balanceLabelFont = this.$$$getFont$$$(null, -1, 16, balanceLabel.getFont());
+        if (balanceLabelFont != null) balanceLabel.setFont(balanceLabelFont);
+        balanceLabel.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 0, 0);
-        panel4.add(lblBalance, gbc);
+        panel4.add(balanceLabel, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
@@ -300,11 +283,11 @@ public class Traders extends JDialog {
         gbc.weighty = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel5.add(scrollPane1, gbc);
-        listAvailableItems = new JList();
-        Font listAvailableItemsFont = this.$$$getFont$$$(null, -1, 14, listAvailableItems.getFont());
-        if (listAvailableItemsFont != null) listAvailableItems.setFont(listAvailableItemsFont);
-        listAvailableItems.setSelectionMode(0);
-        scrollPane1.setViewportView(listAvailableItems);
+        availableItemsList = new JList();
+        Font availableItemsListFont = this.$$$getFont$$$(null, -1, 14, availableItemsList.getFont());
+        if (availableItemsListFont != null) availableItemsList.setFont(availableItemsListFont);
+        availableItemsList.setSelectionMode(0);
+        scrollPane1.setViewportView(availableItemsList);
     }
 
     /**
@@ -331,6 +314,24 @@ public class Traders extends JDialog {
      */
     public JComponent $$$getRootComponent$$$() {
         return contentPane;
+    }
+
+    /**
+     * Provides the ability to keep track of the items that are displayed in the list.
+     */
+    final class ItemModelEntry {
+        final int quantity;
+        final SpaceItem spaceItem;
+
+        ItemModelEntry(SpaceItem spaceItem, int quantity) {
+            this.spaceItem = spaceItem;
+            this.quantity = quantity;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d x %s - %s", quantity, spaceItem, spaceItem.getItemDescription());
+        }
     }
 
 }

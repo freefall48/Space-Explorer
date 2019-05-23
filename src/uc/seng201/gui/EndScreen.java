@@ -13,11 +13,11 @@ public class EndScreen extends JDialog {
     /**
      * Root panel.
      */
-	private JPanel contentPane;
+    private JPanel contentPane;
     /**
      * Okay button.
      */
-    private JButton buttonOK;
+    private JButton okButton;
     /**
      * Shows if the user has won or lost.
      */
@@ -25,7 +25,7 @@ public class EndScreen extends JDialog {
     /**
      * Shows why the user won/lost.
      */
-    private JLabel labelMessage;
+    private JLabel messageLabel;
     /**
      * Displays the final score.
      */
@@ -48,17 +48,17 @@ public class EndScreen extends JDialog {
      *
      * @param gameState reference to the current game state.
      * @param isVictory true if the user won the game.
-     * @param message why did the user win/lose.
+     * @param message   why did the user win/lose.
      */
     public EndScreen(GameState gameState, boolean isVictory, String message) {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(okButton);
 
-        buttonOK.addActionListener(e -> onOK());
+        okButton.addActionListener(e -> onOK());
 
         stateLabel.setText(isVictory ? "Victory" : "Failure");
-        labelMessage.setText(message);
+        messageLabel.setText(message);
 
         shipNameLabel.setText(gameState.getSpaceShip().getShipName());
         daysTakenLabel.setText(String.format("%d of %d", gameState.getCurrentDay(), gameState.getDuration()));
@@ -111,15 +111,15 @@ public class EndScreen extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(panel2, gbc);
-        buttonOK = new JButton();
-        buttonOK.setText("Main Menu");
+        okButton = new JButton();
+        okButton.setText("Main Menu");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(buttonOK, gbc);
+        panel2.add(okButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -149,16 +149,16 @@ public class EndScreen extends JDialog {
         gbc.weightx = 10.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel4.add(stateLabel, gbc);
-        labelMessage = new JLabel();
-        labelMessage.setHorizontalAlignment(0);
-        labelMessage.setHorizontalTextPosition(2);
-        labelMessage.setText("#Message");
+        messageLabel = new JLabel();
+        messageLabel.setHorizontalAlignment(0);
+        messageLabel.setHorizontalTextPosition(2);
+        messageLabel.setText("#Message");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 0, 0, 0);
-        panel4.add(labelMessage, gbc);
+        panel4.add(messageLabel, gbc);
         final JSeparator separator1 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;

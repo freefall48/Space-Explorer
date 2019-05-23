@@ -6,9 +6,8 @@ import java.io.File;
 /**
  * Implementation of a FileFilter that only allows JSON files to be
  * loaded.
- * 
- * @author Matthew Johnson
  *
+ * @author Matthew Johnson
  */
 public class SavedGameFileFilter extends FileFilter {
     @Override

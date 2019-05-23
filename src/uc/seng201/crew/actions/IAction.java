@@ -11,8 +11,8 @@ public interface IAction {
     /**
      * Called when a crew member performs the action.
      *
-     * @param gameState reference to the current game state.
-     * @param args arguments that are action specific.
+     * @param gameState   reference to the current game state.
+     * @param args        arguments that are action specific.
      * @param crewMembers who is performing the action.
      * @return message describing the outcome of the action.
      */

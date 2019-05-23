@@ -23,7 +23,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="5723f" class="javax.swing.JButton" binding="btnLeave">
+              <component id="5723f" class="javax.swing.JButton" binding="leaveButton">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="0" left="5" bottom="0" right="0" weightx="1.0" weighty="1.0"/>
@@ -32,7 +32,7 @@
                   <text value="Leave"/>
                 </properties>
               </component>
-              <component id="e7465" class="javax.swing.JButton" binding="btnBuy">
+              <component id="e7465" class="javax.swing.JButton" binding="buyButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag top="0" left="0" bottom="0" right="5" weightx="1.0" weighty="1.0"/>
@@ -92,14 +92,14 @@
                   <text value="Balance:"/>
                 </properties>
               </component>
-              <component id="1da26" class="javax.swing.JLabel" binding="lblBalance">
+              <component id="1da26" class="javax.swing.JLabel" binding="balanceLabel">
                 <constraints>
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag top="0" left="5" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
                   <font size="16"/>
-                  <text value="####"/>
+                  <text value=""/>
                 </properties>
               </component>
               <hspacer id="92602">
@@ -126,7 +126,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="dade8" class="javax.swing.JList" binding="listAvailableItems">
+                  <component id="dade8" class="javax.swing.JList" binding="availableItemsList">
                     <constraints/>
                     <properties>
                       <font size="14"/>

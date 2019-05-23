@@ -19,7 +19,7 @@ public class Planet {
      * Only one part can be found per planet. Has
      * the part been found for this planet.
      */
-    private boolean partFound = false;
+    private boolean partFound;
 
     /**
      * Create a new planet with a random name.
@@ -60,7 +60,6 @@ public class Planet {
      * Planets are the same if they have the same name.
      *
      * @param object planet to compare to.
-     *
      * @return true if the planets have the same name.
      */
     @Override
@@ -86,8 +85,7 @@ public class Planet {
      * find.
      *
      * @param crewMember who is searching the planet.
-     * @param spaceShip reference to the spaceship.
-     *
+     * @param spaceShip  reference to the spaceship.
      * @return description of the result of the search.
      */
     public String onSearch(CrewMember crewMember, SpaceShip spaceShip) {

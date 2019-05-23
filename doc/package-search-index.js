@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"uc.seng201.logic"},{"l":"uc.seng201.logic.crew"},{"l":"uc.seng201.logic.events"},{"l":"uc.seng201.logic.food"},{"l":"uc.seng201.logic.medical"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"uc.seng201.logic"},{"l":"uc.seng201.logic.crew"},{"l":"uc.seng201.logic.events"},{"l":"uc.seng201.logic.food"},{"l":"uc.seng201.logic.medical"}];

@@ -57,16 +57,16 @@ public enum CrewAction {
      * will do. Formatters can be used and replaced when displayed to
      * the user.
      */
-    private String actionText;
+    private final String actionText;
     /**
      * How many crew members does the action require to perform.
      */
-    private int crewRequired;
+    private final int crewRequired;
 
     /**
      * Provides an available action for a crew member to perform.
      *
-     * @param actionText message to be displayed describing the action.
+     * @param actionText   message to be displayed describing the action.
      * @param crewRequired how many crew are needed to perform.
      */
     CrewAction(final String actionText, final int crewRequired) {

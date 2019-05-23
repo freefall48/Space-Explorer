@@ -1,8 +1,8 @@
 package uc.seng201.gui;
 
+import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.GameEnvironment;
 import uc.seng201.environment.GameState;
-import uc.seng201.crew.CrewMember;
 import uc.seng201.utils.SavedGameFileFilter;
 import uc.seng201.utils.observerable.Event;
 
@@ -24,7 +24,7 @@ class MainScreen extends ScreenComponent {
     /**
      * Displays the ships name
      */
-    private JLabel lblSpaceShipName;
+    private JLabel spaceShipLabel;
     /**
      * Provides tabs to display the crew, items and planets.
      */
@@ -36,35 +36,35 @@ class MainScreen extends ScreenComponent {
     /**
      * Displays information about the current and total days.
      */
-    private JLabel lblDay;
+    private JLabel dayLabel;
     /**
      * Displays the current planet being orbited.
      */
-    private JLabel lblOrbiting;
+    private JLabel orbitingLabel;
     /**
      * Displays how many parts are still missing.
      */
-    private JLabel lblMissingParts;
+    private JLabel missingPartsLabel;
     /**
      * Displays the space ships balance.
      */
-    private JLabel lblBalance;
+    private JLabel balanceLabel;
     /**
      * Button to perform an action as a crew member.
      */
-    private JButton btnPerformAction;
+    private JButton actionButton;
     /**
      * Button that saves the game.
      */
-    private JButton btnSave;
+    private JButton saveButton;
     /**
      * Button that moves to the next day.
      */
-    private JButton btnNextDay;
+    private JButton nextDayButton;
     /**
      * Displays information about the ships shields.
      */
-    private JLabel lblShipShields;
+    private JLabel shipShieldsLabel;
     /**
      * Displays the ships current food items.
      */
@@ -80,11 +80,11 @@ class MainScreen extends ScreenComponent {
     /**
      * Button opens the space traders.
      */
-    private JButton btnSpaceTraders;
+    private JButton spaceTradersButton;
     /**
      * Button allows the user to inspect details about one crew member.
      */
-    private JButton btnInspect;
+    private JButton inspectButton;
     /**
      * Displays the users current score.
      */
@@ -92,7 +92,7 @@ class MainScreen extends ScreenComponent {
     /**
      * Displays the ships health.
      */
-    private JLabel lblShipHealth;
+    private JLabel shipHealthLabel;
 
     /**
      * Model backing the user list.
@@ -119,7 +119,7 @@ class MainScreen extends ScreenComponent {
     MainScreen(GameState gameState) {
         this.gameState = gameState;
 
-        btnNextDay.addActionListener(e -> onNextDay());
+        nextDayButton.addActionListener(e -> onNextDay());
         listCrew.addListSelectionListener(this::onCrewMemberSelection);
 
         // Add easy of life features. Double-click for action dialog and Right-click for inspect dialog.
@@ -144,10 +144,10 @@ class MainScreen extends ScreenComponent {
             }
         });
         // Add listeners for button clicks.
-        btnPerformAction.addActionListener(e -> onPerformAction());
-        btnSpaceTraders.addActionListener(e -> onTrade());
-        btnSave.addActionListener(e -> onSave());
-        btnInspect.addActionListener(e -> onInspect());
+        actionButton.addActionListener(e -> onPerformAction());
+        spaceTradersButton.addActionListener(e -> onTrade());
+        saveButton.addActionListener(e -> onSave());
+        inspectButton.addActionListener(e -> onInspect());
 
         // Set the models for the lists to follow.
         listCrew.setModel(crewMemberDefaultListModel);
@@ -288,18 +288,18 @@ class MainScreen extends ScreenComponent {
             CrewMemberModelEntry crewMemberModelEntry = iterator.next();
             if (crewMemberModelEntry.crewMember.getActionsLeftToday() > 0) {
                 listCrew.setSelectedValue(crewMemberModelEntry, true);
-                btnPerformAction.setEnabled(true);
+                actionButton.setEnabled(true);
                 return;
             }
         }
         // No crew actions left but select one for the inspect button
         listCrew.setSelectedIndex(0);
-        btnPerformAction.setEnabled(false);
+        actionButton.setEnabled(false);
     }
 
     private void onCrewMemberSelection(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting() && listCrew.getSelectedIndex() != -1) {
-            btnPerformAction.setEnabled(listCrew.getSelectedValue().crewMember.canPerformActions());
+            actionButton.setEnabled(listCrew.getSelectedValue().crewMember.canPerformActions());
         }
     }
 
@@ -348,38 +348,20 @@ class MainScreen extends ScreenComponent {
      * Repaints the information about the game-state that is being displayed.
      */
     private void paintInfoPanel() {
-        lblSpaceShipName.setText(gameState.getSpaceShip().getShipName());
-        lblDay.setText(String.format("%d of %d", gameState.getCurrentDay(),
+        spaceShipLabel.setText(gameState.getSpaceShip().getShipName());
+        dayLabel.setText(String.format("%d of %d", gameState.getCurrentDay(),
                 gameState.getDuration()));
-        lblOrbiting.setText(gameState.getCurrentPlanet().toString());
-        lblMissingParts.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
-        lblBalance.setText("$" + gameState.getSpaceShip().getBalance());
-        lblShipShields.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
-        lblShipHealth.setText(String.format("%d/%d", gameState.getSpaceShip().getShipHealth(),
+        orbitingLabel.setText(gameState.getCurrentPlanet().toString());
+        missingPartsLabel.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
+        balanceLabel.setText("$" + gameState.getSpaceShip().getBalance());
+        shipShieldsLabel.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));
+        shipHealthLabel.setText(String.format("%d/%d", gameState.getSpaceShip().getShipHealth(),
                 gameState.getSpaceShip().getShipHealthMax()));
 
         gameState.computeScore();
         currentScoreLabel.setText(String.valueOf(gameState.getScore()));
         repaint();
     }
-
-    /**
-     * Easy way to hold the crew members within the list model. Final as there is
-     * no need to extend this class.
-     */
-    final class CrewMemberModelEntry {
-        final CrewMember crewMember;
-
-        CrewMemberModelEntry(CrewMember crewMember) {
-            this.crewMember = crewMember;
-        }
-
-        @Override
-        public String toString() {
-            return crewMember.description();
-        }
-    }
-
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer
@@ -511,16 +493,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label1, gbc);
-        lblOrbiting = new JLabel();
-        Font lblOrbitingFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblOrbiting.getFont());
-        if (lblOrbitingFont != null) lblOrbiting.setFont(lblOrbitingFont);
-        lblOrbiting.setText("XXX-XXX");
+        orbitingLabel = new JLabel();
+        Font orbitingLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, orbitingLabel.getFont());
+        if (orbitingLabelFont != null) orbitingLabel.setFont(orbitingLabelFont);
+        orbitingLabel.setText("XXX-XXX");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblOrbiting, gbc);
+        panel6.add(orbitingLabel, gbc);
         final JLabel label2 = new JLabel();
         Font label2Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label2.getFont());
         if (label2Font != null) label2.setFont(label2Font);
@@ -531,16 +513,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label2, gbc);
-        lblMissingParts = new JLabel();
-        Font lblMissingPartsFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblMissingParts.getFont());
-        if (lblMissingPartsFont != null) lblMissingParts.setFont(lblMissingPartsFont);
-        lblMissingParts.setText("X");
+        missingPartsLabel = new JLabel();
+        Font missingPartsLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, missingPartsLabel.getFont());
+        if (missingPartsLabelFont != null) missingPartsLabel.setFont(missingPartsLabelFont);
+        missingPartsLabel.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblMissingParts, gbc);
+        panel6.add(missingPartsLabel, gbc);
         final JLabel label3 = new JLabel();
         Font label3Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label3.getFont());
         if (label3Font != null) label3.setFont(label3Font);
@@ -551,16 +533,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label3, gbc);
-        lblDay = new JLabel();
-        Font lblDayFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblDay.getFont());
-        if (lblDayFont != null) lblDay.setFont(lblDayFont);
-        lblDay.setText("X");
+        dayLabel = new JLabel();
+        Font dayLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, dayLabel.getFont());
+        if (dayLabelFont != null) dayLabel.setFont(dayLabelFont);
+        dayLabel.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblDay, gbc);
+        panel6.add(dayLabel, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -576,29 +558,29 @@ class MainScreen extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
         panel6.add(separator1, gbc);
-        btnNextDay = new JButton();
-        Font btnNextDayFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnNextDay.getFont());
-        if (btnNextDayFont != null) btnNextDay.setFont(btnNextDayFont);
-        btnNextDay.setText("Next Day");
+        nextDayButton = new JButton();
+        Font nextDayButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, nextDayButton.getFont());
+        if (nextDayButtonFont != null) nextDayButton.setFont(nextDayButtonFont);
+        nextDayButton.setText("Next Day");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 13;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel6.add(btnNextDay, gbc);
-        btnPerformAction = new JButton();
-        btnPerformAction.setEnabled(true);
-        Font btnPerformActionFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnPerformAction.getFont());
-        if (btnPerformActionFont != null) btnPerformAction.setFont(btnPerformActionFont);
-        btnPerformAction.setText("Action");
-        btnPerformAction.setToolTipText("Perform actions that require crew members.");
+        panel6.add(nextDayButton, gbc);
+        actionButton = new JButton();
+        actionButton.setEnabled(true);
+        Font actionButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, actionButton.getFont());
+        if (actionButtonFont != null) actionButton.setFont(actionButtonFont);
+        actionButton.setText("Action");
+        actionButton.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
-        panel6.add(btnPerformAction, gbc);
+        panel6.add(actionButton, gbc);
         final JLabel label4 = new JLabel();
         Font label4Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label4.getFont());
         if (label4Font != null) label4.setFont(label4Font);
@@ -609,16 +591,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label4, gbc);
-        lblBalance = new JLabel();
-        Font lblBalanceFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblBalance.getFont());
-        if (lblBalanceFont != null) lblBalance.setFont(lblBalanceFont);
-        lblBalance.setText("$XX");
+        balanceLabel = new JLabel();
+        Font balanceLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, balanceLabel.getFont());
+        if (balanceLabelFont != null) balanceLabel.setFont(balanceLabelFont);
+        balanceLabel.setText("$XX");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblBalance, gbc);
+        panel6.add(balanceLabel, gbc);
         final JLabel label5 = new JLabel();
         Font label5Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label5.getFont());
         if (label5Font != null) label5.setFont(label5Font);
@@ -629,16 +611,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label5, gbc);
-        lblShipShields = new JLabel();
-        Font lblShipShieldsFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblShipShields.getFont());
-        if (lblShipShieldsFont != null) lblShipShields.setFont(lblShipShieldsFont);
-        lblShipShields.setText("X");
+        shipShieldsLabel = new JLabel();
+        Font shipShieldsLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, shipShieldsLabel.getFont());
+        if (shipShieldsLabelFont != null) shipShieldsLabel.setFont(shipShieldsLabelFont);
+        shipShieldsLabel.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblShipShields, gbc);
+        panel6.add(shipShieldsLabel, gbc);
         final JSeparator separator2 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -647,32 +629,32 @@ class MainScreen extends ScreenComponent {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 0, 10, 0);
         panel6.add(separator2, gbc);
-        btnSpaceTraders = new JButton();
-        btnSpaceTraders.setEnabled(true);
-        Font btnSpaceTradersFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnSpaceTraders.getFont());
-        if (btnSpaceTradersFont != null) btnSpaceTraders.setFont(btnSpaceTradersFont);
-        btnSpaceTraders.setText("Space Traders");
-        btnSpaceTraders.setToolTipText("Visit your local space traders.");
+        spaceTradersButton = new JButton();
+        spaceTradersButton.setEnabled(true);
+        Font spaceTradersButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, spaceTradersButton.getFont());
+        if (spaceTradersButtonFont != null) spaceTradersButton.setFont(spaceTradersButtonFont);
+        spaceTradersButton.setText("Space Traders");
+        spaceTradersButton.setToolTipText("Visit your local space traders.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 2, 0);
-        panel6.add(btnSpaceTraders, gbc);
-        btnInspect = new JButton();
-        btnInspect.setEnabled(true);
-        Font btnInspectFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, btnInspect.getFont());
-        if (btnInspectFont != null) btnInspect.setFont(btnInspectFont);
-        btnInspect.setText("Inspect");
-        btnInspect.setToolTipText("Perform actions that require crew members.");
+        panel6.add(spaceTradersButton, gbc);
+        inspectButton = new JButton();
+        inspectButton.setEnabled(true);
+        Font inspectButtonFont = this.$$$getFont$$$("Droid Sans Mono", -1, 16, inspectButton.getFont());
+        if (inspectButtonFont != null) inspectButton.setFont(inspectButtonFont);
+        inspectButton.setText("Inspect");
+        inspectButton.setToolTipText("Perform actions that require crew members.");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 10;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 0, 0, 0);
-        panel6.add(btnInspect, gbc);
+        panel6.add(inspectButton, gbc);
         final JLabel label6 = new JLabel();
         Font label6Font = this.$$$getFont$$$("Droid Sans Mono", -1, 18, label6.getFont());
         if (label6Font != null) label6.setFont(label6Font);
@@ -703,16 +685,16 @@ class MainScreen extends ScreenComponent {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 0, 10, 5);
         panel6.add(label7, gbc);
-        lblShipHealth = new JLabel();
-        Font lblShipHealthFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, lblShipHealth.getFont());
-        if (lblShipHealthFont != null) lblShipHealth.setFont(lblShipHealthFont);
-        lblShipHealth.setText("X");
+        shipHealthLabel = new JLabel();
+        Font shipHealthLabelFont = this.$$$getFont$$$("Droid Sans Mono", Font.ITALIC, 18, shipHealthLabel.getFont());
+        if (shipHealthLabelFont != null) shipHealthLabel.setFont(shipHealthLabelFont);
+        shipHealthLabel.setText("X");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 10, 0);
-        panel6.add(lblShipHealth, gbc);
+        panel6.add(shipHealthLabel, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -722,16 +704,16 @@ class MainScreen extends ScreenComponent {
         gbc.weightx = 10.0;
         gbc.fill = GridBagConstraints.BOTH;
         panelRoot.add(panel7, gbc);
-        lblSpaceShipName = new JLabel();
-        Font lblSpaceShipNameFont = this.$$$getFont$$$("Droid Sans Mono", -1, 36, lblSpaceShipName.getFont());
-        if (lblSpaceShipNameFont != null) lblSpaceShipName.setFont(lblSpaceShipNameFont);
-        lblSpaceShipName.setText("#SpaceShip");
+        spaceShipLabel = new JLabel();
+        Font spaceShipLabelFont = this.$$$getFont$$$("Droid Sans Mono", -1, 36, spaceShipLabel.getFont());
+        if (spaceShipLabelFont != null) spaceShipLabel.setFont(spaceShipLabelFont);
+        spaceShipLabel.setText("#SpaceShip");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(20, 0, 10, 0);
-        panel7.add(lblSpaceShipName, gbc);
+        panel7.add(spaceShipLabel, gbc);
         final JPanel panel8 = new JPanel();
         panel8.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -740,16 +722,16 @@ class MainScreen extends ScreenComponent {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panelRoot.add(panel8, gbc);
-        btnSave = new JButton();
-        btnSave.setHorizontalAlignment(0);
-        btnSave.setText("Save");
+        saveButton = new JButton();
+        saveButton.setHorizontalAlignment(0);
+        saveButton.setText("Save");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 10.0;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 0, 20);
-        panel8.add(btnSave, gbc);
+        panel8.add(saveButton, gbc);
         final JSeparator separator3 = new JSeparator();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -784,6 +766,23 @@ class MainScreen extends ScreenComponent {
      */
     public JComponent $$$getRootComponent$$$() {
         return panelRoot;
+    }
+
+    /**
+     * Easy way to hold the crew members within the list model. Final as there is
+     * no need to extend this class.
+     */
+    final class CrewMemberModelEntry {
+        final CrewMember crewMember;
+
+        CrewMemberModelEntry(CrewMember crewMember) {
+            this.crewMember = crewMember;
+        }
+
+        @Override
+        public String toString() {
+            return crewMember.description();
+        }
     }
 
 }

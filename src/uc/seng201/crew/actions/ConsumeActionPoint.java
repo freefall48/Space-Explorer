@@ -13,8 +13,8 @@ public abstract class ConsumeActionPoint implements IAction {
     /**
      * Reduce all acting crew members action points by 1.
      *
-     * @param gameState reference to the current game state.
-     * @param args arguments that are action specific.
+     * @param gameState   reference to the current game state.
+     * @param args        arguments that are action specific.
      * @param crewMembers who is performing the action.
      * @return null.
      */

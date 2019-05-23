@@ -12,6 +12,7 @@ public class ModHealingHands extends ModificationAdapter {
      * have this modifier.
      */
     private static final double HEALTH_REGEN_MULTIPLIER = 1.25;
+
     /**
      * Increase the current healing ability oif this crew member.
      *

@@ -1,11 +1,11 @@
 package uc.seng201.misc.events;
 
+import uc.seng201.SpaceExplorer;
+import uc.seng201.environment.GameState;
+import uc.seng201.items.SpaceItem;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import uc.seng201.environment.GameState;
-import uc.seng201.SpaceExplorer;
-import uc.seng201.items.SpaceItem;
 
 /**
  * Alien Pirates random event that can trigger at the start of a new day. Checks if there are

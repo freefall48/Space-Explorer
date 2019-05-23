@@ -4,8 +4,6 @@ import uc.seng201.crew.CrewMember;
 import uc.seng201.environment.GameState;
 import uc.seng201.errors.ActionException;
 
-import java.awt.*;
-
 /**
  * Action for crew members to sleep and reduce their current
  * tiredness level.

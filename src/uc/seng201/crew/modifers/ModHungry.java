@@ -17,6 +17,7 @@ public class ModHungry extends ModificationAdapter {
      * increased by.
      */
     private static final int INCREASED_TIREDNESS_RATE = 20;
+
     /**
      * Reduces the crew members health regen as well as increases the rate
      * at which they become tired.
