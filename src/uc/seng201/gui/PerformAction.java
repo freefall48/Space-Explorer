@@ -167,7 +167,7 @@ public class PerformAction extends JDialog {
         // Add all the planets that are not the current planet.
         gameState.getPlanets().forEach(planet -> {
             if (!planet.equals(this.gameState.getCurrentPlanet())) {
-                targetPlanetsModel.addElement(planet.getPlanetName());
+                targetPlanetsModel.addElement(planet.toString());
             }
         });
 

@@ -19,16 +19,6 @@ public final class ActionHandler implements Observer {
                 CrewAction action = (CrewAction) args[0];
                 CrewMember[] actingCrew = (CrewMember[]) args[1];
 
-                // Check and remove action points from crew if needed.
-                if (action.getCostsActionPoint()) {
-                    for (CrewMember crewMember : actingCrew) {
-                        // Could be null for the second crew member so handle that
-                        if (crewMember != null) {
-                            crewMember.performAction();
-                        }
-                    }
-                }
-
                 /*
                 Call the correct action and provide it with the game-state instance, action specific arguments
                 and the crew who are performing the action. Get the response message.

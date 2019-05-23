@@ -7,7 +7,7 @@ public enum CrewAction {
     /**
      * Two crew members can pilot the space ship to a new planet.
      */
-    PILOT("<html>%s and %s will fly %s to %s!", 2, true) {
+    PILOT("<html>%s and %s will fly %s to %s!", 2) {
         @Override
         public IAction getInstance() {
             return new ActionPilot();
@@ -18,7 +18,7 @@ public enum CrewAction {
      * money or spaceship parts. Many not find anything. Only one part
      * per planet.
      */
-    SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1, true) {
+    SEARCH("<html>%s will search the current planet '%s'.<br>%s", 1) {
         @Override
         public IAction getInstance() {
             return new ActionSearch();
@@ -27,7 +27,7 @@ public enum CrewAction {
     /**
      * A crew member can sleep to reduce their current tiredness level.
      */
-    SLEEP("<html>%s will sleep to remove tiredness.", 1, true) {
+    SLEEP("<html>%s will sleep to remove tiredness.", 1) {
         @Override
         public IAction getInstance() {
             return new ActionSleep();
@@ -36,7 +36,7 @@ public enum CrewAction {
     /**
      * A crew member can consume an item that is currently on the spaceship.
      */
-    CONSUME("<html>%s will consume the %s", 1, true) {
+    CONSUME("<html>%s will consume the %s", 1) {
         @Override
         public IAction getInstance() {
             return new ActionConsumeItem();
@@ -45,7 +45,7 @@ public enum CrewAction {
     /**
      * A crew member can repair damage that the spaceship has taken.
      */
-    REPAIR("<html>%s will repair %s", 1, true) {
+    REPAIR("<html>%s will repair %s", 1) {
         @Override
         public IAction getInstance() {
             return new ActionRepair();
@@ -62,22 +62,16 @@ public enum CrewAction {
      * How many crew members does the action require to perform.
      */
     private int crewRequired;
-    /**
-     * Does the action consume an action point of the crew involved.
-     */
-    private boolean costsActionPoint;
 
     /**
      * Provides an available action for a crew member to perform.
      *
      * @param actionText message to be displayed describing the action.
      * @param crewRequired how many crew are needed to perform.
-     * @param costsActionPoint does it cost an action point to perform.
      */
-    CrewAction(final String actionText, final int crewRequired, final boolean costsActionPoint) {
+    CrewAction(final String actionText, final int crewRequired) {
         this.actionText = actionText;
         this.crewRequired = crewRequired;
-        this.costsActionPoint = costsActionPoint;
     }
 
     /**
@@ -99,15 +93,6 @@ public enum CrewAction {
      */
     public int getCrewRequired() {
         return crewRequired;
-    }
-
-    /**
-     * Returns if the action should consume an action point.
-     *
-     * @return true if an action point is needed.
-     */
-    public boolean getCostsActionPoint() {
-        return costsActionPoint;
     }
 
     /**

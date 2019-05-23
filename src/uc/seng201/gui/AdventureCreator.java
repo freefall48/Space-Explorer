@@ -97,8 +97,8 @@ class AdventureCreator extends ScreenComponent {
      * @param duration number of days the game will run.
      * @return list of generated planets.
      */
-    private List<Planet> generatePlanets(int duration) {
-        List<Planet> planets = new ArrayList<>();
+    private Set<Planet> generatePlanets(int duration) {
+        Set<Planet> planets = new HashSet<>();
         for (int i = 0; i < duration; i++) {
             planets.add(new Planet());
         }
@@ -126,7 +126,7 @@ class AdventureCreator extends ScreenComponent {
         spaceShip.add(new HashSet<>(Collections.list(crewListModel.elements())));
 
         // Generate the planets for this run through.
-        List<Planet> planets = generatePlanets(gameDuration);
+        Set<Planet> planets = generatePlanets(gameDuration);
         GameState gameState = new GameState(spaceShip, gameDuration, planets);
 
         // There is a new game state so notify the event manager.

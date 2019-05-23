@@ -16,6 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Contains all instances that relate to the current game. This object can be
@@ -30,7 +33,7 @@ public class GameState {
     /**
      * All planets that are available to the player.
      */
-    private List<Planet> planets;
+    private Set<Planet> planets;
     /**
      * SpaceTraders instance.
      */
@@ -58,8 +61,8 @@ public class GameState {
      * @param duration number of days the game should run.
      * @param planets planets to be available to the player.
      */
-    public GameState(final SpaceShip spaceShip, final int duration, final List<Planet> planets) {
-        this(spaceShip, planets, planets.get(0), 1, duration);
+    public GameState(final SpaceShip spaceShip, final int duration, final Set<Planet> planets) {
+            this(spaceShip, planets, null, 1, duration);
     }
 
     /**
@@ -68,16 +71,25 @@ public class GameState {
      *
      * @param spaceShip players spaceship.
      * @param planets planets to be available to the player.
-     * @param currentPlanet planet to start at.
+     * @param currentPlanet planet to start at. Can be null.
      * @param currentDay day that the player should start on.
      * @param duration number of days the game should run.
      */
-    public GameState(final SpaceShip spaceShip, final List<Planet> planets, final Planet currentPlanet,
+    public GameState(final SpaceShip spaceShip, final Set<Planet> planets, final Planet currentPlanet,
                      final int currentDay, final int duration) {
         this();
-        this.spaceShip = spaceShip;
-        this.planets = planets;
-        this.currentPlanet = currentPlanet;
+        /*
+         If no current planet was given then its likely we are starting a
+         new game so just pick one.
+         */
+        if (currentPlanet == null) {
+            Optional<Planet> startPlanet = planets.stream().findAny();
+            startPlanet.ifPresent(planet -> this.currentPlanet = planet);
+        }
+
+        // Cannot have nulls for these variables.
+        this.spaceShip = Objects.requireNonNull(spaceShip);
+        this.planets = Objects.requireNonNull(planets);
         this.currentDay = currentDay;
         this.duration = duration;
         this.score = 0;
@@ -91,7 +103,6 @@ public class GameState {
      */
     private GameState() {
         GameEnvironment.EVENT_MANAGER.addObserver(Event.START_DAY, new NewDayHandler());
-        GameEnvironment.EVENT_MANAGER.addObserver(Event.CREW_MEMBER_ACTION, new CrewActionHandler());
     }
 
     /**
@@ -104,11 +115,11 @@ public class GameState {
     }
 
     /**
-     * Returns a list of planets that are available for this game state.
+     * Returns a set of planets that are available for this game state.
      *
-     * @return list of planets.
+     * @return set of planets.
      */
-    public List<Planet> getPlanets() {
+    public Set<Planet> getPlanets() {
         return planets;
     }
 
@@ -144,7 +155,7 @@ public class GameState {
      */
     public Planet planetFromName(final String name) {
         for (Planet planet : planets) {
-            if (planet.getPlanetName().equals(name)) {
+            if (planet.toString().equals(name)) {
                 return planet;
             }
         }
@@ -274,27 +285,4 @@ public class GameState {
             computeScore();
         }
     }
-
-    /**
-     * GameState handler for the "CREW_ACTION" event. A random flying event
-     * may of occurred so the health of the ship is checked. If its health
-     * is 0 the "DEFEAT" event is triggered. It is possible that the last
-     * ship part was found so that is checked too. If no parts remain missing
-     * the "VICTORY" event is triggered.
-     */
-    final class CrewActionHandler implements Observer {
-        @Override
-        public void onEvent(final Object... args) {
-            if (spaceShip.getShieldCount() == 0) {
-                GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT,
-                        "Looks like you have managed to destroy whats left of "
-                                + spaceShip.getShipCrew());
-            }
-            if (!isMissingShipParts()) {
-                GameEnvironment.EVENT_MANAGER.notifyObservers(
-                        Event.VICTORY, "All parts found!");
-            }
-        }
-    }
-
 }

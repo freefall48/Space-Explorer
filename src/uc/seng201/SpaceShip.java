@@ -68,9 +68,9 @@ public class SpaceShip {
     private static final int SPACE_SHIP_STARTING_HEALTH = 100;
     /**
      * When multiplied with the duration gets the number of parts
-     * to find.
+     * to find. (Make sure we are not using integer division)
      */
-    private static final double PARTS_TO_FIND_MULTIPLIER = 0.6666;
+    private static final double PARTS_TO_FIND_MULTIPLIER = 2.0 / 3.0;
 
     /**
      * Starting number of shields for the spaceship.
@@ -310,7 +310,8 @@ public class SpaceShip {
     }
 
     /**
-     * Reduced the number of currently missing spaceship parts by 1.
+     * Reduced the number of currently missing spaceship parts by 1. If there are no missing
+     * parts left then the game has been won so let the event manager know.
      *
      * @throws InvalidGameState if the number of parts still missing would be 0 or negative as a part
      * could not have been missing.
@@ -318,14 +319,19 @@ public class SpaceShip {
     public void partFound() throws InvalidGameState {
         if (missingParts > 0) {
             missingParts -= 1;
-        } else {
+        }
+        else {
             throw new InvalidGameState("Cannot reduce parts if no parts are missing");
+        }
+        // If the number of parts is now 0 then all parts are found.
+        if (missingParts == 0) {
+            GameEnvironment.EVENT_MANAGER.notifyObservers(Event.VICTORY, "All parts have been found!");
         }
     }
 
     /**
      * Damages the space ship by a given amount. The amount of damage the spaceship takes is
-     * divided by the number of shields the ship has. If ship has no shields then it takes
+     * divided by the number of shields the ship has. If ship has 1 or no shields then it takes
      * full damage. Upon taking damage the ship will also lose a shield, increasing
      * damage that will occur in the future.
      *
@@ -342,6 +348,7 @@ public class SpaceShip {
         }
 
         if (newShipHealth <= 0) {
+            newShipHealth = 0;
             GameEnvironment.EVENT_MANAGER.notifyObservers(Event.DEFEAT, "Ship fell apart.");
         }
         shipHealth = newShipHealth;

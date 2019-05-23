@@ -351,7 +351,7 @@ class MainScreen extends ScreenComponent {
         lblSpaceShipName.setText(gameState.getSpaceShip().getShipName());
         lblDay.setText(String.format("%d of %d", gameState.getCurrentDay(),
                 gameState.getDuration()));
-        lblOrbiting.setText(gameState.getCurrentPlanet().getPlanetName());
+        lblOrbiting.setText(gameState.getCurrentPlanet().toString());
         lblMissingParts.setText(String.valueOf(gameState.getSpaceShip().getMissingParts()));
         lblBalance.setText("$" + gameState.getSpaceShip().getBalance());
         lblShipShields.setText(String.format("%d", gameState.getSpaceShip().getShieldCount()));

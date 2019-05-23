@@ -464,6 +464,7 @@ public class CrewMember {
         if (newHealth > this.maxHealth) {
             newHealth = this.maxHealth;
         } else if (newHealth <= 0) {
+            newHealth = 0;
             GameEnvironment.EVENT_MANAGER.notifyObservers(Event.CREW_MEMBER_DIED, this);
         }
         this.health = newHealth;

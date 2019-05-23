@@ -9,10 +9,11 @@ import uc.seng201.errors.ActionException;
  * Action for crew members who are searching the planet that is
  * currently orbited.
  */
-public final class ActionSearch implements IAction {
+public final class ActionSearch extends ConsumeActionPoint {
     @Override
     public String perform(final GameState gameState, final Object[] args,
                           final CrewMember... crewMembers) {
+        super.perform(gameState, args, crewMembers);
         if (args.length != 1 || crewMembers.length != 1) {
             throw new ActionException("Invalid args passed");
         }

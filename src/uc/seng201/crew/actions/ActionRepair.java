@@ -7,10 +7,11 @@ import uc.seng201.errors.ActionException;
 /**
  * Action for a crew member repairing the spaceship.
  */
-public final class ActionRepair implements IAction {
+public final class ActionRepair extends ConsumeActionPoint {
     @Override
     public String perform(final GameState gameState, final Object[] args,
                           final CrewMember... crewMembers) {
+        super.perform(gameState, args, crewMembers);
         if (crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");
         }

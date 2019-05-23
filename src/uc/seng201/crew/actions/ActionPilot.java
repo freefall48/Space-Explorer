@@ -12,11 +12,11 @@ import uc.seng201.utils.observerable.Event;
 /**
  * Action for when crew members pilot the ship to a different planet.
  */
-public final class ActionPilot implements IAction {
+public final class ActionPilot extends ConsumeActionPoint {
     @Override
     public String perform(final GameState gameState, final Object[] args,
                           final CrewMember... crewMembers) {
-
+        super.perform(gameState, args, crewMembers);
         // Check we have got arguments we need.
         if (args.length != 1 && crewMembers.length == 2) {
             throw new ActionException("Invalid args size");

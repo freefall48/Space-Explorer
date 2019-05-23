@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import uc.seng201.crew.*;
+import uc.seng201.errors.InvalidGameState;
 import uc.seng201.errors.SpaceShipException;
 import uc.seng201.items.SpaceItem;
 
@@ -163,5 +164,33 @@ class SpaceShipTest {
         });
         assertFalse(spaceShip.hasCrewActionsRemaining());
 
+    }
+
+    @DisplayName("Correct parts to find from duration.")
+    @ParameterizedTest(name = "{index} => value={0}, result={1}")
+    @CsvSource({
+            "3,2",
+            "4,2",
+            "5,3"
+    })
+    void calcPartsToFind(int value, int result) {
+        assertEquals(result, SpaceShip.calcPartsToFind(value));
+    }
+
+    @DisplayName("Reducing missing parts.")
+    @Test
+    void partFound() {
+        spaceShip.partFound();
+        assertEquals(spaceShip.getMissingParts(), spaceShip.getOriginalMissingParts() - 1);
+    }
+
+    @DisplayName("Part cannot be found if none are missing.")
+    @Test
+    void partFound1() {
+        for (int i = 0; i < spaceShip.getOriginalMissingParts(); i++) {
+            spaceShip.partFound();
+        }
+        // Should be 0 parts remaining when this is called.
+        assertThrows(InvalidGameState.class, () -> spaceShip.partFound());
     }
 }

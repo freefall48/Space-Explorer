@@ -9,58 +9,68 @@ import uc.seng201.crew.modifers.Modifications;
  *
  */
 public enum SpaceItem {
-    CARROT(ItemType.FOOD, 5, "At least its healthy...") {
+    /**
+     * Carrots are a food item that restore 10 food for $5.
+     */
+    CARROT(ItemType.FOOD, 5, "Increase food by 10."),
+    /**
+     * Chicken is a food item that restores 30 food for $15.
+     */
+    CHICKEN(ItemType.FOOD, 15, "Time for roast. Increases food by 30."),
+    /**
+     * Crackers are a food item that restores 20 food for $10.
+     */
+    CRACKERS(ItemType.FOOD, 10, "Increases food by 20."),
+    /**
+     * Crickets are a food item that restores 10 food for $5.
+     */
+    CRICKETS(ItemType.FOOD, 5, "Increases food by 10."),
+    /**
+     * Pork is a food item that restores 60 food $30.
+     */
+    PORK(ItemType.FOOD, 30, "Yummy yummy pork. Increases food by 60."),
+    /**
+     * Space snack is a food item that restores 20 food for $10.
+     */
+    SPACESNACK(ItemType.FOOD, 10, "Not sure what this is? Increases food by 20."),
+
+    /**
+     * Bandage is a medical item that restores 50 health for $30.
+     */
+    BANDAGE(ItemType.MEDICAL, 30, "Increases a crew members health by 50.") {
+        /**
+         * When consumed alter the crew members health.
+         * @param crewMember to affect
+         */
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
+            crewMember.alterHealth(50);
         }
     },
-    CHICKEN(ItemType.FOOD, 15, "Time for roast.") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
-        }
-    },
-    BANDAGE(ItemType.MEDICAL, 20, "Increases a crew members health by 50") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterHealth(getPrice());
-        }
-    },
-    CRACKERS(ItemType.FOOD, 15, "now what flavor?") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
-        }
-    },
-    CRICKETS(ItemType.FOOD, 15, "Bear would do it.") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
-        }
-    },
-    PORK(ItemType.FOOD, 15, "Yummy yummy pork.") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
-        }
-    },
-    SPACESNACK(ItemType.FOOD, 15, "Not sure what this is?") {
-        @Override
-        public void onConsume(CrewMember crewMember) {
-            crewMember.alterFood(getPrice() * 2);
-        }
-    },
-    STARDEW(ItemType.MEDICAL, 10, "Removes space plague from a crew member.") {
+    /**
+     * Stardew is a medical item that removes space plague from a crew member for $15.
+     */
+    STARDEW(ItemType.MEDICAL, 15, "Removes space plague from a crew member.") {
+        /**
+         * When consumed remove the space plague from the crew member.
+         * @param crewMember to affect
+         */
         @Override
         public void onConsume(CrewMember crewMember) {
             crewMember.removeModification(Modifications.SPACE_PLAGUE);
         }
     },
-    OINKMENT(ItemType.MEDICAL, 10, "Increases a crew members health by 25") {
+    /**
+     * Oinkment is a medical item that restores 20 health for $12.
+     */
+    OINKMENT(ItemType.MEDICAL, 12, "Increases a crew members health by 20") {
+        /**
+         * When consumed alter the crew members health.
+         * @param crewMember to affect
+         */
         @Override
         public void onConsume(CrewMember crewMember) {
-            crewMember.removeModification(Modifications.SPACE_PLAGUE);
+            crewMember.alterHealth(20);
         }
     };
 
@@ -96,10 +106,14 @@ public enum SpaceItem {
      * onConsume method is called. This method should be called whenever an
      * item is consumed by a crew member. The method has access to a mutable
      * crewMember who the method should apply effects too.
+     * Defaults to altering the food level of the crew member by 2 times the
+     * price of the item.
      *
      * @param crewMember to affect
      */
-    public abstract void onConsume(CrewMember crewMember);
+    public void onConsume(CrewMember crewMember) {
+        crewMember.alterFood(price * 2);
+    }
 
     /**
      * Returns the item type of the item.

@@ -8,11 +8,10 @@ import uc.seng201.items.SpaceItem;
 /**
  * Action for a crew member consuming an item from the space ship.
  */
-public final class ActionConsumeItem implements IAction {
+public final class ActionConsumeItem extends ConsumeActionPoint {
     @Override
-    public String perform(final GameState gameState, final Object[] args,
-                          final CrewMember... crewMembers) {
-
+    public String perform(final GameState gameState, final Object[] args, final CrewMember... crewMembers) {
+        super.perform(gameState, args, crewMembers);
         if (args.length != 1 && crewMembers.length != 1) {
             throw new ActionException("Invalid args provided");
         }

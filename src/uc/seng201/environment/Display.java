@@ -26,6 +26,14 @@ public class Display {
     private static Map<Screen, ScreenComponent> screens;
 
     /**
+     * Determines how the display class will output information to the user.
+     *  0 = no output.
+     *  1 = console.
+     *  2 = gui.
+     */
+    private static int outputMethod = 0;
+
+    /**
      * Changes the main screen component that is being displayed. Replaces
      * the instance of the screens if needed.
      *
@@ -72,7 +80,14 @@ public class Display {
      * @param message to be displayed within the window.
      */
     public static void popup(final String message) {
-        JOptionPane.showMessageDialog(rootFrame, message);
+        switch (outputMethod) {
+            case 1:
+                System.out.println(message);
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(rootFrame, message);
+                break;
+        }
     }
 
     /**
@@ -93,5 +108,6 @@ public class Display {
 
         changeScreen(Screen.MAIN_MENU);
         rootFrame.setVisible(true);
+        outputMethod = 2;
     }
 }
